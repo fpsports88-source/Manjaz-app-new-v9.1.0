@@ -348,15 +348,8 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
 .pc-n{font-weight:900;font-size:.8rem;cursor:pointer;display:flex;gap:6px;align-items:center}.pc-t{display:block;opacity:.55;font-size:.68rem;margin-top:2px}.pc-act{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 .pc-ban{padding:14px;border-radius:16px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.4);color:var(--danger);font-weight:800}
 </style>
-
-<style id="ys-phase1-polish">
-#ysSplash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 35%,#243a78 0%,#111a37 38%,#080d1b 100%);color:#fff;opacity:1;visibility:visible;transition:opacity .55s ease,visibility .55s ease;font-family:inherit}#ysSplash.ys-out{opacity:0;visibility:hidden;pointer-events:none}.ys-splash-inner{display:grid;justify-items:center;gap:15px;padding:24px;text-align:center}.ys-splash-logo{width:92px;height:92px;display:grid;place-items:center;border-radius:28px;font-size:2rem;font-weight:1000;letter-spacing:-.08em;background:linear-gradient(135deg,#60a5fa,#6d5dfc 55%,#c084fc);box-shadow:0 0 0 1px #ffffff24,0 16px 55px #536dff55;animation:ysSplashFloat 2.4s ease-in-out infinite}.ys-splash-title{font-size:1.65rem;font-weight:1000;letter-spacing:.01em}.ys-splash-sub{font-size:.9rem;color:#cbd5e1}.ys-splash-line{width:132px;height:4px;border-radius:99px;overflow:hidden;background:#ffffff20}.ys-splash-line:after{content:"";display:block;width:42%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#60a5fa,#c084fc);animation:ysSplashLoad 1.25s ease-in-out infinite}@keyframes ysSplashFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.035)}}@keyframes ysSplashLoad{from{transform:translateX(-140%)}to{transform:translateX(340%)}}@media(prefers-reduced-motion:reduce){#ysSplash,.ys-splash-logo,.ys-splash-line:after{animation:none!important;transition:none!important}}
-.ys-profile-signature{display:inline-block;margin:2px auto 8px;font-weight:1000;letter-spacing:.22em;font-size:.78rem;background:linear-gradient(90deg,#60a5fa,#c084fc,#fbbf24,#60a5fa);background-size:240% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ysSignatureGlow 4s linear infinite,ysSignatureFloat 2.5s ease-in-out infinite;text-shadow:0 0 18px #818cf855}@keyframes ysSignatureGlow{to{background-position:240% center}}@keyframes ysSignatureFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}@media(prefers-reduced-motion:reduce){.ys-profile-signature{animation:none!important}}
-</style>
-</head>
+<style id="layoutFix">.main .view{align-items:stretch;justify-items:stretch;width:100%;margin-inline:auto}.main .view>*{min-width:0;max-width:100%}body:not(.deep-focus) .view{place-items:stretch}@media(min-width:700px){html{zoom:1!important}}</style></head>
 <body>
-  <div id="ysSplash" role="status" aria-label="منجز Ultra"><div class="ys-splash-inner"><div class="ys-splash-logo">YS</div><div class="ys-splash-title">منجز <span style="color:#a5b4fc">Ultra</span></div><div class="ys-splash-sub">ابدأ إنجازك… خطوة كل يوم</div><div class="ys-splash-line" aria-hidden="true"></div><small style="color:#94a3b8">Powered by YS</small></div></div>
-
   <div id="app" class="app-root"></div>
   <div id="toastRoot" class="toast-root" aria-live="polite"></div>
   <div id="modalRoot"></div>
@@ -377,7 +370,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         appId: '1:3482020492:web:72d6f419712c0404a8e9a9'
       };
 
-      const APP = { name:'منجز', version:'9.4.0-ys-final', copyright:'© YS — جميع الحقوق محفوظة' };
+      const APP = { name:'منجز', version:'9.1.0-ultra-plus', copyright:'© YS — جميع الحقوق محفوظة' };
       const LS = { profiles:'munjiz.profiles', active:'munjiz.active', prefs:'munjiz.prefs', temp:'munjiz.temp' };
       const DAY = 86400000;
       const STATUS = ['new','inProgress','done'];
@@ -521,7 +514,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       const DEFAULT_STATE = {
         schemaVersion:3, updatedAt:Date.now(),
         auth:{provider:'guest',uid:'guest',displayName:'',email:'',photoURL:''},
-        profile:{name:'',school:'',avatarColor:'#2563eb',photo:'',gender:''},
+        profile:{name:'',school:'',avatarColor:'#2563eb',photo:''},
         settings:{lang:'ar',themeMode:'auto',themePreset:'ocean',accent:'#2563eb',pomodoro:{work:25,short:5,long:15,cycle:4},notifyLead:60,sound:true,vibration:true},
         subjects:[], tasks:[], groups:[], teams:[], activeTeamId:null, sessions:[],
         game:{xp:0,level:1,streak:0,bestStreak:0,studyDates:[],badges:{},frames:{unlocked:['none'],equipped:'none'},titles:{unlocked:['student'],equipped:'student'},raceWins:0,challengeWins:0,firstCompletionDate:'',firstCompletionAt:null},
@@ -853,32 +846,31 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       const Subjects={ upsert(d){ const s=normalizeSubject(d); const i=state.subjects.findIndex(x=>x.id===s.id); if(i>=0)state.subjects[i]=s; else state.subjects.push(s); saveState(); return s; }, remove(id){ state.tasks.forEach(t=>{if(t.subjectId===id)t.subjectId=null;}); state.subjects=state.subjects.filter(x=>x.id!==id); saveState(); toast(t('deleted'),'success'); } };
       const Groups={ upsert(d){ const g=normalizeGroup(d); const i=state.groups.findIndex(x=>x.id===g.id); if(i>=0)state.groups[i]=g; else state.groups.unshift(g); saveState(); Gamification.checkBadges(); return g; }, remove(id){ state.groups=state.groups.filter(x=>x.id!==id); state.tasks.forEach(t=>{if(t.groupId===id)t.groupId=null;}); saveState(); toast(t('deleted'),'success'); } };
       const Teams={
-        async create(d){ const g=normalizeTeam(d); if(fb.ready && state.auth.provider==='firebase' && state.auth.uid){ g.ownerId=state.auth.uid; g.memberIds=[state.auth.uid]; g.shared=true; const ref=await fb.db.collection('teams').add({...g,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); g.id=ref.id; await fb.db.collection('teamCodes').doc(g.joinCode).set({teamId:ref.id,ownerId:state.auth.uid}).catch(()=>{}); } else { g.ownerId='local'; g.memberIds=['local']; } state.teams.unshift(g); state.activeTeamId=g.id; saveState(); Gamification.checkBadges(); publishProfileToCloud(); toast(t('teamCreated'),'success'); return g; },
-        async joinByCode(code){ const c=String(code||'').trim().toUpperCase(); if(!c){toast(t('invalidTeamCode'),'error');return false;} if(!fb.ready || state.auth.provider!=='firebase'){toast(t('requiresFirebase'),'warn');return false;} try{ const codeSnap=await fb.db.collection('teamCodes').doc(c).get(); if(!codeSnap.exists){toast(t('invalidTeamCode'),'error');return false;} const tid=codeSnap.data().teamId; if(state.teams.some(x=>x.id===tid)){toast(t('alreadyInTeam'),'warn');return false;} const ref=fb.db.collection('teams').doc(tid); await ref.update({memberIds:firebase.firestore.FieldValue.arrayUnion(state.auth.uid),updatedAt:iso()}); const doc=await ref.get(); const data=doc.data()||{}; const team=normalizeTeam({id:doc.id,...data}); const i=state.teams.findIndex(x=>x.id===team.id); if(i>=0)state.teams[i]=team; else state.teams.unshift(team); state.activeTeamId=team.id; saveState(); Gamification.checkBadges(); toast(t('teamJoined'),'success'); return true; }catch{ toast(t('invalidTeamCode'),'error'); return false; } },
+        async create(d){ if(state.teams.some(x=>x.shared&&(x.memberIds||[]).includes(state.auth.uid))){ toast((state.settings.lang==='ar'?'أنت في فريق بالفعل — غادره أو احذفه أولًا لإنشاء فريق جديد':'You are already in a team — leave or delete it first'),'warn'); return null; } const g=normalizeTeam(d); if(fb.ready && state.auth.provider==='firebase' && state.auth.uid){ g.ownerId=state.auth.uid; g.memberIds=[state.auth.uid]; g.shared=true; const ref=await fb.db.collection('teams').add({...g,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); g.id=ref.id; await fb.db.collection('teamCodes').doc(g.joinCode).set({teamId:ref.id,ownerId:state.auth.uid}).catch(()=>{}); } else { g.ownerId='local'; g.memberIds=['local']; } state.teams.unshift(g); state.activeTeamId=g.id; saveState(); Gamification.checkBadges(); publishProfileToCloud(); toast(t('teamCreated'),'success'); return g; },
+        async joinByCode(code){ if(state.teams.some(x=>x.shared&&(x.memberIds||[]).includes(state.auth.uid))){ toast((state.settings.lang==='ar'?'أنت في فريق بالفعل — غادره أولًا للانضمام لفريق آخر':'You are already in a team — leave it first'),'warn'); return false; } const c=String(code||'').trim().toUpperCase(); if(!c){toast(t('invalidTeamCode'),'error');return false;} if(!fb.ready || state.auth.provider!=='firebase'){toast(t('requiresFirebase'),'warn');return false;} try{ const codeSnap=await fb.db.collection('teamCodes').doc(c).get(); if(!codeSnap.exists){toast(t('invalidTeamCode'),'error');return false;} const tid=codeSnap.data().teamId; if(state.teams.some(x=>x.id===tid)){toast(t('alreadyInTeam'),'warn');return false;} const ref=fb.db.collection('teams').doc(tid); await ref.update({memberIds:firebase.firestore.FieldValue.arrayUnion(state.auth.uid),updatedAt:iso()}); const doc=await ref.get(); const data=doc.data()||{}; const team=normalizeTeam({id:doc.id,...data}); const i=state.teams.findIndex(x=>x.id===team.id); if(i>=0)state.teams[i]=team; else state.teams.unshift(team); state.activeTeamId=team.id; saveState(); Gamification.checkBadges(); toast(t('teamJoined'),'success'); return true; }catch{ toast(t('invalidTeamCode'),'error'); return false; } },
         async leave(id){ const team=teamById(id); if(!team)return; if(team.shared && fb.ready && state.auth.uid){ if(!team.memberIds.includes(state.auth.uid)){toast(t('notInTeam'),'warn');return;} await fb.db.collection('teams').doc(id).update({memberIds:firebase.firestore.FieldValue.arrayRemove(state.auth.uid),updatedAt:iso()}); } state.teams=state.teams.filter(x=>x.id!==id); if(state.activeTeamId===id)state.activeTeamId=state.teams[0]?.id||null; saveState(); toast(t('teamLeft'),'success'); },
-        async delete(id){
-          const team=teamById(id); if(!team) return false;
-          const isOwner=team.ownerId===state.auth.uid || team.ownerId==='local';
-          if(!dev() && !isOwner) throw new Error(t('noDeveloperAccess'));
-          // Never hide a Firestore failure: keep the team visible until the server confirms deletion.
-          if(team.shared){
-            if(!fb.ready || !fb.auth?.currentUser) throw new Error(t('requiresFirebase'));
-            const ref=fb.db.collection('teams').doc(id);
-            const snap=await ref.get();
-            if(!snap.exists) throw new Error(state.settings.lang==='ar'?'الفريق غير موجود على الخادم':'Team no longer exists on the server');
-            const serverTeam=snap.data()||{};
-            if(!dev() && serverTeam.ownerId!==fb.auth.currentUser.uid) throw new Error(t('noDeveloperAccess'));
-            await ref.delete();
-            if(serverTeam.joinCode || team.joinCode){
-              await fb.db.collection('teamCodes').doc(serverTeam.joinCode||team.joinCode).delete().catch(err=>{ if(err?.code!=='not-found') console.warn('Team code cleanup failed',err); });
-            }
+        async purgeCloud(id,joinCode){
+          const db=fb.db; const msgs=await db.collection('teams').doc(id).collection('messages').limit(400).get().catch(()=>null);
+          if(msgs) await Promise.all(msgs.docs.map(d=>d.ref.delete().catch(()=>{})));
+          for(const p of ['all','daily','weekly','week','day','month']){
+            db.collection('teamBoard').doc(p).collection('teams').doc(id).delete().catch(()=>{});
+            const st=await db.collection('teamMembers').doc(id).collection(p).limit(200).get().catch(()=>null);
+            if(st) await Promise.all(st.docs.map(d=>d.ref.delete().catch(()=>{})));
           }
-          state.teams=state.teams.filter(x=>x.id!==id);
-          if(state.activeTeamId===id) state.activeTeamId=state.teams[0]?.id||null;
-          saveState(); toast(t('deleted'),'success'); return true;
+          if(joinCode) await db.collection('teamCodes').doc(joinCode).delete().catch(()=>{});
+          await db.collection('teams').doc(id).delete();
         },
+        async purge(id){
+          const team=teamById(id); if(!team) return;
+          if(team.shared && fb.ready && state.auth.uid){
+            if(!(team.ownerId===state.auth.uid||state.developer.unlocked)){ toast((state.settings.lang==='ar'?'لا يمكنك حذف فريق لا تملكه':'You can only delete your own team'),'warn'); return; }
+            try{ await this.purgeCloud(id,team.joinCode); }catch(e){ toast(t('requiresFirebase')+' ['+((e&&e.code)||'')+']','error'); return; }
+          }
+          state.teams=state.teams.filter(x=>x.id!==id); if(state.activeTeamId===id) state.activeTeamId=state.teams[0]?.id||null; saveState(); toast(t('deleted'),'success');
+        },
+        async delete(id){ const team=teamById(id); if(!team)return; if(team.shared && fb.ready && state.auth.uid===team.ownerId) await fb.db.collection('teamCodes').doc(team.joinCode).delete().catch(()=>{}); await fb.db.collection('teams').doc(id).delete().catch(()=>{}); state.teams=state.teams.filter(x=>x.id!==id); if(state.activeTeamId===id)state.activeTeamId=state.teams[0]?.id||null; saveState(); toast(t('deleted'),'success'); },
         setActive(id){ state.activeTeamId=id; saveState(); render(); },
-        async fetch(){ if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid)return; try{ const snap=await fb.db.collection('teams').where('memberIds','array-contains',state.auth.uid).limit(50).get(); const cloud=snap.docs.map(d=>normalizeTeam({id:d.id,...d.data()})); cloud.filter(x=>x.ownerId===state.auth.uid).forEach(x=>fb.db.collection('teamCodes').doc(x.joinCode).set({teamId:x.id,ownerId:state.auth.uid}).catch(()=>{})); state.teams=[...cloud,...state.teams.filter(t=>!t.shared)]; if(state.activeTeamId && !state.teams.some(t=>t.id===state.activeTeamId)) state.activeTeamId=state.teams[0]?.id||null; saveState(false); }catch(e){ console.warn(e); } }
+        async fetch(){ if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid)return; try{ const snap=await fb.db.collection('teams').where('memberIds','array-contains',state.auth.uid).limit(50).get(); const cloud=snap.docs.map(d=>normalizeTeam({id:d.id,...d.data()})); state.teams=state.teams.filter(x=>!x.shared||cloud.some(c=>c.id===x.id)); cloud.filter(x=>x.ownerId===state.auth.uid).forEach(x=>fb.db.collection('teamCodes').doc(x.joinCode).set({teamId:x.id,ownerId:state.auth.uid}).catch(()=>{})); state.teams=[...cloud,...state.teams.filter(t=>!t.shared)]; if(state.activeTeamId && !state.teams.some(t=>t.id===state.activeTeamId)) state.activeTeamId=state.teams[0]?.id||null; saveState(false); }catch(e){ console.warn(e); } }
       };
       const Challenges={
         async create(d){ const c=normalizeChallenge({...d,ownerId:state.auth.uid||'local'}); if(fb.ready && state.auth.provider==='firebase' && state.auth.uid){ c.source='cloud'; const payload={...c,createdAt:iso()}; delete payload.id; const ref=await fb.db.collection('challenges').add(payload); c.id=ref.id; state.challenges.cloud.unshift(c); } else { c.source='local'; state.challenges.local.unshift(c); } saveState(); toast(t('savedMsg'),'success'); return c; },
@@ -977,7 +969,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
           ${!has?`<div class="card small muted">${esc(t('firebaseMissing'))}</div>`:''}
           <div class="auth-tabs"><button class="tab-btn active" data-tab="google">${esc(t('google'))}</button><button class="tab-btn" data-tab="email">${esc(t('email'))}</button><button class="tab-btn" data-tab="guest">${esc(t('guest'))}</button></div>
           <div id="p-google" class="panel active"><button class="btn google-btn" data-action="google-login" ${has?'':'disabled'}>${GOOGLE_ICON}<span>${esc(t('google'))}</span></button><label class="checkbox-line"><input type="checkbox" id="remember" checked><span>${esc(t('remember'))}</span></label></div>
-          <div id="p-email" class="panel"><form id="emailLoginForm" class="auth-form"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('login'))}</button></form><details><summary class="link-btn">${esc(t('addProfile'))}</summary><form id="registerForm" class="auth-form" style="margin-top:10px"><label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" required></label><label class="field"><span>${state.settings.lang==='ar'?'النوع':'Gender'}</span><select class="input" name="gender" required><option value="">${state.settings.lang==='ar'?'اختر النوع':'Choose gender'}</option><option value="male">${state.settings.lang==='ar'?'ذكر':'Male'}</option><option value="female">${state.settings.lang==='ar'?'أنثى':'Female'}</option></select></label><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('save'))}</button></form></details><details><summary class="link-btn">${esc(t('invalidCredentials'))}</summary><form id="resetForm" class="auth-form" style="margin-top:10px"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><button class="btn" type="submit" ${has?'':'disabled'}>${esc(t('send'))}</button></form></details></div>
+          <div id="p-email" class="panel"><form id="emailLoginForm" class="auth-form"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('login'))}</button></form><details><summary class="link-btn">${esc(t('addProfile'))}</summary><form id="registerForm" class="auth-form" style="margin-top:10px"><label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" required></label><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('save'))}</button></form></details><details><summary class="link-btn">${esc(t('invalidCredentials'))}</summary><form id="resetForm" class="auth-form" style="margin-top:10px"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><button class="btn" type="submit" ${has?'':'disabled'}>${esc(t('send'))}</button></form></details></div>
           <div id="p-guest" class="panel"><button class="btn" data-action="guest-login" style="width:100%">${esc(t('guest'))}</button></div>
           ${profiles.length?`<div><div class="row between"><strong>${esc(t('savedProfiles'))}</strong><button class="link-btn" data-action="new-local-profile">${icon('plus',14)} ${esc(t('addProfile'))}</button></div><div class="profile-list">${profiles.map(p=>`<div class="profile-row"><div class="avatar" style="background:${esc(p.color)}">${p.photo||p.photoURL?`<img src="${esc(p.photo||p.photoURL)}" alt="" style="width:100%;height:100%;object-fit:cover">`:esc((p.name||'م').slice(0,1).toUpperCase())}</div><div class="meta"><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.email||(p.provider==='local'?t('localOnly'):t('synced')))}</div></div><button class="btn sm" data-action="open-profile" data-id="${p.id}">${esc(t('openProfile'))}</button><button class="icon-btn" data-action="delete-profile" data-id="${p.id}" aria-label="${esc(t('deleteProfile'))}">${icon('trash',16)}</button></div>`).join('')}</div></div>`:''}
           <div class="muted small center"><span class="ys-signature">YS</span> • ${esc(APP.copyright)}</div>
@@ -998,19 +990,19 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       const PF_COLORS=['#2563eb','#7c3aed','#db2777','#dc2626','#ea580c','#059669','#0891b2','#475569'];
       const pid=id=>'MZ-'+String(id||'LOCAL').replace(/[^A-Za-z0-9]/g,'').slice(0,8).toUpperCase();
       const myId=()=>state.auth.uid&&state.auth.uid!=='guest'?state.auth.uid:(activeProfile?.id||'local');
-      function myRow(){ const p=state.profile; return {id:myId(),displayName:p.name||state.auth.displayName||'',avatarColor:p.avatarColor,photo:p.photo||state.auth.photoURL||'',title:titleName(state.game.titles.equipped),frame:state.game.frames.equipped,xp:state.game.xp,level:state.game.level,streak:state.game.streak,tasksCompleted:state.tasks.filter(x=>x.status==='done').length,focusMinutes:Math.round(completedSessions().reduce((s,x)=>s+x.actualSec/60,0)),raceWins:state.game.raceWins,bio:p.bio||'',gender:p.gender||'',banner:p.banner|0,handle:p.handle||'',badges:Object.keys(state.game.badges||{})}; }
+      function myRow(){ const p=state.profile; return {id:myId(),displayName:p.name||state.auth.displayName||'',avatarColor:p.avatarColor,photo:p.photo||state.auth.photoURL||'',title:titleName(state.game.titles.equipped),frame:state.game.frames.equipped,xp:state.game.xp,level:state.game.level,streak:state.game.streak,tasksCompleted:state.tasks.filter(x=>x.status==='done').length,focusMinutes:Math.round(completedSessions().reduce((s,x)=>s+x.actualSec/60,0)),raceWins:state.game.raceWins,bio:p.bio||'',banner:p.banner|0,handle:p.handle||'',badges:Object.keys(state.game.badges||{})}; }
       function pfCard(r){
         const rl=(Social.staff||{})[r.id]||null, gold=!!(rl&&rl.role==='developer'), isMod=!!(rl&&rl.role==='moderator');
         const [c1,c2]=BANNERS[(r.banner|0)%BANNERS.length]||BANNERS[0];
         const av=r.photo?`<img class="avatar frame-${esc(r.frame||'none')}" src="${esc(r.photo)}" alt="">`:`<span class="avatar frame-${esc(r.frame||'none')}" style="background:${esc(r.avatarColor||'var(--accent)')}">${esc((r.displayName||'م').slice(0,1).toUpperCase())}</span>`;
         const st=[[r.level||1,t('level')],[r.xp||0,'XP'],[r.streak||0,t('streak')],[r.tasksCompleted||0,t('tasks')],[fmtDuration(r.focusMinutes||0),t('focus')],[r.raceWins||0,'🏁']];
-        return `<div class="pf-card${gold?' pf-gold':''}"><div class="pf-banner" style="${gold?'':`background:linear-gradient(135deg,${c1},${c2})`}"></div><div class="pf-body"><div class="pf-av">${av}</div><h2 class="pf-name">${esc(r.displayName||'—')}</h2><div class="ys-profile-signature" aria-label="YS">✦ YS ✦</div>${r.handle?`<div class="pf-handle">@${esc(r.handle)}</div>`:''}<div class="pf-tags"><button type="button" class="pf-id" data-pf="copy" data-id="${esc(pid(r.id))}">${esc(pid(r.id))} ⧉</button>${Social.badgeFor(r)}${gold?'<span class="chip role-dev">👑 YS • المؤسس</span>':isMod?'<span class="chip role-mod">🛡️ مشرف</span>':''}<span class="chip">${esc(r.title||t('student'))}</span></div>${r.bio?`<p class="pf-bio">${esc(r.bio)}</p>`:''}${medals(r,gold)}<div class="pf-stats">${st.map(([v,l])=>`<div><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('')}</div></div></div>`;
+        return `<div class="pf-card${gold?' pf-gold':''}"><div class="pf-banner" style="${gold?'':`background:linear-gradient(135deg,${c1},${c2})`}"></div><div class="pf-body"><div class="pf-av">${av}</div><h2 class="pf-name">${esc(r.displayName||'—')}</h2>${r.handle?`<div class="pf-handle">@${esc(r.handle)}</div>`:''}<div class="pf-tags"><button type="button" class="pf-id" data-pf="copy" data-id="${esc(pid(r.id))}">${esc(pid(r.id))} ⧉</button>${Social.badgeFor(r)}${gold?'<span class="chip role-dev">👑 YS • المؤسس</span>':isMod?'<span class="chip role-mod">🛡️ مشرف</span>':''}<span class="chip">${esc(r.title||t('student'))}</span></div>${r.bio?`<p class="pf-bio">${esc(r.bio)}</p>`:''}${medals(r,gold)}<div class="pf-stats">${st.map(([v,l])=>`<div><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('')}</div></div></div>`;
       }
       function renderProfile(){
         const p=state.profile, sw=(arr,k,cur)=>arr.map((c,i)=>`<button type="button" class="pf-sw ${cur===i?'on':''}" data-pf="${k}" data-i="${i}" style="background:${Array.isArray(c)?`linear-gradient(135deg,${c[0]},${c[1]})`:c}" aria-label="${k} ${i+1}"></button>`).join('');
-        return `<div class="pf-grid"><div id="pfPreview">${pfCard(myRow())}</div><div class="card pf-edit" id="pfForm"><h3 class="title">${esc(t('editProfileT'))}</h3><div class="row"><button type="button" class="btn" data-pf="photo">📷 ${state.settings.lang==='ar'?'صورة الملف':'Photo'}</button><button type="button" class="btn" data-pf="rmphoto">✕</button><input type="file" id="pfFile" accept="image/*" hidden></div><label>${esc(t('nameT'))}<input id="pfName" maxlength="40" value="${esc(p.name||'')}"></label><label>@username<input id="pfHandle" maxlength="20" dir="ltr" value="${esc(p.handle||'')}" placeholder="username"></label><label>${state.settings.lang==='ar'?'النوع':'Gender'}<select id="pfGender"><option value="">${state.settings.lang==='ar'?'غير محدد':'Not set'}</option><option value="male" ${p.gender==='male'?'selected':''}>${state.settings.lang==='ar'?'ذكر':'Male'}</option><option value="female" ${p.gender==='female'?'selected':''}>${state.settings.lang==='ar'?'أنثى':'Female'}</option></select></label><label>${esc(t('bioT'))}<textarea id="pfBio" maxlength="140" rows="3">${esc(p.bio||'')}</textarea><small class="muted" id="pfCnt">${(p.bio||'').length}/140</small></label><div><div class="muted small">${esc(t('bannerT'))}</div><div class="pf-sws" id="swBanner">${sw(BANNERS,'banner',p.banner|0)}</div></div><div><div class="muted small">${esc(t('colorT'))}</div><div class="pf-sws" id="swColor">${sw(PF_COLORS,'color',PF_COLORS.indexOf(p.avatarColor))}</div></div><button class="btn primary" data-pf="save">${esc(t('saveT'))}</button></div>${missionsHtml()}</div>`;
+        return `<div class="pf-grid"><div id="pfPreview">${pfCard(myRow())}</div><div class="card pf-edit" id="pfForm"><h3 class="title">${esc(t('editProfileT'))}</h3><div class="row"><button type="button" class="btn" data-pf="photo">📷 ${state.settings.lang==='ar'?'صورة الملف':'Photo'}</button><button type="button" class="btn" data-pf="rmphoto">✕</button><input type="file" id="pfFile" accept="image/*" hidden></div><label>${esc(t('nameT'))}<input id="pfName" maxlength="40" value="${esc(p.name||'')}"></label><label>@username<input id="pfHandle" maxlength="20" dir="ltr" value="${esc(p.handle||'')}" placeholder="username"></label><label>${esc(t('bioT'))}<textarea id="pfBio" maxlength="140" rows="3">${esc(p.bio||'')}</textarea><small class="muted" id="pfCnt">${(p.bio||'').length}/140</small></label><div><div class="muted small">${esc(t('bannerT'))}</div><div class="pf-sws" id="swBanner">${sw(BANNERS,'banner',p.banner|0)}</div></div><div><div class="muted small">${esc(t('colorT'))}</div><div class="pf-sws" id="swColor">${sw(PF_COLORS,'color',PF_COLORS.indexOf(p.avatarColor))}</div></div><button class="btn primary" data-pf="save">${esc(t('saveT'))}</button></div>${missionsHtml()}</div>`;
       }
-      function pfDraft(){ const g=n=>document.getElementById(n); if(!g('pfName'))return; const p=state.profile; p.name=g('pfName').value.slice(0,40); p.handle=g('pfHandle').value.toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20); p.bio=g('pfBio').value.slice(0,140); if(g('pfGender'))p.gender=g('pfGender').value; g('pfCnt').textContent=p.bio.length+'/140'; g('pfPreview').innerHTML=pfCard(myRow()); }
+      function pfDraft(){ const g=n=>document.getElementById(n); if(!g('pfName'))return; const p=state.profile; p.name=g('pfName').value.slice(0,40); p.handle=g('pfHandle').value.toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20); p.bio=g('pfBio').value.slice(0,140); g('pfCnt').textContent=p.bio.length+'/140'; g('pfPreview').innerHTML=pfCard(myRow()); }
       async function openPub(id){
         let r=(state.leaderboard.cache||[]).find(x=>x.id===id);
         if(!r&&fb.ready){ try{ const s=await fb.db.collection('publicProfiles').doc(id).get(); if(s.exists) r={id,...s.data()}; }catch{} }
@@ -1152,7 +1144,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       function renderTeams(){
         const active=teamById(state.activeTeamId);
         return `<div class="card"><div class="row between"><div><h2 class="title">${esc(t('teams'))}</h2><p class="subtitle">${esc(t('createFirstTeam'))}</p></div><div class="row"><button class="btn" data-action="join-team">${icon('users',16)} ${esc(t('joinTeam'))}</button><button class="btn primary" data-action="new-team">${icon('plus',18)} ${esc(t('createTeam'))}</button></div></div>
-        ${state.teams.length?`<div class="grid-cards" style="margin-top:12px">${state.teams.map(tm=>{const tasks=state.tasks.filter(x=>x.teamId===tm.id); return `<div class="card entity-card ${state.activeTeamId===tm.id?'active':''}"><div class="strip" style="background:${esc(tm.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(tm.name)}</h3><div class="muted small">${esc(tm.description||'—')}</div><div class="badge" style="margin-top:6px">${esc(t('teamCode'))}: ${esc(tm.joinCode)}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tm.memberIds.length}</strong><div class="muted small">${esc(t('members'))}</div></div></div><div class="row"><button class="btn sm ${state.activeTeamId===tm.id?'primary':''}" data-action="select-team" data-id="${tm.id}">${esc(state.activeTeamId===tm.id?t('activeTeam'):t('selectTeam'))}</button><button class="btn sm" data-action="copy-team-code" data-id="${tm.id}">${esc(t('copyCode'))}</button>${(tm.ownerId===state.auth.uid||state.developer.unlocked)?`<button class="btn sm danger" data-action="delete-team" data-id="${esc(tm.id)}">🗑️ ${esc(t('deleteTeam'))}</button>`:`<button class="btn sm danger" data-action="leave-team" data-id="${esc(tm.id)}">${esc(t('leaveTeam'))}</button>`}</div></div>`;}).join('')}</div>`:emptyHtml(t('noTeams'))}
+        ${state.teams.length?`<div class="grid-cards" style="margin-top:12px">${state.teams.map(tm=>{const tasks=state.tasks.filter(x=>x.teamId===tm.id); return `<div class="card entity-card ${state.activeTeamId===tm.id?'active':''}"><div class="strip" style="background:${esc(tm.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(tm.name)}</h3><div class="muted small">${esc(tm.description||'—')}</div><div class="badge" style="margin-top:6px">${esc(t('teamCode'))}: ${esc(tm.joinCode)}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tm.memberIds.length}</strong><div class="muted small">${esc(t('members'))}</div></div></div><div class="row"><button class="btn sm ${state.activeTeamId===tm.id?'primary':''}" data-action="select-team" data-id="${tm.id}">${esc(state.activeTeamId===tm.id?t('activeTeam'):t('selectTeam'))}</button><button class="btn sm" data-action="copy-team-code" data-id="${tm.id}">${esc(t('copyCode'))}</button><button class="btn sm danger" data-action="leave-team" data-id="${tm.id}">${esc(t('leaveTeam'))}</button>${(tm.ownerId===state.auth.uid||state.developer.unlocked)?`<button class="btn sm danger" data-action="delete-team" data-id="${tm.id}">🗑 ${esc(state.settings.lang==='ar'?'حذف الفريق':'Delete team')}</button>`:''}</div></div>`;}).join('')}</div>`:emptyHtml(t('noTeams'))}
         </div>
         ${active?`<div class="card" style="margin-top:12px"><div class="row between"><h2 class="title">${esc(t('teamLb'))}: ${esc(active.name)}</h2><button class="btn sm primary" data-action="lb-tab" data-tab="team">${esc(t('refresh'))}</button> <button class="btn sm" data-soc="team-chat" data-id="${esc(active.id)}">💬 ${esc(t('chatT'))}</button></div><div class="list">${state.leaderboard.cache.filter(Boolean).slice(0,10).map(lbRow).join('')||emptyHtml(t('noData'))}</div></div>`:''}`;
       }
@@ -1226,6 +1218,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         ${DevCenter.html()}
         <div class="grid cols-2" style="margin-top:12px">
           <div class="card"><h3 class="title">⚡ ${state.settings.lang==='ar'?'حدث XP مضاعف':'XP boost event'}</h3><div class="auth-form"><div class="row"><input class="input" id="devMult" type="number" min="1" max="5" step="0.5" value="2" style="flex:1;font-size:16px"><input class="input" id="devHours" type="number" min="1" max="168" value="24" style="flex:1;font-size:16px"></div><div class="row"><button type="button" class="btn primary" data-dev2="event-save">${state.settings.lang==='ar'?'تفعيل (مضاعف | ساعات)':'Start (multiplier | hours)'}</button><button type="button" class="btn" data-dev2="event-off">${state.settings.lang==='ar'?'إيقاف':'Stop'}</button></div></div></div>
+          <div class="card"><h3 class="title">🧹 ${state.settings.lang==='ar'?'تنظيف الفرق':'Teams cleanup'}</h3><div class="auth-form"><p class="muted small">${state.settings.lang==='ar'?'يحذف كل الفرق وأكوادها وشاتاتها وتصنيفاتها نهائيًا (للبداية من جديد).':'Deletes ALL teams with their codes, chats and boards permanently.'}</p><button type="button" class="btn danger" data-dev2="purge-all-teams">🗑 ${state.settings.lang==='ar'?'حذف كل الفرق':'Delete all teams'}</button></div></div>
           <div class="card"><h3 class="title">📊 ${esc(t('statsT'))}</h3><div class="auth-form"><button type="button" class="btn" data-dev2="stats">${esc(t('refreshStatsT'))}</button><div id="devStats" class="muted small"></div></div></div>
           <div class="card"><h3 class="title">${esc(t('rankTiersT'))}</h3><div class="auth-form"><textarea class="input" id="devTiers" rows="6" dir="auto" style="font-size:15px">${esc(Social.rankText || Social.defaultTiers)}</textarea><button type="button" class="btn primary" data-dev2="save-ranking">${esc(t('saveRankT'))}</button></div></div>
           <div class="card"><h3 class="title">${esc(t('staffT'))}</h3><div class="auth-form">${Social.staffList()}<button type="button" class="btn" data-dev2="staff-me">👑 ${esc(t('regMeT'))}</button><div class="row"><input class="input" id="devModId" dir="ltr" maxlength="12" placeholder="MZ-XXXXXXXX" style="flex:1;font-size:16px"><button type="button" class="btn primary" data-dev2="mod-add">${esc(t('addModT'))}</button></div></div></div>
@@ -1570,6 +1563,12 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
           if(a === 'event-save'){ const mult = Math.min(5, Math.max(1, +g('devMult').value || 2)), hrs = Math.min(168, Math.max(1, +g('devHours').value || 24));
             await fb.db.collection('developer').doc('events').set({ mult, until: new Date(Date.now() + hrs * 36e5).toISOString(), at }); await Events.load(); toast(t('savedT'),'success'); render(); }
           if(a === 'event-off'){ await fb.db.collection('developer').doc('events').set({ mult: 1, until: at, at }); await Events.load(); toast(t('savedT'),'success'); render(); }
+          if(a === 'purge-all-teams'){
+            if(!(await confirmModal({ title: L2('حذف كل الفرق','Delete all teams'), message: L2('هذا لا يمكن التراجع عنه. متأكد؟','This cannot be undone. Sure?'), danger: true }))) return;
+            const all = await fb.db.collection('teams').limit(500).get(); let n = 0;
+            for(const d of all.docs){ try{ await Teams.purgeCloud(d.id, d.data().joinCode); n++; }catch{} }
+            state.teams = state.teams.filter(x => !x.shared); state.activeTeamId = state.teams[0]?.id || null; saveState(); toast('🧹 ' + n, 'success'); render();
+          }
           if(a === 'staff-me'){ await fb.db.collection('staff').doc(Social.me()).set({ role: 'developer', name: Social.name(), at }); await Social.loadConfig(); toast(t('savedT'),'success'); render(); }
           if(a === 'mod-add'){ const r = await Social.resolve(g('devModId').value); if(!r){ toast(t('notFoundT'),'warn'); return; }
             await Promise.all([fb.db.collection('moderators').doc(r.uid).set({ name: r.name, at }), fb.db.collection('staff').doc(r.uid).set({ role: 'moderator', name: r.name, at })]);
@@ -1637,8 +1636,8 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
           case 'save-join-team': { const fd=new FormData($('#joinTeamForm')); const ok=await Teams.joinByCode(fd.get('code')); if(ok) modalStack.at(-1)?.close(); render(); break; }
           case 'select-team': Teams.setActive(id); break;
           case 'copy-team-code': { const tm=teamById(id); if(tm){ await navigator.clipboard?.writeText(tm.joinCode); toast(t('copied'),'success'); } break; }
+          case 'delete-team': { if(await confirmModal({title:(state.settings.lang==='ar'?'حذف الفريق':'Delete team'),message:(state.settings.lang==='ar'?'سيتم حذف الفريق وكل بياناته نهائيًا. متأكد؟':'The team and all its data will be deleted permanently. Sure?'),danger:true})) await Teams.purge(id); render(); break; }
           case 'leave-team': if(await confirmModal({title:t('leaveTeam'),message:t('leaveTeam'),danger:true})) await Teams.leave(id); render(); break;
-          case 'delete-team': { const tm=teamById(id); if(!tm)break; if(!(state.developer.unlocked||tm.ownerId===state.auth.uid)){toast(t('noDeveloperAccess'),'error');break;} if(await confirmModal({title:t('deleteTeam'),message:state.settings.lang==='ar'?'سيتم حذف الفريق نهائيًا، ويمكنك إنشاء فريق جديد لاحقًا مقابل السعر المحدد في لوحة المطور.':'This team will be permanently deleted. You can create another later at the price set by the developer.',danger:true})){ try{ await Teams.delete(id); toast(t('deleted'),'success'); }catch(err){toast(err.message||t('requiresFirebase'),'error');} } render(); break; }
           case 'lb-tab': Leaderboard.fetch(el.dataset.tab); break;
           case 'lb-refresh': Leaderboard.fetch(state.ui.leaderboardTab||'global'); break;
           case 'equip-frame': Gamification.equipFrame(el.dataset.id); break;
@@ -1675,7 +1674,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         if(f.id==='quickAddForm'){ const fd=new FormData(f); Tasks.create(parseQuickAdd(fd.get('text'))); f.reset(); render(); toast(t('savedMsg'),'success'); }
         if(f.id==='focusForm'){ const fd=new FormData(f); startFocus({taskId:fd.get('taskId')||null,subjectId:fd.get('subjectId')||null,minutes:clamp(Math.round(num(fd.get('minutes'),25)),1,240)}); }
         if(f.id==='emailLoginForm'){ const fd=new FormData(f); await loginWithEmail(fd.get('email'),fd.get('password'),true); }
-        if(f.id==='registerForm'){ const fd=new FormData(f); const created=await registerWithEmail(fd.get('name'),fd.get('email'),fd.get('password'),true); if(created){state.profile.gender=fd.get('gender')==='female'?'female':'male'; state.profile.name=String(fd.get('name')||'').trim(); saveState(); publishProfileToCloud(); render();} }
+        if(f.id==='registerForm'){ const fd=new FormData(f); await registerWithEmail(fd.get('name'),fd.get('email'),fd.get('password'),true); }
         if(f.id==='resetForm'){ const fd=new FormData(f); await resetPassword(fd.get('email')); }
         if(f.id==='profileForm'){ const fd=new FormData(f); state.profile.name=String(fd.get('name')||'').trim(); state.profile.school=String(fd.get('school')||'').trim(); state.settings.accent=fd.get('accent'); if(activeProfile){ activeProfile.name=state.profile.name; activeProfile.color=state.settings.accent; const list=getProfiles(); const i=list.findIndex(p=>p.id===activeProfile.id); if(i>=0){list[i]=activeProfile;saveProfiles(list);} } saveState(); applySettings(); render(); toast(t('savedMsg'),'success'); }
         if(f.id==='settingsForm'){ const fd=new FormData(f); state.settings.lang=fd.get('lang'); state.settings.themeMode=fd.get('themeMode'); state.settings.themePreset=fd.get('themePreset'); state.settings.pomodoro.work=clamp(Math.round(num(fd.get('work'),25)),1,240); state.settings.pomodoro.short=clamp(Math.round(num(fd.get('short'),5)),1,120); state.settings.notifyLead=clamp(Math.round(num(fd.get('notifyLead'),60)),1,1440); state.settings.sound=!!fd.get('sound'); state.settings.vibration=!!fd.get('vibration'); saveState(); applySettings(); render(); toast(t('savedMsg'),'success'); }
@@ -2149,9 +2148,7 @@ service cloud.firestore {
   Object.assign(M.ar,{store:'المتجر',vip:'VIP'}); Object.assign(M.en,{store:'Store',vip:'VIP'});
   ICONS.bag='<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>';
   /* tidy navigation order + new tabs */
-  Object.assign(M.ar,{inbox:'البريد الوارد'}); Object.assign(M.en,{inbox:'Inbox'});
-  ICONS.inbox='<path d="M4 4h16l2 10v5H2v-5L4 4z"/><path d="M2 14h5l2 3h6l2-3h5"/>';
-  const _ni=navItems; navItems=function(){ const m=Object.fromEntries(_ni()), o=[['home','home'],['tasks','tasks'],['focus','focus'],['groups','users'],['teams','trophy'],['challenges','fire'],['leaderboard','medal'],['chat','chat'],['friends','users'],['inbox','inbox'],['store','bag'],['vip','crown'],['profile','user'],['settings','settings']]; if(m.developer) o.push(['developer','crown']); return o; };
+  const _ni=navItems; navItems=function(){ const m=Object.fromEntries(_ni()), o=[['home','home'],['tasks','tasks'],['focus','focus'],['groups','users'],['teams','trophy'],['challenges','fire'],['leaderboard','medal'],['chat','chat'],['friends','users'],['store','bag'],['vip','crown'],['profile','user'],['settings','settings']]; if(m.developer) o.push(['developer','crown']); return o; };
   /* VIP */
   if(!FRAME_DEFS.some(f=>f.id==='vip')) FRAME_DEFS.push({id:'vip',ar:'VIP ⭐',en:'VIP ⭐'});
   if(!TITLE_DEFS.some(f=>f.id==='vip_t')) TITLE_DEFS.push({id:'vip_t',ar:'عضو VIP ⭐',en:'VIP Member ⭐'});
@@ -2215,7 +2212,7 @@ service cloud.firestore {
   /* instant developer recognition (UI only; server rules still decide real power) */
   try{ const h=localStorage.getItem('munjiz.devHint'); if(h&&state.auth&&state.auth.uid===h) state.developer.unlocked=true; }catch{}
   /* dev-controlled prices (developer/prices) */
-  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,team:299,items:{}}, Pz={...D0}, live={};
+  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,team:300,items:{}}, Pz={...D0}, live={};
   window.__price=(k,i,id)=>{ const o=(Pz.items||{})[k+':'+id]; if(o!==undefined&&o!==null&&o!=='') return +o; return k==='f'?Pz.fb+i*Pz.fs:Pz.tb+i*Pz.ts; };
   const Promo={on:false,text:'',link:'',emoji:'📣'};
   setInterval(()=>{ if(!ok()) return;
@@ -2232,17 +2229,11 @@ service cloud.firestore {
     try{ await wdoc().set({c:w.c||0,own:w.own||[],vip:!!w.vip,chest:ls('munjiz.chest',''),rev,at:iso()}); }catch{ last=''; } }
   setInterval(()=>{ pull(); push(); },12000); setTimeout(pull,2500);
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) push(); });
-  /* Team policy: one active team per student. Every creation costs the developer-controlled price (default 299 YS Coins), including the first team and recreating after deletion. */
-  document.addEventListener('click',e=>{ const b=e.target.closest('[data-action="save-team"]'); if(!b||dev()) return; const w=ls(WK,{c:0}); if((+w.c||0)<(+Pz.team||299)){ e.stopImmediatePropagation(); e.preventDefault(); toast(L('إنشاء الفريق يكلف '+Pz.team+' YS Coins — رصيدك لا يكفي','Creating a team costs '+Pz.team+' YS Coins — not enough coins'),'warn'); } },true);
+  /* one team only; extra team costs YS Coins */
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-action="save-team"]'); if(!b||dev()||!state.teams.length) return; if((ls(WK,{c:0}).c||0)<Pz.team){ e.stopImmediatePropagation(); e.preventDefault(); toast(L('مسموح بفريق واحد فقط. فريق إضافي يكلف '+Pz.team+' YS Coins — رصيدك لا يكفي','One team only. An extra team costs '+Pz.team+' YS Coins — not enough YS Coins'),'warn'); } },true);
   const _tc=Teams.create.bind(Teams);
-  Teams.create=async function(d){
-    if(dev()) return _tc(d);
-    if(state.teams.some(x=>x.shared ? (x.memberIds||[]).includes(state.auth.uid) : true)) { toast(L('غادر فريقك الحالي أو احذفه أولًا قبل إنشاء فريق جديد','Leave or delete your current team before creating another'),'warn'); return null; }
-    const w=ls(WK,{c:0}), price=Math.max(0,Math.floor(+Pz.team||299));
-    if((+w.c||0)<price){ toast(L('تحتاج '+price+' YS Coins لإنشاء الفريق. رصيدك '+(+w.c||0),'You need '+price+' YS Coins to create a team. Balance: '+(+w.c||0)),'warn'); return null; }
-    if(!await confirmModal({title:'🛡️',message:L('إنشاء الفريق مقابل '+price+' YS Coins؟','Create this team for '+price+' YS Coins?')})) return null;
-    const g=await _tc(d); if(g){ w.c=(+w.c||0)-price; ss(WK,w); await push(); render(); } return g;
-  };
+  Teams.create=async function(d){ if(!dev()&&state.teams.length){ const w=ls(WK,{c:0}); if(w.c<Pz.team){ toast(L('رصيدك لا يكفي','Not enough YS Coins'),'warn'); return null; }
+      if(!await confirmModal({title:'🛡️',message:L('إنشاء فريق إضافي بسعر '+Pz.team+' YS Coins؟','Create an extra team for '+Pz.team+' YS Coins?')})) return null; const g=await _tc(d); if(g){ w.c-=Pz.team; ss(WK,w); push(); } return g; } return _tc(d); };
   /* VIP purchase */
   async function buyVip(){ const w=ls(WK,{c:0}), p=Pz.vip; if(!dev()&&w.c<p){ toast(L('تحتاج '+p+' YS Coins — رصيدك '+w.c,'Need '+p+' YS Coins — you have '+w.c),'warn'); return; }
     if(!await confirmModal({title:'👑',message:L('شراء عضوية VIP بسعر '+p+' YS Coins (دائمة)؟','Buy lifetime VIP for '+p+' YS Coins?')})) return;
@@ -2271,7 +2262,7 @@ service cloud.firestore {
   /* dev panel: prices + promo */
   const _rd=renderDeveloper; renderDeveloper=function(){ const h=_rd(); if(!dev()) return h; const num=(id,l,v)=>`<label class="field"><span>${l}</span><input id="${id}" type="number" min="0" value="${v}" dir="ltr"></label>`;
     const opts=[...FRAME_DEFS.filter(f=>!['none','ys','vip'].includes(f.id)).map(f=>`<option value="f:${esc(f.id)}">🖼️ ${esc(frameName(f.id))}</option>`),...TITLE_DEFS.filter(x=>!['guardian','ys_dev','founder','vip_t'].includes(x.id)).map(x=>`<option value="t:${esc(x.id)}">🏷️ ${esc(titleName(x.id))}</option>`)].join('');
-    return h+`<div class="card dev-panel"><h3 class="title">💰 ${L('التحكم في الأسعار','Price control')}</h3><div class="form-grid">${num('u7fb',L('إطار: السعر الأساسي','Frame base'),Pz.fb)}${num('u7fs',L('إطار: زيادة لكل عنصر','Frame step'),Pz.fs)}${num('u7tb',L('لقب: السعر الأساسي','Title base'),Pz.tb)}${num('u7ts',L('لقب: زيادة لكل عنصر','Title step'),Pz.ts)}${num('u7vip',L('سعر VIP','VIP price'),Pz.vip)}${num('u7team',L('سعر إنشاء الفريق','Team creation price'),Pz.team)}</div><button type="button" class="btn primary" style="margin-top:8px" data-u7="psave">${L('حفظ الأسعار','Save prices')}</button><p class="muted small">${L('احذف الفرق التجريبية واحدًا واحدًا بعد التأكد من ملكيتها. لن يتم حذف كل الفرق دفعة واحدة.','Delete test teams individually after verifying ownership. Bulk deletion is disabled.')}</p>
+    return h+`<div class="card dev-panel"><h3 class="title">💰 ${L('التحكم في الأسعار','Price control')}</h3><div class="form-grid">${num('u7fb',L('إطار: السعر الأساسي','Frame base'),Pz.fb)}${num('u7fs',L('إطار: زيادة لكل عنصر','Frame step'),Pz.fs)}${num('u7tb',L('لقب: السعر الأساسي','Title base'),Pz.tb)}${num('u7ts',L('لقب: زيادة لكل عنصر','Title step'),Pz.ts)}${num('u7vip',L('سعر VIP','VIP price'),Pz.vip)}${num('u7team',L('سعر فريق إضافي','Extra team price'),Pz.team)}</div><button type="button" class="btn primary" style="margin-top:8px" data-u7="psave">${L('حفظ الأسعار','Save prices')}</button>
       <h4 class="title" style="margin-top:12px">${L('سعر عنصر محدد','Single item price')}</h4><div class="row"><select id="u7it" style="flex:1">${opts}</select><input id="u7ip" type="number" min="0" dir="ltr" style="max-width:100px"><button type="button" class="btn sm primary" data-u7="iset">✔</button><button type="button" class="btn sm" data-u7="iclr">↺</button></div></div>
       <div class="card dev-panel"><h3 class="title">📢 ${L('مساحة الإعلان','Ad slot')}</h3><div class="grid"><div class="row"><input id="u7ae" maxlength="2" value="${esc(Promo.emoji||'📣')}" style="max-width:64px;text-align:center"><input id="u7at" maxlength="140" value="${esc(Promo.text||'')}" placeholder="${esc(L('نص الإعلان','Ad text'))}" style="flex:1"></div><input id="u7al" dir="ltr" value="${esc(Promo.link||'')}" placeholder="https://…"><label class="checkbox-line"><input type="checkbox" id="u7ao" ${Promo.on?'checked':''}> ${L('تفعيل','Enabled')}</label><button type="button" class="btn primary" data-u7="asave">${L('حفظ الإعلان','Save ad')}</button></div></div>`; };
   document.addEventListener('click',async e=>{ const b=e.target.closest('[data-u7]'); if(!b) return; const a=b.dataset.u7, v=x=>(document.getElementById(x)||{}).value||'';
@@ -2280,129 +2271,15 @@ service cloud.firestore {
       else if(a==='ad'){ const l=b.dataset.l; if(/^https?:\/\//i.test(l)) window.open(l,'_blank','noopener'); }
       else if(a==='emb'){ const id=b.dataset.id, i=+b.dataset.i; await col('teams',id).update({emblem:i,updatedAt:iso()}); ['all','d-'+day(),'w-'+wk()].forEach(p=>col('teamBoard',p,'teams',id).set({emblem:i},{merge:true}).catch(()=>{})); Em.d[id]={...(Em.d[id]||{}),emblem:i}; render(); }
       else if(!dev()) return;
-      else if(a==='psave'){ await col('developer','prices').set({fb:+v('u7fb')||0,fs:+v('u7fs')||0,tb:+v('u7tb')||0,ts:+v('u7ts')||0,vip:+v('u7vip')||0,team:+v('u7team')||299},{merge:true}); toast(t('savedMsg'),'success'); }
+      else if(a==='psave'){ await col('developer','prices').set({fb:+v('u7fb')||0,fs:+v('u7fs')||0,tb:+v('u7tb')||0,ts:+v('u7ts')||0,vip:+v('u7vip')||0,team:+v('u7team')||0},{merge:true}); toast(t('savedMsg'),'success'); }
       else if(a==='iset'){ const k=v('u7it'), p=v('u7ip'); if(p==='') return; await col('developer','prices').set({items:{[k]:+p}},{merge:true}); toast(t('savedMsg'),'success'); }
       else if(a==='iclr'){ await col('developer','prices').update({['items.'+v('u7it')]:FV().delete()}); toast(t('savedMsg'),'success'); }
       else if(a==='asave'){ await col('developer','promo').set({emoji:v('u7ae')||'📣',text:v('u7at').slice(0,140),link:v('u7al').trim(),on:!!document.getElementById('u7ao').checked,at:iso()}); toast(t('savedMsg'),'success'); }
     }catch(err){ toast((err&&err.code==='permission-denied')?L('القواعد تمنع هذا — حدّث Firestore Rules','Rules block this — update Firestore rules'):((err&&err.message)||'error'),'error'); } });
 })();
 
-      /* YS visual polish: subtle animated signature, frames and reduced-motion support */
-      const ysPolish=document.createElement('style'); ysPolish.textContent=`
-        .ys-signature,.u4-sig{display:inline-flex;align-items:center;gap:.25rem;font-weight:900;letter-spacing:.08em;background:linear-gradient(100deg,#fbbf24,#fff7c2,#a78bfa,#fbbf24);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ysShimmer 4s linear infinite;text-shadow:0 0 18px #f59e0b22}
-        .pf-card:has(.pf-banner),.u4-endo,.u7-em{transition:transform .25s ease,filter .25s ease}
-        .pf-card:hover .pf-banner{filter:saturate(1.12)}
-        .u4-endo{animation:ysGlow 5s ease-in-out infinite}
-        @keyframes ysShimmer{to{background-position:240% 0}}
-        @keyframes ysGlow{0%,100%{box-shadow:0 0 0 #8b5cf600}50%{box-shadow:0 0 22px #8b5cf622}}
-        @media(prefers-reduced-motion:reduce){.ys-signature,.u4-sig,.u4-endo{animation:none!important;transition:none!important}}
-      `; document.head.appendChild(ysPolish);
       init();
     })();
-  
-
-/* ===== YS QA patch: require joining a challenge before submission + developer coin grants ===== */
-(()=>{
-  const ar=()=>state.settings.lang==='ar';
-  const L=(a,e)=>ar()?a:e;
-  const originalSubmit=Challenges.submit.bind(Challenges);
-  Challenges.submit=async function(id,source='cloud'){
-    const uid=state.auth.uid||activeProfile?.id||'local';
-    if(source==='local'){
-      const c=(state.challenges.local||[]).find(x=>x.id===id);
-      if(!c || !(c.participants||[]).includes(uid)){
-        toast(L('انضم إلى التحدي أولًا، ثم نفّذ شروطه قبل التسليم.','Join the challenge first, then complete its requirements before submitting.'),'warn');
-        return;
-      }
-    } else {
-      if(!fb.ready || !fb.auth?.currentUser){ toast(t('requiresFirebase'),'warn'); return; }
-      try{
-        const part=await fb.db.collection('challenges').doc(id).collection('participants').doc(uid).get();
-        if(!part.exists){ toast(L('اضغط «انضمام» أولًا قبل التسليم.','Press Join before submitting.'),'warn'); return; }
-      }catch(err){ toast(err?.code==='permission-denied'?L('قواعد Firebase تمنع التحقق من انضمامك.','Firebase rules block checking your participation.'):t('requiresFirebase'),'error'); return; }
-    }
-    return originalSubmit(id,source);
-  };
-
-  const oldRenderDeveloper=renderDeveloper;
-  renderDeveloper=function(){
-    const html=oldRenderDeveloper();
-    if(!state.developer.unlocked) return html;
-    return html+`<div class="card dev-panel" style="margin-top:12px"><h3 class="title">🪙 ${L('إدارة رصيد YS Coins','YS Coins management')}</h3><p class="subtitle">${L('إضافة رصيد إلى محفظة طالب. استخدم UID الخاص بحسابه.','Credit a student wallet using their account UID.')}</p><form id="ysGrantCoinsForm" class="auth-form"><label class="field"><span>${L('UID الطالب','Student UID')}</span><input class="input" name="uid" required dir="ltr" maxlength="128" autocomplete="off"></label><label class="field"><span>${L('عدد العملات (يمكن أن يكون سالبًا للخصم)','Coin amount (negative to deduct)')}</span><input class="input" name="amount" type="number" min="-1000000" max="1000000" step="1" value="100" required></label><label class="field"><span>${L('سبب العملية','Reason')}</span><input class="input" name="reason" maxlength="160" placeholder="${L('مكافأة / تصحيح رصيد','Reward / balance correction')}"></label><button class="btn primary" type="submit">${L('تطبيق التغيير','Apply balance change')}</button></form><p class="muted small">${L('تنبيه: حماية الرصيد الحقيقية تحتاج Cloud Functions؛ تحديث المحفظة محمي بقواعد Firebase.','Note: strong wallet protection requires Cloud Functions; browser-side balance alone is not secure for a real economy.')}</p></div>`;
-  };
-
-  document.addEventListener('submit',async e=>{
-    const f=e.target;
-    if(f?.id!=='ysGrantCoinsForm') return;
-    e.preventDefault();
-    if(!state.developer.unlocked || !fb.ready || !fb.auth?.currentUser){ toast(L('يلزم تسجيل دخول المطور عبر Firebase.','Developer must be signed in through Firebase.'),'error'); return; }
-    const fd=new FormData(f), uid=String(fd.get('uid')||'').trim(), amount=Number(fd.get('amount'));
-    if(!uid || !Number.isInteger(amount) || Math.abs(amount)>1000000){ toast(L('راجع UID وعدد العملات.','Check the UID and coin amount.'),'error'); return; }
-    const btn=f.querySelector('button[type="submit"]'); if(btn) btn.disabled=true;
-    try{
-      const ref=fb.db.collection('users').doc(uid).collection('meta').doc('wallet');
-      let previous=0, nextBalance=0;
-      const reason=String(fd.get('reason')||'').trim().slice(0,160)||L('تعديل من لوحة المطور','Developer console adjustment');
-      const adminUid=fb.auth.currentUser.uid;
-      await fb.db.runTransaction(async tx=>{
-        const snap=await tx.get(ref), old=snap.exists?snap.data():{};
-        previous=Math.max(0,Number(old.c)||0);
-        nextBalance=Math.max(0,Math.min(100000000,previous+amount));
-        tx.set(ref,{c:nextBalance,own:Array.isArray(old.own)?old.own:[],vip:!!old.vip,chest:old.chest||'',rev:(Number(old.rev)||0)+1,at:new Date().toISOString(),lastAdminReason:reason,lastAdminUid:adminUid},{merge:true});
-      });
-      // Keep an auditable record separate from the mutable wallet balance.
-      await fb.db.collection('coinTransactions').add({uid,delta:nextBalance-previous,requestedDelta:amount,before:previous,after:nextBalance,reason,actorUid:adminUid,source:'developer-console',createdAt:new Date().toISOString()});
-      await fb.db.collection('inbox').doc(uid).collection('items').add({type:'coins',title:L('تحديث رصيد YS Coins','YS Coins balance update'),body:L(`تم تعديل رصيدك من ${previous} إلى ${nextBalance} عملة. السبب: ${reason}`,`Your balance changed from ${previous} to ${nextBalance} coins. Reason: ${reason}`),read:false,createdAt:new Date().toISOString(),delta:nextBalance-previous});
-      toast(L(`تم تحديث الرصيد: ${previous} ← ${nextBalance} عملة، وتم تسجيل العملية.`,`Balance updated: ${previous} → ${nextBalance} coins; transaction logged.`),'success'); f.reset();
-    }catch(err){ toast(err?.code==='permission-denied'?L('رفضت قواعد Firebase العملية؛ تأكد من صلاحية المطور.','Firebase rules denied the operation; verify developer permissions.'):String(err?.message||'error'),'error'); }
-    finally{ if(btn) btn.disabled=false; }
-  });
-})();
-
-
-/* ===== YS Ultra Phase 4: persistent inbox UI and safer interaction ===== */
-(()=>{
-  const L=(a,e)=>state.settings.lang==='ar'?a:e;
-  const inboxCol=()=>fb.db.collection('inbox').doc(fb.auth.currentUser.uid).collection('items');
-  const inboxState={items:[],busy:false,error:'',lastUid:'',lastFetch:0};
-  const safeDate=v=>{try{const d=v&&v.toDate?v.toDate():new Date(v);return Number.isNaN(d.getTime())?'':d.toLocaleString(state.settings.lang==='ar'?'ar':'en',{dateStyle:'medium',timeStyle:'short'});}catch{return '';}};
-  function inboxHtml(){
-    const signed=!!(fb.ready&&fb.auth&&fb.auth.currentUser);
-    if(!signed)return `<div class="card"><h2 class="title">📥 ${L('البريد الوارد','Inbox')}</h2>${emptyHtml(L('سجّل الدخول بحساب متصل بـ Firebase لعرض رسائلك على أجهزتك.','Sign in with Firebase to see your messages across devices.'))}</div>`;
-    const unread=inboxState.items.filter(x=>!x.read).length;
-    return `<div class="card"><div class="row between"><div><h2 class="title">📥 ${L('البريد الوارد','Inbox')}</h2><p class="subtitle">${L('التحديثات ورسائل الإدارة ومكافآت حسابك','Updates, admin messages and account rewards')} · ${unread} ${L('غير مقروء','unread')}</p></div><button class="btn sm" data-inbox="refresh">↻ ${L('تحديث','Refresh')}</button></div>
-      ${inboxState.error?`<p class="muted small">${esc(inboxState.error)}</p>`:''}${inboxState.busy?`<p class="muted">${L('جارٍ تحميل الرسائل…','Loading messages…')}</p>`:''}
-      <div class="list" style="margin-top:12px">${inboxState.items.map(x=>`<article class="list-item" style="align-items:flex-start;${x.read?'opacity:.72':'border-inline-start:3px solid var(--accent)'}"><span class="avatar" style="width:40px;height:40px;display:grid;place-items:center;background:var(--surface-2)">${x.type==='coins'?'🪙':x.type==='challenge'?'🔥':x.type==='friend'?'👥':'📣'}</span><div class="list-main"><div class="list-title">${esc(x.title||L('رسالة جديدة','New message'))} ${x.read?'':'<span class="badge">'+L('جديد','NEW')+'</span>'}</div><p style="white-space:pre-wrap;margin:5px 0">${esc(x.body||'')}</p><div class="meta"><span>${esc(safeDate(x.createdAt||x.at))}</span></div></div>${!x.read?`<button class="btn sm" data-inbox="read" data-id="${esc(x.id)}">${L('تمت القراءة','Mark read')}</button>`:''}</article>`).join('')||(!inboxState.busy?emptyHtml(L('لا توجد رسائل حتى الآن.','No messages yet.')):'')}</div></div>`;
-  }
-  const oldView=renderView; renderView=function(v){if(v==='inbox')return inboxHtml();return oldView(v);};
-  async function loadInbox(force=false){
-    if(inboxState.busy||(!force&&Date.now()-inboxState.lastFetch<30000))return;
-    if(!(fb.ready&&fb.auth&&fb.auth.currentUser)){inboxState.items=[];inboxState.error='';return;}
-    const uid=fb.auth.currentUser.uid;if(inboxState.lastUid!==uid){inboxState.items=[];inboxState.lastUid=uid;inboxState.lastFetch=0;}
-    inboxState.busy=true;inboxState.error='';if(state.ui.view==='inbox')render();
-    try{const snap=await inboxCol().orderBy('createdAt','desc').limit(60).get();inboxState.items=snap.docs.map(d=>({id:d.id,...d.data()}));inboxState.lastFetch=Date.now();}
-    catch(err){inboxState.error=err?.code==='permission-denied'?L('قواعد Firebase تمنع قراءة البريد. راجع صلاحيات inbox.','Firebase rules denied inbox access. Check inbox permissions.'):L('تعذر تحميل الرسائل؛ تحقق من الاتصال.','Could not load messages; check your connection.');}
-    finally{inboxState.lastFetch=Date.now();inboxState.busy=false;if(state.ui.view==='inbox')render();}
-  }
-  document.addEventListener('click',async e=>{
-    const b=e.target.closest('[data-inbox]');if(!b)return;
-    const action=b.dataset.inbox;
-    if(action==='refresh'){inboxState.lastFetch=0;await loadInbox(true);return;}
-    if(action==='read'){
-      const id=b.dataset.id;if(!id||!(fb.ready&&fb.auth&&fb.auth.currentUser))return;
-      b.disabled=true;
-      try{await inboxCol().doc(id).update({read:true});const x=inboxState.items.find(x=>x.id===id);if(x)x.read=true;render();}
-      catch(err){toast(err?.code==='permission-denied'?L('لا تملك صلاحية تحديث هذه الرسالة.','You cannot update this message.'):L('تعذر تحديث الرسالة.','Could not update message.'),'error');b.disabled=false;}
-    }
-  });
-  const oldRender=render; render=function(){oldRender();if(state.ui.view==='inbox'&&activeProfile)loadInbox();};
-  setInterval(()=>{if(activeProfile&&state.ui.view==='inbox'&&!inboxState.busy)loadInbox(true);},45000);
-})();
-
-</script>
-
-<script id="ys-phase1-splash-logic">
-(()=>{const el=document.getElementById('ysSplash');if(!el)return;let hidden=false;const hide=()=>{if(hidden)return;hidden=true;el.classList.add('ys-out');setTimeout(()=>el.remove(),650)};const start=Date.now();const finish=()=>setTimeout(hide,Math.max(450,1450-(Date.now()-start)));if(document.readyState==='complete')finish();else window.addEventListener('load',finish,{once:true});setTimeout(hide,3200);})();
-</script>
+  </script>
 </body>
 </html>
