@@ -413,6 +413,65 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
 .v4-form{display:flex;gap:8px;margin-top:10px}.v4-form input{flex:1;font-size:16px;border-radius:99px}.v4-form button{border-radius:99px;min-width:48px}
 .v4-emo{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}.v4-emo button{border-radius:12px;min-width:38px;height:38px;font-size:1.1rem;padding:0}
 </style>
+<style id="v10fix">.main .view>*{min-width:0}</style><style id="novaCss">
+@keyframes novaIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+html{scroll-behavior:smooth}
+html[data-design=nova]{--radius:20px;--shadow:0 1px 2px rgba(15,23,42,.05),0 14px 34px -18px rgba(15,23,42,.22)}
+html[data-design=nova] .main .view{animation:novaIn .3s ease both}
+html[data-design=nova] .card{background:var(--surface);border:1px solid color-mix(in srgb,var(--border) 70%,transparent);border-radius:22px;box-shadow:var(--shadow);transition:box-shadow .25s,transform .25s}
+html[data-design=nova] .card:hover{box-shadow:0 20px 44px -22px rgba(15,23,42,.3)}
+html[data-design=nova] .btn{border-radius:14px;min-height:44px;font-weight:700;border:1px solid var(--border);background:var(--surface);transition:transform .15s,box-shadow .2s,background .2s}
+html[data-design=nova] .btn:hover{background:var(--surface2)}
+html[data-design=nova] .btn:active{transform:scale(.97)}
+html[data-design=nova] .btn.primary{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 12px 26px -14px var(--accent)}
+html[data-design=nova] .btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,#000)}
+html[data-design=nova] .input,html[data-design=nova] select,html[data-design=nova] textarea{border-radius:14px;border:1.5px solid var(--border);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+html[data-design=nova] .input:focus,html[data-design=nova] select:focus,html[data-design=nova] textarea:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+html[data-design=nova] .list-item{border-radius:16px;border-bottom:0;transition:background .2s}
+html[data-design=nova] .list-item:hover{background:var(--surface2)}
+html[data-design=nova] .topbar{background:color-mix(in srgb,var(--bg) 80%,transparent);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid color-mix(in srgb,var(--border) 60%,transparent)}
+html[data-design=nova] .sidebar{background:var(--surface);border-inline-end:1px solid var(--border)}
+html[data-design=nova] .bottom-nav{inset-inline:12px;bottom:calc(10px + var(--safe-b));border-radius:24px;border:1px solid var(--border);background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 18px 40px -20px rgba(15,23,42,.45)}
+html[data-design=nova] .title{font-weight:800;letter-spacing:-.01em}
+html[data-design=nova] .chip,html[data-design=nova] .badge{border-radius:999px}
+html[data-design=nova] .modal{border-radius:26px}
+html[data-design=nova] ::-webkit-scrollbar{width:8px;height:8px}html[data-design=nova] ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px}
+@media (prefers-reduced-motion:reduce){html[data-design=nova] *{animation:none!important;transition:none!important}}
+</style><script>
+/* YS: background polling pauses while the tab is hidden (smoother app) */
+(function(){ var si=window.setInterval.bind(window); window.setInterval=function(fn,ms){ var a=[].slice.call(arguments,2); return si(function(){ if(ms>=10000&&document.hidden) return; return fn.apply(null,a); },ms); }; })();
+</script>
+<style id="proCss11">
+html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spacing:0!important}
+.sp-name{letter-spacing:0;line-height:1.25}.sp-tag{letter-spacing:0}
+.avatar[class*="frame-"]:not(.frame-none){animation:none}
+.avatar.frame-ys::before,.avatar.frame-legend::before{animation:none}
+.pf-card .avatar[class*="frame-"]:not(.frame-none){animation:v3Pulse 3.2s ease-in-out infinite}
+.pf-card .avatar.frame-ys::before,.pf-card .avatar.frame-legend::before{animation:v3Spin 3s linear infinite}
+@media (max-width:600px){.sidebar,.topbar,.bottom-nav{backdrop-filter:none}}
+.tm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tm-cell{display:grid;justify-items:center;gap:4px;text-align:center;padding:12px 6px;border-radius:18px;background:var(--surface2);border:1px solid var(--border);font-size:.8rem}
+.tm-tn{font-weight:900;font-size:.74rem;color:var(--accent)}
+.tm-mini{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.md-c{display:grid;justify-items:center;gap:2px;font-size:.62rem;font-weight:900}
+@media(min-width:760px){.tm-grid{grid-template-columns:repeat(6,1fr)}}
+.lg-card{border-radius:28px}.lg-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px;border-radius:16px;background:var(--surface2)}
+.lg-tabs .tab-btn{border-radius:12px;font-weight:800}.lg-btn{width:100%;min-height:48px;font-size:1rem;border-radius:14px}
+.lg-pw{display:flex;gap:6px;align-items:center}.lg-pw .input{flex:1}
+.lg-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.8rem;margin:12px 0}.lg-or::before,.lg-or::after{content:"";flex:1;height:1px;background:var(--border)}
+.gd-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gd-opt{position:relative}.gd-opt input{position:absolute;opacity:0}
+.gd-opt span{display:grid;place-items:center;min-height:52px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface2);font-weight:800;cursor:pointer}
+.gd-opt input:checked+span{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface2));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.v7-b{position:absolute;top:-4px;inset-inline-end:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#ef4444;color:#fff;font:900 .65rem/18px system-ui;text-align:center;font-style:normal;box-shadow:0 0 0 2px var(--bg)}
+.v7-upd{position:fixed;inset:0;z-index:99998;display:grid;place-items:center;background:rgba(2,6,23,.6);backdrop-filter:blur(6px);padding:16px}
+.v7-uc{width:min(440px,100%);max-height:80vh;overflow:auto;padding:20px;border-radius:24px;background:var(--surface);border:1px solid var(--border);box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}
+.v7-ut{font-size:1.2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v7-uc ul{margin:10px 0 0;padding-inline-start:18px;line-height:1.9}
+.ann-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px}
+.ann-b{flex:0 0 88%;max-width:560px;scroll-snap-align:center;aspect-ratio:16/9;border-radius:22px;overflow:hidden;position:relative;cursor:pointer;background:var(--surface2);box-shadow:0 18px 40px -22px rgba(0,0,0,.7)}
+.ann-b img{width:100%;height:100%;object-fit:cover;display:block}
+.ann-t{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font-weight:800}
+</style>
 </head>
 <body>
   <div id="app" class="app-root"></div>
@@ -435,7 +494,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         appId: '1:3482020492:web:72d6f419712c0404a8e9a9'
       };
 
-      const APP = { name:'منجز', version:'9.1.0-ultra-plus', copyright:'© YS — جميع الحقوق محفوظة' };
+      const APP = { name:'منجز', version:'9.3.0', copyright:'© YS — جميع الحقوق محفوظة' };
       const LS = { profiles:'munjiz.profiles', active:'munjiz.active', prefs:'munjiz.prefs', temp:'munjiz.temp' };
       const DAY = 86400000;
       const STATUS = ['new','inProgress','done'];
@@ -788,11 +847,11 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         if(!fb.ready) return;
         if(!user){ if(state.auth.provider==='firebase'){ state.developer.unlocked=false; saveState(false); render(); } return; }
         const list=getProfiles(); let p=list.find(x=>x.uid===user.uid);
-        if(!p) p=createProfile({name:user.displayName||user.email||'Account',color:randomColor(),email:user.email||'',photoURL:user.photoURL||'',provider:user.providerData?.[0]?.providerId||'password',uid:user.uid,settings:state.settings});
+        if(!p) p=createProfile({name:user.displayName||('User-'+String(user.uid).slice(0,4).toUpperCase()),color:randomColor(),email:user.email||'',photoURL:user.photoURL||'',provider:user.providerData?.[0]?.providerId||'password',uid:user.uid,settings:state.settings});
         switchProfile(p.id);
         state.auth={provider:'firebase',uid:user.uid,displayName:user.displayName||'',photoURL:user.photoURL||'',email:user.email||''};
-        state.profile.name=state.profile.name||p.name; state.profile.avatarColor=p.color; saveState();
-        Developer.check(); await pullCloud(); await Teams.fetch(); subscribeLive(); publishProfileToCloud(); render(); Challenges.fetchCloud().then(()=>render()).catch(()=>{}); Leaderboard.fetch(state.ui.leaderboardTab||'global');
+        state.profile.name=state.profile.name||p.name; state.profile.avatarColor=p.color; if(window.__pendingGender){ state.profile.gender=window.__pendingGender; window.__pendingGender=''; } saveState();
+        render(); Developer.check(); (async()=>{ try{ await pullCloud(); await Teams.fetch(); }catch{} subscribeLive(); publishProfileToCloud(); render(); })(); Challenges.fetchCloud().then(()=>render()).catch(()=>{}); Leaderboard.fetch(state.ui.leaderboardTab||'global');
       }
       function watchAuth(){ if(fb.ready) fb.auth.onAuthStateChanged(handleAuthUser); }
 
@@ -839,7 +898,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         if(!fb.ready || state.auth.provider!=='firebase') return;
         liveUnsubscribers.forEach(u=>u&&u()); liveUnsubscribers=[];
         try{
-          liveUnsubscribers.push(fb.db.collection('announcements').orderBy('createdAt','desc').limit(10).onSnapshot(snap=>{ state.announcements=snap.docs.map(d=>({id:d.id,...d.data()})).filter(a=>a.active); saveState(false); if(state.ui.view==='home')render(); }));
+          liveUnsubscribers.push(fb.db.collection('announcements').orderBy('createdAt','desc').limit(10).onSnapshot(snap=>{ state.announcements=snap.docs.map(d=>{ const x=d.data(); if(x.image&&String(x.image).startsWith('data:')){ (window.__annImg=window.__annImg||{})[d.id]=x.image; x.image='@mem'; } return {id:d.id,...x}; }).filter(a=>a.active); saveState(false); if(state.ui.view==='home')render(); }));
           liveUnsubscribers.push(fb.db.collection('developer').doc('flags').onSnapshot(doc=>{ if(doc.exists){ state.developer.flags=doc.data()||{}; saveState(false); applyFeatureFlags(); } }));
         }catch(e){ console.warn(e); }
       }
@@ -1227,7 +1286,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
 
       function renderChallenges(){
         const all=[...state.challenges.cloud.map(c=>({...c,source:'cloud'})),...state.challenges.local.map(c=>({...c,source:'local'}))].filter(c=>new Date(c.endsAt)>=new Date());
-        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('challenges'))}</h2><div class="row"><button class="btn" data-action="refresh-challenges">${icon('zap',16)} ${esc(t('refresh'))}</button>${Social.canCreate()?`<button class="btn primary" data-action="new-challenge">${icon('plus',18)} ${esc(t('addChallenge'))}</button>`:''}</div></div>${all.length?`<div class="grid cols-2" style="margin-top:12px">${all.map(c=>`<div class="card challenge-card ${c.type}"><div class="row between"><strong>${esc(c.title)}</strong><span class="badge ${c.source==='cloud'?'done':'new'}">${esc(c.source==='cloud'?t('synced'):t('localOnly'))}</span></div><div class="muted small">${esc(c.description||'—')}</div><div class="meta"><span>${esc(t(c.type==='race'?'race':c.type==='focus'?'focusChallenge':c.type==='streak'?'streakChallenge':'teamChallenge'))}</span><span>${esc(t('endsAt'))}: ${esc(fmtDateTime(c.endsAt))}</span><span>+${c.rewardXp} XP</span><span>${(c.participants||[]).length} ${esc(t('users'))}</span></div><div class="row"><button class="btn sm primary" data-action="join-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('joinChallenge'))}</button><button class="btn sm" data-action="submit-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('submitChallenge'))}</button></div></div>`).join('')}</div>`:emptyHtml(t('noChallenges'))}</div>`;
+        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('challenges'))}</h2><div class="row"><button class="btn" data-action="refresh-challenges">${icon('zap',16)} ${esc(t('refresh'))}</button>${Social.canCreate()?`<button class="btn primary" data-action="new-challenge">${icon('plus',18)} ${esc(t('addChallenge'))}</button>`:''}</div></div>${all.length?`<div class="grid cols-2" style="margin-top:12px">${all.map(c=>`<div class="card challenge-card ${c.type}"><div class="row between"><strong>${esc(c.title)}</strong><span class="badge ${c.source==='cloud'?'done':'new'}">${esc(c.source==='cloud'?t('synced'):t('localOnly'))}</span></div><div class="muted small">${esc(c.description||'—')}</div><div class="meta"><span>${esc(t(c.type==='race'?'race':c.type==='focus'?'focusChallenge':c.type==='streak'?'streakChallenge':'teamChallenge'))}</span><span>${esc(t('endsAt'))}: ${esc(fmtDateTime(c.endsAt))}</span><span>+${c.rewardXp} XP</span><span>${(c.participants||[]).length} ${esc(t('users'))}</span></div>${Challenges.bar(c)}<div class="row"><button class="btn sm primary" data-action="join-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('joinChallenge'))}</button><button class="btn sm" data-action="submit-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('submitChallenge'))}</button></div></div>`).join('')}</div>`:emptyHtml(t('noChallenges'))}</div>`;
       }
 
       function renderFocus(){
@@ -1361,7 +1420,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       var Look = {
         KEY: 'munjiz.look',
         SW: ['#2563eb', '#7c3aed', '#db2777', '#dc2626', '#ea580c', '#059669', '#0891b2', '#0f172a'],
-        get(){ try{ return Object.assign({ design: 'aurora', density: 'comfy', size: 1, accent: '', motion: false }, JSON.parse(localStorage.getItem(this.KEY) || '{}')); }catch{ return { design: 'aurora', density: 'comfy', size: 1, accent: '', motion: false }; } },
+        get(){ try{ return Object.assign({ design: 'nova', density: 'comfy', size: 1, accent: '', motion: false }, JSON.parse(localStorage.getItem(this.KEY) || '{}')); }catch{ return { design: 'nova', density: 'comfy', size: 1, accent: '', motion: false }; } },
         set(p){ localStorage.setItem(this.KEY, JSON.stringify(Object.assign(this.get(), p))); this.apply(); render(); },
         apply(){
           const o = this.get(), h = document.documentElement;
@@ -1372,7 +1431,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
         card(){
           const o = this.get(), b = (k, v, l) => `<button type="button" class="btn sm ${String(o[k]) === String(v) ? 'primary' : ''}" data-look="${k}" data-v="${v}">${esc(l)}</button>`;
           return `<div class="card" style="margin-top:12px"><h2 class="title">${esc(t('lookT'))}</h2><div class="auth-form" style="gap:14px">
-            <div><div class="muted small">${esc(t('designT'))}</div><div class="row">${b('design','aurora',t('auroraT'))}${b('design','classic',t('classicT'))}</div></div>
+            <div><div class="muted small">${esc(t('designT'))}</div><div class="row">${b('design','nova',L2('نوفا (الجديد)','Nova (new)'))}${b('design','aurora',t('auroraT'))}${b('design','classic',t('classicT'))}</div></div>
             <div><div class="muted small">${esc(t('accentT'))}</div><div class="row" style="flex-wrap:wrap;gap:8px">${this.SW.map(c => `<button type="button" aria-label="${c}" data-look="accent" data-v="${c}" style="width:34px;height:34px;border-radius:50%;background:${c};border:3px solid ${o.accent === c ? 'var(--text)' : 'transparent'};cursor:pointer"></button>`).join('')}<input type="color" value="${o.accent || '#2563eb'}" data-lookcolor style="width:40px;height:34px;border:0;background:none;padding:0"></div></div>
             <div><div class="muted small">${esc(t('densityT'))}</div><div class="row">${b('density','comfy',t('comfyT'))}${b('density','compact',t('compactT'))}</div></div>
             <div><div class="muted small">${esc(t('textSizeT'))}</div><div class="row">${[0.9, 1, 1.1, 1.2].map(v => b('size', v, v === 1 ? 'A' : v < 1 ? 'a' : v === 1.1 ? 'A+' : 'A++')).join('')}</div></div>
@@ -1486,6 +1545,37 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box
       };
       document.addEventListener('click', e => { const b = e.target.closest('[data-ob]'); if(!b) return; const box = document.getElementById('obBox'); if(!box) return;
         if(Onboard.i < Onboard.S().length - 1){ Onboard.i++; Onboard.draw(box); } else { state.onboarded = true; saveState(); const c = Onboard.modal && Onboard.modal.querySelector('[data-close]'); if(c) c.click(); } });
+
+
+      /* ===== شروط التحديات + شريط التقدم (© YS) ===== */
+      (function(){
+        const cst = () => state.cstat || (state.cstat = { tasks: 0, focus: 0 });
+        const _ct = Gamification.completeTaskReward.bind(Gamification), _fr = Gamification.focusReward.bind(Gamification);
+        Gamification.completeTaskReward = function(task){ _ct(task); cst().tasks++; };
+        Gamification.focusReward = function(sec){ _fr(sec); cst().focus += Math.max(1, Math.round(sec / 60)); };
+        const getCh = id => [...((state.challenges && state.challenges.local) || []), ...((state.challenges && state.challenges.cloud) || [])].find(x => x.id === id);
+        Challenges.progress = function(c){
+          const st = cst(), b = (state.cch && state.cch.base || {})[c.id]; if(c.type === 'streak') return state.game.streak || 0; if(!b) return 0;
+          return Math.max(0, c.type === 'focus' ? st.focus - b.focus : st.tasks - b.tasks);
+        };
+        Challenges.unit = c => c.type === 'focus' ? L2('دقيقة تركيز', 'focus min') : c.type === 'streak' ? L2('يوم متتالي', 'streak days') : L2('مهمة', 'tasks');
+        Challenges.bar = function(c){
+          const g = Math.max(1, c.goal || 1), p = Math.min(this.progress(c), g), ok = p >= g;
+          return `<div style="margin:8px 0 10px"><div class="row between small"><span class="muted">${esc(L2('التقدم', 'Progress'))}: ${p}/${g} ${esc(this.unit(c))}</span><b>${ok ? '✅' : Math.round(p / g * 100) + '%'}</b></div><div style="height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:4px"><div style="height:100%;width:${Math.round(p / g * 100)}%;background:${ok ? 'var(--ok)' : 'var(--accent)'};transition:width .4s"></div></div></div>`;
+        };
+        const _j = Challenges.join.bind(Challenges);
+        Challenges.join = async function(id, source){
+          const st = cst(); state.cch = state.cch || { base: {} }; state.cch.base = state.cch.base || {};
+          if(!state.cch.base[id]) state.cch.base[id] = { tasks: st.tasks, focus: st.focus };
+          return _j(id, source);
+        };
+        const _s = Challenges.submit.bind(Challenges);
+        Challenges.submit = async function(id, source){
+          const c = getCh(id);
+          if(c && (c.goal || 0) > 0 && this.progress(c) < c.goal){ toast(L2('أكمل شرط التحدي أولًا: ', 'Complete the challenge first: ') + this.progress(c) + '/' + c.goal + ' ' + this.unit(c), 'warn'); return; }
+          return _s(id, source);
+        };
+      })();
 
       /* ===== الأصدقاء والشات (© YS) ===== */
       const Social = {
@@ -2218,7 +2308,7 @@ service cloud.firestore {
   if(!FRAME_DEFS.some(f=>f.id==='vip')) FRAME_DEFS.push({id:'vip',ar:'VIP ⭐',en:'VIP ⭐'});
   if(!TITLE_DEFS.some(f=>f.id==='vip_t')) TITLE_DEFS.push({id:'vip_t',ar:'عضو VIP ⭐',en:'VIP Member ⭐'});
   const VIP={map:{},on:false};
-  VIP.active=x=>!!x&&(!x.until||Date.parse(x.until)>Date.now()); VIP.mine=()=>dev()||!!ls('munjiz.wallet',{}).vip||(ok()&&VIP.active(VIP.map[me()])); window.__vipMine=()=>VIP.mine();
+  VIP.active=x=>!!x&&(!x.until||Date.parse(x.until)>Date.now()); VIP.mine=()=>{ if(dev()) return true; const w=ls('munjiz.wallet',{}); if(w.vip){ if(!w.vipUntil){ w.vipUntil=new Date(Date.now()+(Pz.vipd||365)*864e5).toISOString(); ss('munjiz.wallet',w); } if(Date.parse(w.vipUntil)>Date.now()) return true; } return ok()&&VIP.active(VIP.map[me()]); }; window.__vipMine=()=>VIP.mine();
   VIP.start=function(){ if(this.on||!ok()) return; this.on=true; col('vip').onSnapshot(s=>{ this.map={}; s.docs.forEach(d=>this.map[d.id]=d.data()); if(VIP.mine()){ Gamification.unlockFrame('vip'); Gamification.unlockTitle('vip_t'); } render(); },()=>{ this.on=false; }); };
   setInterval(()=>VIP.start(),4000);
   const _ax=Gamification.addXp.bind(Gamification); Gamification.addXp=function(a,s){ _ax(a,s); if(VIP.mine()){ const w=W(); w.c+=Math.floor(Math.max(0,a)/5); ss('munjiz.wallet',w); } };
@@ -2277,7 +2367,7 @@ service cloud.firestore {
   /* instant developer recognition (UI only; server rules still decide real power) */
   try{ const h=localStorage.getItem('munjiz.devHint'); if(h&&state.auth&&state.auth.uid===h) state.developer.unlocked=true; }catch{}
   /* dev-controlled prices (developer/prices) */
-  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,team:300,items:{}}, Pz={...D0}, live={};
+  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,vipd:365,team:100,items:{}}, Pz={...D0}, live={};
   window.__price=(k,i,id)=>{ const o=(Pz.items||{})[k+':'+id]; if(o!==undefined&&o!==null&&o!=='') return +o; return k==='f'?Pz.fb+i*Pz.fs:Pz.tb+i*Pz.ts; };
   const Promo={on:false,text:'',link:'',emoji:'📣'};
   setInterval(()=>{ if(!ok()) return;
@@ -2301,9 +2391,9 @@ service cloud.firestore {
       if(!await confirmModal({title:'🛡️',message:L('إنشاء فريق إضافي بسعر '+Pz.team+' YS Coins؟','Create an extra team for '+Pz.team+' YS Coins?')})) return null; const g=await _tc(d); if(g){ w.c-=Pz.team; ss(WK,w); push(); } return g; } return _tc(d); };
   /* VIP purchase */
   async function buyVip(){ const w=ls(WK,{c:0}), p=Pz.vip; if(!dev()&&w.c<p){ toast(L('تحتاج '+p+' YS Coins — رصيدك '+w.c,'Need '+p+' YS Coins — you have '+w.c),'warn'); return; }
-    if(!await confirmModal({title:'👑',message:L('شراء عضوية VIP بسعر '+p+' YS Coins (دائمة)؟','Buy lifetime VIP for '+p+' YS Coins?')})) return;
-    w.c-=dev()?0:p; w.vip=true; ss(WK,w); Gamification.unlockFrame('vip'); Gamification.unlockTitle('vip_t'); try{ celebrate(); }catch{}
-    try{ if(ok()) await col('vip',me()).set({tier:'vip',until:null,src:'shop',at:iso()}); }catch{ toast(L('تم الشراء محليًا — حدّث قواعد Firestore ليراه الآخرون','Bought locally — update Firestore rules so others see it'),'warn'); }
+    if(!await confirmModal({title:'👑',message:L('شراء عضوية VIP بسعر '+p+' YS Coins (لمدة '+(Pz.vipd||365)+' يوم)؟','Buy 1-year VIP for '+p+' YS Coins?')})) return;
+    const _vb=(w.vipUntil&&Date.parse(w.vipUntil)>Date.now())?Date.parse(w.vipUntil):Date.now(); w.vipUntil=new Date(_vb+(Pz.vipd||365)*864e5).toISOString(); w.c-=dev()?0:p; w.vip=true; ss(WK,w); Gamification.unlockFrame('vip'); Gamification.unlockTitle('vip_t'); try{ celebrate(); }catch{}
+    try{ if(ok()) await col('vip',me()).set({tier:'vip',until:w.vipUntil,src:'shop',at:iso()}); }catch{ toast(L('تم الشراء محليًا — حدّث قواعد Firestore ليراه الآخرون','Bought locally — update Firestore rules so others see it'),'warn'); }
     push(); render(); }
   /* emblems */
   const mix=(h,t,a)=>{ const n=parseInt(h.slice(1),16),T=t==='w'?255:0; return '#'+[n>>16,n>>8&255,n&255].map(v=>Math.round(v+(T-v)*a).toString(16).padStart(2,'0')).join(''); };
@@ -2327,7 +2417,7 @@ service cloud.firestore {
   /* dev panel: prices + promo */
   const _rd=renderDeveloper; renderDeveloper=function(){ const h=_rd(); if(!dev()) return h; const num=(id,l,v)=>`<label class="field"><span>${l}</span><input id="${id}" type="number" min="0" value="${v}" dir="ltr"></label>`;
     const opts=[...FRAME_DEFS.filter(f=>!['none','ys','vip'].includes(f.id)).map(f=>`<option value="f:${esc(f.id)}">🖼️ ${esc(frameName(f.id))}</option>`),...TITLE_DEFS.filter(x=>!['guardian','ys_dev','founder','vip_t'].includes(x.id)).map(x=>`<option value="t:${esc(x.id)}">🏷️ ${esc(titleName(x.id))}</option>`)].join('');
-    return h+`<div class="card dev-panel"><h3 class="title">💰 ${L('التحكم في الأسعار','Price control')}</h3><div class="form-grid">${num('u7fb',L('إطار: السعر الأساسي','Frame base'),Pz.fb)}${num('u7fs',L('إطار: زيادة لكل عنصر','Frame step'),Pz.fs)}${num('u7tb',L('لقب: السعر الأساسي','Title base'),Pz.tb)}${num('u7ts',L('لقب: زيادة لكل عنصر','Title step'),Pz.ts)}${num('u7vip',L('سعر VIP','VIP price'),Pz.vip)}${num('u7team',L('سعر فريق إضافي','Extra team price'),Pz.team)}</div><button type="button" class="btn primary" style="margin-top:8px" data-u7="psave">${L('حفظ الأسعار','Save prices')}</button>
+    return h+`<div class="card dev-panel"><h3 class="title">💰 ${L('التحكم في الأسعار','Price control')}</h3><div class="form-grid">${num('u7fb',L('إطار: السعر الأساسي','Frame base'),Pz.fb)}${num('u7fs',L('إطار: زيادة لكل عنصر','Frame step'),Pz.fs)}${num('u7tb',L('لقب: السعر الأساسي','Title base'),Pz.tb)}${num('u7ts',L('لقب: زيادة لكل عنصر','Title step'),Pz.ts)}${num('u7vip',L('سعر VIP','VIP price'),Pz.vip)}${num('u7vipd',L('مدة VIP (أيام)','VIP days'),Pz.vipd||365)}${num('u7team',L('سعر فريق إضافي','Extra team price'),Pz.team)}</div><button type="button" class="btn primary" style="margin-top:8px" data-u7="psave">${L('حفظ الأسعار','Save prices')}</button>
       <h4 class="title" style="margin-top:12px">${L('سعر عنصر محدد','Single item price')}</h4><div class="row"><select id="u7it" style="flex:1">${opts}</select><input id="u7ip" type="number" min="0" dir="ltr" style="max-width:100px"><button type="button" class="btn sm primary" data-u7="iset">✔</button><button type="button" class="btn sm" data-u7="iclr">↺</button></div></div>
       <div class="card dev-panel"><h3 class="title">📢 ${L('مساحة الإعلان','Ad slot')}</h3><div class="grid"><div class="row"><input id="u7ae" maxlength="2" value="${esc(Promo.emoji||'📣')}" style="max-width:64px;text-align:center"><input id="u7at" maxlength="140" value="${esc(Promo.text||'')}" placeholder="${esc(L('نص الإعلان','Ad text'))}" style="flex:1"></div><input id="u7al" dir="ltr" value="${esc(Promo.link||'')}" placeholder="https://…"><label class="checkbox-line"><input type="checkbox" id="u7ao" ${Promo.on?'checked':''}> ${L('تفعيل','Enabled')}</label><button type="button" class="btn primary" data-u7="asave">${L('حفظ الإعلان','Save ad')}</button></div></div>`; };
   document.addEventListener('click',async e=>{ const b=e.target.closest('[data-u7]'); if(!b) return; const a=b.dataset.u7, v=x=>(document.getElementById(x)||{}).value||'';
@@ -2336,7 +2426,7 @@ service cloud.firestore {
       else if(a==='ad'){ const l=b.dataset.l; if(/^https?:\/\//i.test(l)) window.open(l,'_blank','noopener'); }
       else if(a==='emb'){ const id=b.dataset.id, i=+b.dataset.i; await col('teams',id).update({emblem:i,updatedAt:iso()}); ['all','d-'+day(),'w-'+wk()].forEach(p=>col('teamBoard',p,'teams',id).set({emblem:i},{merge:true}).catch(()=>{})); Em.d[id]={...(Em.d[id]||{}),emblem:i}; render(); }
       else if(!dev()) return;
-      else if(a==='psave'){ await col('developer','prices').set({fb:+v('u7fb')||0,fs:+v('u7fs')||0,tb:+v('u7tb')||0,ts:+v('u7ts')||0,vip:+v('u7vip')||0,team:+v('u7team')||0},{merge:true}); toast(t('savedMsg'),'success'); }
+      else if(a==='psave'){ await col('developer','prices').set({fb:+v('u7fb')||0,fs:+v('u7fs')||0,tb:+v('u7tb')||0,ts:+v('u7ts')||0,vip:+v('u7vip')||0,vipd:Math.max(1,+v('u7vipd')||365),team:+v('u7team')||0},{merge:true}); toast(t('savedMsg'),'success'); }
       else if(a==='iset'){ const k=v('u7it'), p=v('u7ip'); if(p==='') return; await col('developer','prices').set({items:{[k]:+p}},{merge:true}); toast(t('savedMsg'),'success'); }
       else if(a==='iclr'){ await col('developer','prices').update({['items.'+v('u7it')]:FV().delete()}); toast(t('savedMsg'),'success'); }
       else if(a==='asave'){ await col('developer','promo').set({emoji:v('u7ae')||'📣',text:v('u7at').slice(0,140),link:v('u7al').trim(),on:!!document.getElementById('u7ao').checked,at:iso()}); toast(t('savedMsg'),'success'); }
@@ -2359,7 +2449,7 @@ service cloud.firestore {
 
   /* animated splash */
   const splash=()=>{ const c=cfg(), secs=Math.min(8,Math.max(1,+c.splashSecs||2.4)), el=document.createElement('div'); el.id='splash'; el.style.setProperty('--sp',secs+'s');
-    el.innerHTML=`<div class="sp-orb"></div><div class="sp-logo">${logoHtml(76)}</div><h1 class="sp-name">${[...(c.name||t('appName'))].map((ch,i)=>`<span style="animation-delay:${i*55}ms">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</h1><p class="sp-tag">${esc(c.tagline||L('ركّز • أنجز • تفوّق','Focus • Achieve • Excel'))}</p><div class="sp-bar"><i></i></div><small class="sp-sig">YS</small>`;
+    el.innerHTML=`<div class="sp-orb"></div><div class="sp-logo">${logoHtml(76)}</div><h1 class="sp-name">${(()=>{ const nm=String(c.name||t('appName')); return /[\u0600-\u06FF]/.test(nm)?nm.split(' ').map((w,i)=>`<span style="animation-delay:${i*140}ms">${esc(w)}</span>`).join(' '):[...nm].map((ch,i)=>`<span style="animation-delay:${i*55}ms">${ch===' '?'&nbsp;':esc(ch)}</span>`).join(''); })()}</h1><p class="sp-tag">${esc(c.tagline||L('ركّز • أنجز • تفوّق','Focus • Achieve • Excel'))}</p><div class="sp-bar"><i></i></div><small class="sp-sig">YS</small>`;
     document.body.appendChild(el); const close=()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),520); }; el.onclick=close; setTimeout(close,secs*1000); };
   splash();
 
@@ -2445,7 +2535,7 @@ function v3Chips(list,fem){ return list&&list.length?`<div class="tr-row">${list
     return `<div class="card"><h3 class="title">🎯 ${L('تقدّمك في التحديات','Your challenge progress')}</h3><div class="list">${all.map(c=>{ const p=Math.max(0,Math.min(c.goal,prog(c))); return `<div class="list-item"><div class="list-main"><div class="list-title">${esc(c.title)}</div><div class="progress"><span style="width:${Math.round(p/c.goal*100)}%"></span></div><div class="meta"><span>${p}/${c.goal} ${unit(c.type)}</span>${p>=c.goal?`<span>✅ ${L('جاهز للتسليم','Ready to submit')}</span>`:`<span>🔒 ${L('أكمل الشرط للتسليم','Finish to submit')}</span>`}</div></div></div>`; }).join('')}</div></div>`; };
 
   /* ---- evolving awards: card, pins, tier-up rewards, profile showcase ---- */
-  const _pf3=pfCard; pfCard=function(r){ const rl=(Social.staff||{})[r.id], isD=rl&&rl.role==='developer'; return _pf3(r).replace('<div class="pf-stats">',v3Chips(isD?V3_TR.slice(0,4).map(x=>[x[0],5]):(r.tracks||[]),r.gender==='f')+'<div class="pf-stats">'); };
+  const _pf3=pfCard; pfCard=function(r){ const rl=(Social.staff||{})[r.id], isD=rl&&rl.role==='developer'; return _pf3(r).replace('<div class="pf-stats">',v3Chips(isD?V3_TR.slice(0,4).map(x=>[x[0],6]):(r.tracks||[]),r.gender==='f')+'<div class="pf-stats">'); };
   const tracksCard=()=>{ const pins=state.profile.pins||[], fem=state.profile.gender==='f';
     return `<div class="card" style="margin-top:12px"><h3 class="title">🏆 ${L('جوائز التطوّر','Evolving awards')}</h3><p class="subtitle">${L('تتطوّر من برونزي إلى أسطوري — ثبّت 📌 حتى 4 لعرضها في ملفك.','Evolve from Bronze to Legendary — pin up to 4 to show on your profile.')}</p><div class="list">${V3_TR.map(tr=>{ const v=v3Val(tr[0]), t=v3Tier(tr,v), nx=tr[4][t], pv=t?tr[4][t-1]:0, pct=nx?Math.round((v-pv)/(nx-pv)*100):100;
       return `<div class="list-item"><div class="badge-icon">${tr[1]}</div><div class="list-main"><div class="list-title">${esc(L(tr[2],tr[3]))} ${t?`<span class="tr-chip t${t}" style="--tc:${V3_TC[t-1]}">${esc(v3Name(t,fem))}</span>`:''}</div><div class="progress"><span style="width:${pct}%"></span></div><div class="meta"><span>${v}${nx?' / '+nx:''}</span>${nx?`<span>→ ${esc(v3Name(t+1,fem))}</span>`:`<span>👑 ${L('أعلى مستوى','Max')}</span>`}</div></div><button type="button" class="btn sm ${pins.includes(tr[0])?'primary':''}" data-v3="pin" data-id="${tr[0]}">📌</button></div>`; }).join('')}</div></div>`; };
@@ -2571,6 +2661,212 @@ function v3Chips(list,fem){ return list&&list.length?`<div class="tr-row">${list
         if(at>seen[c.path]){ seen[c.path]=at; const msg='💬 '+c.name+' — '+(x.name||'')+': '+String(x.text).slice(0,60); inboxAdd(msg); toast(msg,'success'); } }catch{} }
     ss('munjiz.chatSeen',seen); };
   setInterval(poll,45000); setTimeout(poll,8000);
+})();
+
+
+/* ===== Phase 7 (YS): medals, public/private teams, pro login, linked accounts, updates, inbox alerts ===== */
+(()=>{
+  const L=(a,e)=>state.settings.lang==='ar'?a:e, dev=()=>!!state.developer.unlocked;
+  const ls=(k,d)=>{ try{ return JSON.parse(localStorage.getItem(k))||d; }catch{ return d; } }, ss=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} };
+  const fbOk=()=>fb.ready&&state.auth.provider==='firebase'&&state.auth.uid&&state.auth.uid!=='guest';
+  const inboxAdd=tx=>{ const a=ls('munjiz.inbox',[]); a.unshift({t:tx,at:Date.now()}); ss('munjiz.inbox',a.slice(0,40)); };
+  const errTxt=err=>(err&&err.code==='permission-denied')?L('القواعد تمنع هذا — حدّث Firestore Rules','Rules block this — update Firestore rules'):((err&&err.message)||'error');
+
+  /* ---------- tiers: 6 for personal tracks too (Bronze .. Legendary) ---------- */
+  [3000,40000,365,75,60,250,300000].forEach((n,i)=>{ if(V3_TR[i]&&V3_TR[i][4].length<6) V3_TR[i][4].push(n); });
+  if(V3_TN.m.length<6){ V3_TN.m.splice(3,0,'بلاتيني'); V3_TN.f.splice(3,0,'بلاتينية'); V3_TN.en.splice(3,0,'Platinum'); V3_TC.splice(3,0,'#22d3ee'); }
+  const _vt=v3Tracks; v3Tracks=function(){ const r=_vt(); return dev()?r.map(x=>[x[0],6]):r; };
+
+  /* ---------- ornate medals (laurel wreath, hanging loop) ---------- */
+  const PAL=[['#6b3410','#b86a2c','#f0b27a'],['#4b5563','#9ca3af','#f3f4f6'],['#92400e','#eab308','#fef08a'],['#0e7490','#22d3ee','#cffafe'],['#5b21b6','#8b5cf6','#e9d5ff'],['#9f1239','#f59e0b','#fff7d6']];
+  let U=0;
+  const star=(n,ro,ri,cx,cy)=>Array.from({length:n*2},(_,i)=>{ const a=Math.PI*i/n-Math.PI/2, r=i%2?ri:ro; return (cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1); }).join(' ');
+  function medal(tier,glyph,on,size){ const [d,m,l]=PAL[tier-1], id='mdl'+(++U), cy=44;
+    const laurel=[-1,1].map(sd=>Array.from({length:9},(_,k)=>{ const th=(90+sd*(14+k*17))*Math.PI/180, x=32+22*Math.cos(th), y=cy+22*Math.sin(th); return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="1.7" ry="4.3" transform="rotate(${(th*180/Math.PI+90+sd*28).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${l}" stroke="${d}" stroke-width=".4"/>`; }).join('')).join('');
+    const wings=tier===6?`<path d="M8 44 C-2 36 -2 20 4 12 C10 22 18 26 24 30Z" fill="${m}" stroke="${d}" stroke-width=".8"/><path d="M56 44 C66 36 66 20 60 12 C54 22 46 26 40 30Z" fill="${m}" stroke="${d}" stroke-width=".8"/>`:'';
+    const teeth=tier>=3?`<polygon points="${star(24,30,27.4,32,cy)}" fill="url(#${id})" stroke="${d}" stroke-width=".6"/>`:'';
+    const gems=tier>=4?[[32,17],[32,71],[5,cy],[59,cy]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="${l}" stroke="${d}" stroke-width=".7"/>`).join(''):'';
+    const crown=tier===6&&on?`<path d="M25 36 l2 -6 3.5 3.5 1.5 -5.5 1.5 5.5 3.5 -3.5 2 6z" fill="#fff7d6" stroke="${d}" stroke-width=".5"/>`:'';
+    const shine=tier===6&&on?`<clipPath id="${id}c"><circle cx="32" cy="${cy}" r="27"/></clipPath><rect x="-30" y="12" width="14" height="64" fill="#fff" opacity=".45" transform="skewX(-20)" clip-path="url(#${id}c)"><animate attributeName="x" values="-30;90" dur="2.6s" repeatCount="indefinite"/></rect>`:'';
+    const gl=on?glyph:'🔒';
+    return `<svg class="${on&&tier===6?'tm-leg':''}" width="${size}" height="${Math.round(size*76/64)}" viewBox="0 0 64 76" style="${on?'':'filter:grayscale(1) opacity(.32)'}" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".5" stop-color="${m}"/><stop offset="1" stop-color="${d}"/></linearGradient><radialGradient id="${id}f" cx=".4" cy=".35" r=".85"><stop offset="0" stop-color="${l}"/><stop offset="1" stop-color="${m}"/></radialGradient></defs>${wings}<circle cx="32" cy="6" r="3.6" fill="none" stroke="url(#${id})" stroke-width="2"/><path d="M28.5 9 L35.5 9 L34 17 L30 17Z" fill="url(#${id})" stroke="${d}" stroke-width=".6"/>${teeth}<circle cx="32" cy="${cy}" r="27" fill="url(#${id})" stroke="${d}" stroke-width="1.2"/><circle cx="32" cy="${cy}" r="25.2" fill="none" stroke="${d}" stroke-opacity=".35" stroke-width="2" stroke-dasharray="1.1 1.5"/><circle cx="32" cy="${cy}" r="18" fill="url(#${id}f)" stroke="${d}" stroke-opacity=".55"/>${laurel}${gems}${crown}<text x="32" y="${cy+7}" text-anchor="middle" font-size="19">${gl}</text><ellipse cx="25" cy="30" rx="13" ry="7" fill="#fff" opacity=".28"/>${shine}</svg>`; }
+  window.__medal=medal;
+  v3Chips=function(list,fem){ if(!list||!list.length) return ''; return `<div class="tr-row">${list.map(([id,t])=>{ const tr=V3_TR.find(x=>x[0]===id); return tr&&t>0&&t<=6?`<div class="md-c" title="${esc(L(tr[2],tr[3]))} — ${esc(v3Name(t,fem))}">${medal(t,tr[1],true,46)}<span>${esc(v3Name(t,fem))}</span></div>`:''; }).join('')}</div>`; };
+  const cutCard=(h,mk)=>{ const i=h.indexOf(mk); if(i<0) return h; let d=0,j=h.length; const re=/<div\b|<\/div>/g; re.lastIndex=i; let m; while((m=re.exec(h))){ d+=m[0]==='</div>'?-1:1; if(d===0){ j=m.index+6; break; } } return h.slice(0,i)+h.slice(j); };
+  const persCard=()=>{ const pins=state.profile.pins||[], fem=state.profile.gender==='f';
+    return `<div class="card" style="margin-top:12px"><h3 class="title">🏅 ${L('أوسمتي','My medals')}</h3><p class="subtitle">${L('تتطوّر من برونزي حتى أسطوري. ثبّت 📌 حتى 4 لتظهر في ملفك.','Evolve from Bronze to Legendary. Pin up to 4 to show on your profile.')}</p><div class="tm-grid">${V3_TR.map(tr=>{ const v=v3Val(tr[0]), t=v3Tier(tr,v), nx=tr[4][t], pv=t?tr[4][t-1]:0;
+      return `<div class="tm-cell"><div>${medal(Math.max(t,1),tr[1],t>0,60)}</div><b>${esc(L(tr[2],tr[3]))}</b><span class="tm-tn">${t?esc(v3Name(t,fem)):esc(L('مقفل','Locked'))}</span><div class="progress" style="width:100%"><span style="width:${nx?Math.round((v-pv)/(nx-pv)*100):100}%"></span></div><span class="muted small">${v.toLocaleString()}${nx?' / '+nx.toLocaleString():' ✓'}</span><button type="button" class="btn sm ${pins.includes(tr[0])?'primary':''}" data-v3="pin" data-id="${tr[0]}">📌</button></div>`; }).join('')}</div></div>`; };
+
+  /* ---------- linked accounts (Google / password / phone / Apple) ---------- */
+  const provs=()=>{ try{ return (fb.auth.currentUser.providerData||[]).map(p=>p.providerId); }catch{ return []; } };
+  const linkCard=()=>{ if(!fbOk()) return `<div class="card" style="margin-top:12px"><h3 class="title">🔗 ${L('ربط الحساب','Link account')}</h3><p class="muted">${L('سجّل حسابًا لتربطه بجوجل أو هاتفك أو Apple.','Create an account to link Google, phone or Apple.')}</p></div>`;
+    const p=provs(), row=(id,ic,nm,act)=>`<div class="list-item"><span style="font-size:1.4rem">${ic}</span><div class="list-main"><div class="list-title">${esc(nm)}</div></div>${p.includes(id)?`<span class="chip role-dev">✓ ${L('مرتبط','Linked')}</span>`:`<button type="button" class="btn sm primary" data-v7="${act}">${L('ربط','Link')}</button>`}</div>`;
+    return `<div class="card" style="margin-top:12px"><h3 class="title">🔗 ${L('الحسابات المرتبطة','Linked accounts')}</h3><p class="subtitle">${L('اربط أكثر من طريقة دخول بنفس الحساب (بياناتك ومحفظتك تتبعك).','Link several sign-in methods to the same account.')}</p><div class="list">${row('google.com','🟢','Google','lk-google')}${row('password','✉️',L('بريد وكلمة مرور','Email & password'),'lk-pass')}${row('phone','📱',L('رقم الهاتف','Phone number'),'lk-phone')}${row('apple.com','🍎','Apple / iCloud','lk-apple')}</div></div>`; };
+  const _rp7=renderProfile; renderProfile=function(){ let h=_rp7(); h=cutCard(h,'<div class="card" style="margin-top:12px"><h3 class="title">🏆 '); return h+persCard()+linkCard(); };
+  const askBox=(title,fields,act,btn)=>{ window.__v7m=openModal({title,size:'sm',body:fields.map(f=>`<input class="input" id="${f[0]}" type="${f[2]||'text'}" placeholder="${esc(f[1])}" dir="ltr" style="margin-bottom:8px;font-size:16px" autocomplete="off">`).join('')+`<button type="button" class="btn primary" data-v7="${act}" style="width:100%">${esc(btn)}</button><div id="v7rc"></div>`}); };
+  const val=id=>((document.getElementById(id)||{}).value||'').trim();
+  const linkErr=e=>toast(e&&e.code==='auth/operation-not-allowed'?L('فعّل هذه الطريقة من Firebase Console ثم Authentication','Enable this method in Firebase Console → Authentication'):e&&e.code==='auth/credential-already-in-use'?L('هذا الحساب مرتبط بمستخدم آخر','Already linked to another user'):authError(e&&e.code),'error');
+
+  /* ---------- professional login ---------- */
+  const cfg=()=>ls('munjiz.cfg',{});
+  renderLogin=function(){ const has=hasFirebaseConfig(), profiles=getProfiles(), c=cfg(), nm=c.name||t('appName');
+    const wt=c.welcomeTitle||L('أهلًا بك في '+nm,'Welcome to '+nm), tx=c.welcomeText||L('مساحتك لإنجاز المهام والتركيز والمنافسة الشريفة مع أصدقائك.','Your space to get things done, focus and compete with friends.');
+    const g=(label,id)=>`<button class="btn google-btn" type="button" data-action="google-login" ${has?'':'disabled'}>${GOOGLE_ICON}<span>${esc(label)}</span></button>`;
+    return `<div class="auth-wrap"><div class="auth-card lg-card">
+      <div class="auth-hero"><div class="logo" data-secret>${logo(44)}</div><div><h1 style="margin:0">${esc(nm)} <span class="ys-badge">${esc(t('ultra'))}</span></h1><p class="muted" style="margin:4px 0 0">${esc(c.tagline||t('tagline'))}</p></div></div>
+      <div class="wl-hero"><div class="wl-chips"><span>✅ ${L('مهام','Tasks')}</span><span>🎯 ${L('تركيز','Focus')}</span><span>🏆 ${L('منافسة','Compete')}</span><span>👥 ${L('فرق','Teams')}</span></div><h2 class="wl-title">${esc(wt)}</h2><p class="wl-text">${esc(tx)}</p></div>
+      <div class="row center" style="justify-content:center"><button class="chip ${state.settings.lang==='ar'?'active':''}" data-action="lang" data-lang="ar">${esc(t('arabic'))}</button><button class="chip ${state.settings.lang==='en'?'active':''}" data-action="lang" data-lang="en">${esc(t('english'))}</button></div>
+      ${!has?`<div class="card small muted">${esc(t('firebaseMissing'))}</div>`:''}
+      <div class="auth-tabs lg-tabs"><button class="tab-btn active" data-tab="signin">${L('دخول','Sign in')}</button><button class="tab-btn" data-tab="signup">${L('حساب جديد','Create account')}</button><button class="tab-btn" data-tab="guest">${esc(t('guest'))}</button></div>
+      <div id="p-signin" class="panel active"><form id="emailLoginForm" class="auth-form"><label class="field"><span>${L('البريد الإلكتروني','Email')}</span><input class="input" type="email" name="email" required dir="ltr" autocomplete="email"></label><label class="field"><span>${L('كلمة المرور','Password')}</span><div class="lg-pw"><input class="input" type="password" name="password" required minlength="6" autocomplete="current-password"><button type="button" class="icon-btn" data-v7="eye" aria-label="show">👁</button></div></label><label class="checkbox-line"><input type="checkbox" id="remember" checked><span>${esc(t('remember'))}</span></label><button class="btn primary lg-btn" type="submit" ${has?'':'disabled'}>${L('تسجيل الدخول','Sign in')}</button></form><div class="lg-or"><span>${L('أو','or')}</span></div>${g(L('المتابعة بجوجل','Continue with Google'))}<details><summary class="link-btn">${L('نسيت كلمة المرور؟','Forgot password?')}</summary><form id="resetForm" class="auth-form" style="margin-top:10px"><label class="field"><span>${L('البريد الإلكتروني','Email')}</span><input class="input" type="email" name="email" required dir="ltr"></label><button class="btn" type="submit" ${has?'':'disabled'}>${esc(t('send'))}</button></form></details></div>
+      <div id="p-signup" class="panel"><form id="registerForm" class="auth-form"><label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" required maxlength="40" autocomplete="name"></label><label class="field"><span>${L('البريد الإلكتروني','Email')}</span><input class="input" type="email" name="email" required dir="ltr" autocomplete="email"></label><label class="field"><span>${L('كلمة المرور (6 أحرف على الأقل)','Password (min 6)')}</span><div class="lg-pw"><input class="input" type="password" name="password" required minlength="6" autocomplete="new-password"><button type="button" class="icon-btn" data-v7="eye" aria-label="show">👁</button></div></label><div class="field"><span>${L('أنت؟','You are')}</span><div class="gd-opts"><label class="gd-opt"><input type="radio" name="gender" value="m" required><span>👨 ${L('ذكر','Male')}</span></label><label class="gd-opt"><input type="radio" name="gender" value="f"><span>👩 ${L('أنثى','Female')}</span></label></div></div><button class="btn primary lg-btn" type="submit" ${has?'':'disabled'}>${L('إنشاء الحساب','Create account')}</button></form><div class="lg-or"><span>${L('أو','or')}</span></div>${g(L('التسجيل بجوجل','Sign up with Google'))}<p class="muted small center">${L('تقدر تربط الهاتف أو Apple بعد التسجيل من ملفك الشخصي.','You can link phone or Apple later from your profile.')}</p></div>
+      <div id="p-guest" class="panel"><p class="muted">${L('جرّب التطبيق بدون حساب — بياناتك تبقى على جهازك فقط.','Try without an account — data stays on this device.')}</p><button class="btn" data-action="guest-login" style="width:100%">${esc(t('guest'))}</button></div>
+      ${profiles.length?`<div><div class="row between"><strong>${esc(t('savedProfiles'))}</strong><button class="link-btn" data-action="new-local-profile">${icon('plus',14)} ${esc(t('addProfile'))}</button></div><div class="profile-list">${profiles.map(p=>`<div class="profile-row"><div class="avatar" style="background:${esc(p.color)}">${p.photo||p.photoURL?`<img src="${esc(p.photo||p.photoURL)}" alt="" style="width:100%;height:100%;object-fit:cover">`:esc((p.name||'م').slice(0,1).toUpperCase())}</div><div class="meta"><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.provider==='local'?t('localOnly'):t('synced'))}</div></div><button class="btn sm" data-action="open-profile" data-id="${p.id}">${esc(t('openProfile'))}</button><button class="icon-btn" data-action="delete-profile" data-id="${p.id}" aria-label="${esc(t('deleteProfile'))}">${icon('trash',16)}</button></div>`).join('')}</div></div>`:''}
+      <div class="muted small center"><span class="ys-signature">YS</span> • ${esc(APP.copyright)}</div></div></div>`; };
+  document.addEventListener('submit',e=>{ if(e.target.id==='registerForm'){ window.__pendingGender=String(new FormData(e.target).get('gender')||'').slice(0,1); } },true);
+
+  /* ---------- welcome bonus (500 coins, once per new account) + cloud wallet sync ---------- */
+  const KEY='munjiz.wallet', UK='munjiz.walletUid', SK='munjiz.walletSnap', BONUS=500;
+  setInterval(()=>{ if(!activeProfile||state.profile.coinsGiven) return; const cloud=fbOk(); if(cloud&&cloudReady!==state.auth.uid) return;
+    const fresh=(state.game.xp||0)===0&&!(state.tasks||[]).length; state.profile.coinsGiven=1;
+    if(fresh){ const w=ls(KEY,{c:0}); w.c=(+w.c||0)+BONUS; ss(KEY,w); inboxAdd('🎁 '+L('هدية الترحيب: '+BONUS+' YS Coins','Welcome gift: '+BONUS+' YS Coins')); toast('🎁 '+L('مرحبًا بك! أضفنا '+BONUS+' YS Coins لرصيدك','Welcome! '+BONUS+' YS Coins added'),'success'); try{ celebrate(); }catch{} }
+    saveState(); render(); },2500);
+  const snapOf=w=>JSON.stringify([Math.max(0,Math.floor(+w.c||0)),!!w.vip,w.vipUntil||'']);
+  let started=null, lastPull=0, wbusy=false;
+  const wready=()=>fbOk()&&cloudReady===state.auth.uid, wref=()=>fb.db.collection('wallets').doc(state.auth.uid);
+  const wpay=w=>({c:Math.max(0,Math.min(1e9,Math.floor(+w.c||0))),vip:!!w.vip,vipUntil:String(w.vipUntil||'').slice(0,40),at:Date.now()});
+  const wapply=d=>{ const w={...ls(KEY,{c:0}),c:+d.c||0,vip:!!d.vip,vipUntil:d.vipUntil||'',at:+d.at||0}; ss(KEY,w); ss(SK,snapOf(w)); render(); };
+  const wpush=async()=>{ const w=ls(KEY,{c:0}), p=wpay(w); w.at=p.at; ss(KEY,w); ss(SK,snapOf(w)); await wref().set(p); };
+  const wstart=async()=>{ if(!wready()||started===state.auth.uid||wbusy) return; wbusy=true;
+    try{ const d=await wref().get(), changed=localStorage.getItem(UK)!==state.auth.uid, w=ls(KEY,{c:0});
+      if(d.exists){ const x=d.data(); if(changed||(+x.at||0)>(+w.at||0)) wapply(x); else ss(SK,snapOf(w)); }
+      else if(changed){ ss(KEY,{c:0}); ss(SK,snapOf({c:0})); }
+      localStorage.setItem(UK,state.auth.uid); started=state.auth.uid; if(!d.exists&&!changed) await wpush(); }catch{}
+    wbusy=false; };
+  setInterval(()=>{ if(!wready()) return; if(started!==state.auth.uid){ wstart(); return; } const w=ls(KEY,{c:0}), sk=localStorage.getItem(SK); if(sk&&snapOf(w)!==sk) wpush().catch(()=>{}); },4000);
+  setInterval(async()=>{ if(!wready()||started!==state.auth.uid||document.hidden||Date.now()-lastPull<20000) return; lastPull=Date.now(); try{ const d=await wref().get(); if(d.exists){ const x=d.data(), w=ls(KEY,{c:0}); if((+x.at||0)>(+w.at||0)&&snapOf(x)!==snapOf(w)) wapply(x); } }catch{} },10000);
+
+  /* ---------- privacy: never show an e-mail as a public name ---------- */
+  setInterval(()=>{ if(!activeProfile||!fbOk()) return; if(/@/.test(state.profile.name||'')){ state.profile.name='User-'+String(state.auth.uid).slice(0,4).toUpperCase(); saveState(); try{ publishProfileToCloud(); }catch{} } },5000);
+
+  /* ---------- accounts registry (dev sees every account the moment it signs in) ---------- */
+  let lastAcc=0, accNew=false;
+  setInterval(async()=>{ if(!fbOk()||cloudReady!==state.auth.uid||Date.now()-lastAcc<120000) return; lastAcc=Date.now(); const ref=fb.db.collection('accounts').doc(state.auth.uid);
+    try{ const cu=fb.auth.currentUser, x={name:String(state.profile.name||'').slice(0,100),email:String(state.auth.email||'').slice(0,200),provider:String((cu&&cu.providerData&&cu.providerData[0]&&cu.providerData[0].providerId)||'password').slice(0,30),gender:String(state.profile.gender||'').slice(0,1),handle:String(state.profile.handle||'').slice(0,20),lastSeen:iso()};
+      if(!accNew){ const d=await ref.get(); if(!d.exists) x.createdAt=iso(); accNew=true; } await ref.set(x,{merge:true}); }catch{} },3000);
+  const AC={rows:null,q:'',busy:false,err:''};
+  const acList=()=>{ const q=AC.q.trim().toLowerCase().replace(/^mz-/,''), now=Date.now();
+    return (AC.rows||[]).filter(a=>!q||(String(a.name||'')+' '+(a.email||'')+' '+a.id).toLowerCase().includes(q)).slice(0,60).map(a=>{ const on=now-Date.parse(a.lastSeen||'')<5*60e3;
+      return `<div class="list-item" data-pid="${esc(a.id)}"><span class="avatar" style="width:38px;height:38px;background:var(--accent)">${esc((a.name||'م').slice(0,1).toUpperCase())}</span><div class="list-main"><div class="list-title">${on?'🟢':'⚪'} ${esc(a.name||'—')} ${a.gender==='f'?'👩':a.gender==='m'?'👨':''}</div><div class="meta"><span dir="ltr">${esc(a.email||a.provider||'')}</span><span dir="ltr">${esc(String(a.id).slice(0,8))}…</span></div></div></div>`; }).join('')||emptyHtml(t('noData')); };
+  const paintAC=()=>{ const e=document.getElementById('v7acl'); if(e) e.innerHTML=acList(); const c=document.getElementById('v7acn'); if(c) c.textContent=(AC.rows||[]).length+(AC.err?' ['+AC.err+']':''); };
+  const loadAC=async()=>{ if(AC.busy||!fb.ready) return; AC.busy=true; try{ const sn=await fb.db.collection('accounts').orderBy('lastSeen','desc').limit(200).get(); AC.rows=sn.docs.map(d=>({id:d.id,...d.data()})); AC.err=''; }catch(e){ AC.rows=AC.rows||[]; AC.err=(e&&e.code)||'error'; } AC.busy=false; paintAC(); };
+
+  /* ---------- update publisher + client update prompt ---------- */
+  const U7={notes:'',hash:'',sections:[],sizes:{},status:''};
+  const sha=async tx=>{ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(tx)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,12); };
+  const titles=tx=>[...new Set([...tx.matchAll(/\/\*\s*=+\s*([^*=\n]{3,100}?)\s*=+\s*\*\//g)].map(m=>m[1].trim()))];
+  const analyze=async()=>{ const fs=[...((document.getElementById('v7f')||{}).files||[])], pick=e=>fs.find(f=>f.name.toLowerCase().endsWith(e)), fi=pick('.html'), fsw=pick('.js'), fm=pick('.json');
+    if(!fi){ toast(L('ارفع ملف index.html على الأقل','Select index.html at least'),'warn'); return; }
+    const [ti,tsw,tm]=await Promise.all([fi.text(),fsw?fsw.text():'',fm?fm.text():'']); U7.hash=await sha(ti); U7.sizes={index:fi.size,sw:fsw?fsw.size:0,manifest:fm?fm.size:0}; U7.sections=titles(ti).slice(0,150);
+    let hosted='', last=null; try{ hosted=await (await fetch(location.href.split('#')[0].split('?')[0],{cache:'no-store'})).text(); }catch{} try{ const d=await fb.db.collection('config').doc('update').get(); if(d.exists) last=d.data(); }catch{}
+    const baseSec=last&&last.sections?last.sections:titles(hosted), added=U7.sections.filter(x=>!baseSec.includes(x)), removed=baseSec.filter(x=>!U7.sections.includes(x)), deployed=hosted&&(await sha(hosted))===U7.hash, lines=[];
+    added.forEach(x=>lines.push('✨ '+x)); removed.slice(0,5).forEach(x=>lines.push('🧹 '+L('إزالة: ','Removed: ')+x));
+    const baseSize=last&&last.files?+last.files.index||0:hosted.length; if(baseSize) lines.push('📦 '+L('حجم التطبيق: ','App size: ')+Math.round(fi.size/1024)+' KB ('+(fi.size>=baseSize?'+':'')+Math.round((fi.size-baseSize)/1024)+' KB)');
+    const cv=x=>(x.match(/CACHE[_A-Z]*\s*=\s*['"]([^'"]+)['"]/)||[])[1]; if(tsw&&cv(tsw)) lines.push('⚙️ '+L('نسخة التخزين المؤقت: ','Cache version: ')+cv(tsw));
+    try{ const mj=JSON.parse(tm); if(mj.name) lines.push('📱 '+L('اسم التطبيق: ','App name: ')+mj.name); }catch{}
+    if(!lines.length) lines.push('🔧 '+L('تحسينات عامة وإصلاحات','General improvements and fixes'));
+    U7.notes=lines.join('\n'); U7.status=deployed?'✅ '+L('الملفات منشورة على الاستضافة','Files are live on the host'):'⚠️ '+L('الاستضافة لسه بتعرض نسخة قديمة — ارفع الملفات (GitHub) قبل النشر','Host still serves an old build — upload the files first');
+    const n=document.getElementById('v7n'), st=document.getElementById('v7st'), vv=document.getElementById('v7v'); if(n) n.value=U7.notes; if(st) st.textContent=U7.status+' · #'+U7.hash; if(vv&&!vv.value) vv.value=new Date().toISOString().slice(0,16).replace(/[-T:]/g,'.'); };
+  const showUpd=u=>{ if(document.querySelector('.v7-upd')) return; const el=document.createElement('div'); el.className='v7-upd';
+    el.innerHTML=`<div class="v7-uc"><div class="v7-ut">🚀 ${L('يوجد تحديث جديد','A new update is available')}</div><div class="muted small">${esc(u.version||'')}</div><ul>${(u.notes||[]).slice(0,12).map(n=>`<li>${esc(n)}</li>`).join('')}</ul><div class="row" style="gap:8px;margin-top:10px"><button type="button" class="btn primary" style="flex:1" data-v7="upd-now">${L('تحديث الآن','Update now')}</button><button type="button" class="btn" data-v7="upd-later">${L('لاحقًا','Later')}</button></div></div>`; el._u=u; document.body.appendChild(el); inboxAdd('🚀 '+L('تحديث جديد: ','New update: ')+(u.version||'')); };
+  const chkUpd=async()=>{ if(!fb.ready||!fb.db) return; try{ const d=await fb.db.collection('config').doc('update').get(); if(!d.exists) return; const u=d.data(), seen=localStorage.getItem('munjiz.updSeen'); if(!seen){ localStorage.setItem('munjiz.updSeen',u.at); return; } if(seen!==u.at) showUpd(u); }catch{} };
+  setInterval(chkUpd,600000); setTimeout(chkUpd,6000);
+  const applyUpd=async u=>{ localStorage.setItem('munjiz.updSeen',u.at); try{ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); }catch{} try{ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); }catch{} location.reload(); };
+
+  /* ---------- team: medals, public/private, directory, members ---------- */
+  const TT=['برونزي','فضي','ذهبي','بلاتيني','ماسي','أسطوري'], TTE=['Bronze','Silver','Gold','Platinum','Diamond','Legendary'];
+  const TR=[['pts','🏆','النقاط','Points',[100,500,1500,4000,10000,25000],b=>+b.pts||0],['tasks','✅','المهام','Tasks',[20,100,400,1200,3500,10000],b=>+((b.stats||{}).tasks)||0],['focus','🎯','التركيز (دقيقة)','Focus (min)',[200,1000,4000,12000,35000,100000],b=>+((b.stats||{}).focus)||0],['badges','🏅','الأوسمة','Badges',[5,20,60,150,350,800],b=>+((b.stats||{}).badges)||0],['members','👥','الأعضاء','Members',[2,4,8,15,25,40],b=>+b.members||0],['streak','🔥','المثابرة (يوم)','Streak (days)',[3,7,14,30,60,120],b=>+((b.stats||{}).streak)||0]];
+  const tierN=(th,v)=>th.filter(n=>v>=n).length, score=b=>TR.reduce((a,x)=>a+tierN(x[4],x[5](b))*10,0)+Math.floor((+b.pts||0)/100);
+  const grid=b=>`<div class="tm-grid">${TR.map(([k,gl,ar,en,th,f])=>{ const v=f(b), t=tierN(th,v), nx=th[t], pv=t?th[t-1]:0;
+    return `<div class="tm-cell"><div>${medal(Math.max(t,1),gl,t>0,60)}</div><b>${esc(L(ar,en))}</b><span class="tm-tn">${t?esc(L(TT[t-1],TTE[t-1])):esc(L('مقفل','Locked'))}</span><div class="progress" style="width:100%"><span style="width:${nx?Math.round((v-pv)/(nx-pv)*100):100}%"></span></div><span class="muted small">${v.toLocaleString()}${nx?' / '+nx.toLocaleString():' ✓'}</span></div>`; }).join('')}</div>`;
+  const TS={cur:null,team:null,profs:[],busy:false};
+  const myTeam=()=>state.teams.find(x=>x.shared&&(x.memberIds||[]).includes(state.auth.uid));
+  const pubStats=async force=>{ const tm=myTeam(); if(!tm||!fbOk()||TS.busy) return; TS.busy=true;
+    try{ const bref=fb.db.collection('teamBoard').doc('all').collection('teams').doc(tm.id), [b,td]=await Promise.all([bref.get(),fb.db.collection('teams').doc(tm.id).get()]), cur=b.exists?b.data():{}; TS.cur=cur; TS.team=td.exists?td.data():null;
+      if(td.exists){ const ids=(td.data().memberIds||[]).slice(0,40); if(force||!cur.stats||Date.now()-(+cur.stats.at||0)>30*60e3||!TS.profs.length){ const ps=await Promise.all(ids.map(id=>fb.db.collection('publicProfiles').doc(id).get().catch(()=>null))), st={tasks:0,focus:0,badges:0,streak:0,at:Date.now()}; TS.profs=[];
+          ps.forEach(p=>{ if(p&&p.exists){ const d=p.data(); TS.profs.push({id:p.id,...d}); st.tasks+=+d.tasksCompleted||0; st.focus+=+d.focusMinutes||0; st.badges+=+d.badgesCount||0; st.streak=Math.max(st.streak,+d.bestStreak||+d.streak||0); } });
+          if(force||!cur.stats||Date.now()-(+cur.stats.at||0)>30*60e3){ await bref.set({name:tm.name||'',stats:st,members:ids.length},{merge:true}); TS.cur={...cur,name:tm.name,stats:st,members:ids.length}; } } }
+      if(state.ui.view==='teams') render(); }catch{}
+    TS.busy=false; };
+  setInterval(()=>pubStats(false),10*60e3); setTimeout(()=>pubStats(false),9000);
+  const PUB={rows:null,busy:false,at:0};
+  const loadPub=async()=>{ if(PUB.busy||!fbOk()) return; PUB.busy=true; try{ const sn=await fb.db.collection('teams').where('isPublic','==',true).limit(30).get(); PUB.rows=sn.docs.map(d=>({id:d.id,...d.data()})); }catch{ PUB.rows=PUB.rows||[]; } PUB.at=Date.now(); PUB.busy=false; if(state.ui.view==='teams') render(); };
+  const teamCard=()=>{ const tm=myTeam(); if(!fbOk()) return ''; if(PUB.rows===null||Date.now()-PUB.at>180000) loadPub(); let h='';
+    if(tm){ if(TS.cur===null) pubStats(false); const own=TS.team&&(TS.team.ownerId===state.auth.uid||(TS.team.roles||{})[state.auth.uid]==='admin')||dev(), pub=!!(TS.team&&TS.team.isPublic);
+      h+=`<div class="card" style="margin-top:12px"><div class="row between" style="gap:8px;flex-wrap:wrap"><h3 class="title">🏅 ${L('أوسمة فريقك','Your team medals')}</h3><div class="row" style="gap:6px">${own&&TS.team?`<button type="button" class="btn sm ${pub?'primary':''}" data-v7="vis">${pub?'🌍 '+L('عام','Public'):'🔒 '+L('خاص','Private')}</button>`:''}<button type="button" class="btn sm" data-v7="trefresh">↻</button></div></div><p class="subtitle">${L('أوسمة مشتركة لكل الفريق — تتطوّر من برونزي إلى أسطوري وتنافس بها الفرق الأخرى.','Shared team medals — evolve from Bronze to Legendary.')}</p>${TS.cur?grid(TS.cur):`<div class="muted">${L('جارٍ التحميل…','Loading…')}</div>`}</div>`
+        +`<div class="card" style="margin-top:12px"><h3 class="title">👥 ${L('أعضاء الفريق','Team members')} (${TS.profs.length})</h3><div class="list">${TS.profs.map(p=>`<div class="list-item" data-pid="${esc(p.id)}"><span class="avatar" style="width:38px;height:38px;background:${esc(p.avatarColor||'var(--accent)')}">${p.photo?`<img src="${esc(p.photo)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:esc((p.displayName||'م').slice(0,1).toUpperCase())}</span><div class="list-main"><div class="list-title">${esc(p.displayName||'—')} ${roleChip(p.id)}</div><div class="meta"><span>L${esc(p.level||1)}</span><span>${esc(p.xp||0)} XP</span><span>✅ ${esc(p.tasksCompleted||0)}</span></div></div></div>`).join('')||`<div class="muted">${L('جارٍ التحميل…','Loading…')}</div>`}</div></div>`; }
+    const pubs=(PUB.rows||[]).filter(x=>!tm||x.id!==tm.id);
+    h+=`<div class="card" style="margin-top:12px"><h3 class="title">🌍 ${L('فرق عامة','Public teams')}</h3><p class="subtitle">${L('أي فريق عام تقدر تنضم له مباشرة. الفرق الخاصة بالكود فقط.','Join any public team directly. Private teams need a code.')}</p><div class="list">${pubs.map(x=>`<div class="list-item"><span class="avatar" style="width:38px;height:38px;background:var(--grad)">${esc((x.name||'م').slice(0,1).toUpperCase())}</span><div class="list-main"><div class="list-title">${esc(x.name||'—')}</div><div class="meta"><span>👥 ${(x.memberIds||[]).length}</span></div></div>${tm?'':`<button type="button" class="btn sm primary" data-v7="pjoin" data-id="${esc(x.id)}">${L('انضمام','Join')}</button>`}</div>`).join('')||`<div class="muted">${L('لا توجد فرق عامة الآن','No public teams yet')}</div>`}</div></div>`;
+    return h; };
+  const MB={rows:null,at:0,busy:false};
+  const loadMB=async()=>{ if(MB.busy) return; MB.busy=true; try{ const sn=await fb.db.collection('teamBoard').doc('all').collection('teams').orderBy('pts','desc').limit(30).get(); MB.rows=sn.docs.map(d=>({id:d.id,...d.data()})).filter(b=>b.name); }catch{ MB.rows=MB.rows||[]; } MB.at=Date.now(); MB.busy=false; if(state.ui.view==='leaderboard') render(); };
+  const mbCard=()=>{ if(!fbOk()) return ''; if(MB.rows===null||Date.now()-MB.at>180000) loadMB(); const rows=(MB.rows||[]).map(b=>({b,s:score(b)})).sort((a,c)=>c.s-a.s).slice(0,15); if(!rows.length) return '';
+    return `<div class="card"><h3 class="title">🏆 ${L('تصنيف أوسمة الفرق','Team medals ranking')}</h3><div class="list">${rows.map((r,i)=>{ const meds=TR.map(x=>[x,tierN(x[4],x[5](r.b))]).filter(x=>x[1]>0).sort((a,c)=>c[1]-a[1]).slice(0,4);
+      return `<div class="list-item"><div class="lb-rank ${i<3?'top'+(i+1):''}">${i+1}</div><div class="list-main"><div class="list-title">${esc(r.b.name)}</div><div class="tm-mini">${meds.map(([x,t])=>medal(t,x[1],true,34)).join('')||`<span class="muted small">${L('بلا أوسمة بعد','No medals yet')}</span>`}</div></div><b>${r.s}</b></div>`; }).join('')}</div></div>`; };
+
+  /* ---------- image announcements ---------- */
+  const annImg=a=>a.image==='@mem'?((window.__annImg||{})[a.id]||''):(a.image||''), okUrl=u=>/^https:\/\//i.test(u||'');
+  const annBanners=()=>{ const list=(state.announcements||[]).filter(a=>annImg(a)).slice(0,5); return list.length?`<div class="ann-row">${list.map(a=>`<div class="ann-b" role="button" data-ann="${esc(a.id)}"><img src="${esc(annImg(a))}" alt="" loading="lazy" decoding="async"><div class="ann-t"><b>${esc(a.title||'')}</b>${a.link?' <span>↗</span>':''}</div></div>`).join('')}</div>`:''; };
+  const annResize=file=>new Promise((res,rej)=>{ const img=new Image(), u=URL.createObjectURL(file); img.onload=()=>{ let w=Math.min(1600,img.width), q=.72, out; const c=document.createElement('canvas'); const draw=()=>{ c.width=w; c.height=Math.round(img.height*w/img.width); c.getContext('2d').drawImage(img,0,0,c.width,c.height); out=c.toDataURL('image/jpeg',q); }; draw(); while(out.length>260000&&(q>.35||w>800)){ if(q>.35) q-=.08; else w=Math.round(w*.8); draw(); } URL.revokeObjectURL(u); res(out); }; img.onerror=rej; img.src=u; });
+  let a5img='';
+
+  /* ---------- developer cards ---------- */
+  const f7=(id,l,ph='')=>`<label class="field"><span>${l}</span><input class="input" id="${id}" placeholder="${esc(ph)}"></label>`;
+  const devCard7=()=>{ if(AC.rows===null) loadAC();
+    return `<div class="card dev-panel"><div class="row between"><h3 class="title">🧑‍💻 ${L('الحسابات المسجّلة','Registered accounts')} (<span id="v7acn">${(AC.rows||[]).length}</span>)</h3><button type="button" class="btn sm" data-v7="acr">↻</button></div><input class="input" id="v7acq" placeholder="${esc(L('ابحث بالاسم أو البريد أو الـ UID…','Search name, email or UID…'))}" value="${esc(AC.q)}" style="margin:8px 0"><div class="list" id="v7acl">${acList()}</div></div>
+    <div class="card dev-panel"><h3 class="title">🚀 ${L('نشر تحديث للتطبيق','Publish an app update')}</h3><p class="subtitle">${L('اختر الملفات الثلاثة (index.html وsw.js وmanifest.json). بنحلّلها ونكتب مواصفات التحديث، والمستخدمين يطلع لهم إشعار.','Pick the 3 files. We analyze them, write the release notes and notify users.')}</p><input type="file" id="v7f" multiple accept=".html,.js,.json" class="input"><div class="row" style="gap:8px;margin:8px 0;flex-wrap:wrap"><button type="button" class="btn" data-v7="analyze">🔍 ${L('تحليل الملفات','Analyze')}</button><span class="muted small" id="v7st"></span></div>${f7('v7v',L('رقم النسخة','Version'))}<label class="field"><span>${L('مواصفات التحديث (سطر لكل نقطة — تقدر تعدّل)','Release notes (one per line)')}</span><textarea class="input" id="v7n" rows="6"></textarea></label><button type="button" class="btn primary" data-v7="publish" style="margin-top:8px">📣 ${L('نشر التحديث للمستخدمين','Publish update')}</button></div>
+    <div class="card dev-panel"><h3 class="title">🖼️ ${L('إعلان بصورة ورابط','Image announcement')}</h3><div class="form-grid">${f7('a5t',L('العنوان','Title'))}${f7('a5b',L('النص','Text'))}${f7('a5i',L('رابط الصورة (أي دقة)','Image URL (any size)'),'https://')}${f7('a5l',L('الرابط عند الضغط','Link on tap'),'https://')}</div><div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="btn" data-v7="apick">📷 ${L('رفع صورة (تُضغط)','Upload (compressed)')}</button><input type="file" id="a5f" accept="image/*" hidden><label class="row" style="gap:6px"><input type="checkbox" id="a5p"> ${L('تثبيت','Pin')}</label><button type="button" class="btn primary" data-v7="apub">📣 ${L('نشر','Publish')}</button></div></div>`; };
+  const _rd7=renderDeveloper; renderDeveloper=function(){ const h=_rd7(); return dev()?h+devCard7():h; };
+
+  /* ---------- delegated events ---------- */
+  document.addEventListener('input',e=>{ if(e.target&&e.target.id==='v7acq'){ AC.q=e.target.value; paintAC(); } });
+  document.addEventListener('change',async e=>{ if(e.target.id==='a5f'&&e.target.files[0]){ try{ a5img=await annResize(e.target.files[0]); document.getElementById('a5i').value='(صورة مرفوعة)'; toast(L('تم تجهيز الصورة','Image ready'),'success'); }catch{ toast('Image error','error'); } } });
+  document.addEventListener('click',async e=>{
+    const ann=e.target.closest('[data-ann]'); if(ann){ const a=(state.announcements||[]).find(x=>x.id===ann.dataset.ann); if(a){ if(okUrl(a.link)) window.open(a.link,'_blank','noopener,noreferrer'); else openModal({title:a.title||'',body:`<img src="${esc(annImg(a))}" alt="" style="width:100%;border-radius:16px">${a.body?`<p style="white-space:pre-wrap;line-height:1.8">${esc(a.body)}</p>`:''}`}); } return; }
+    const b=e.target.closest('[data-v7]'); if(!b) return; const a=b.dataset.v7;
+    try{
+      if(a==='eye'){ const i=b.parentNode.querySelector('input'); if(i) i.type=i.type==='password'?'text':'password'; }
+      else if(a==='upd-later'){ b.closest('.v7-upd').remove(); }
+      else if(a==='upd-now'){ const el=b.closest('.v7-upd'); await applyUpd(el._u); }
+      else if(a==='notif'){ if('Notification' in window){ const p=await Notification.requestPermission(); toast(p==='granted'?L('تم تفعيل الإشعارات','Notifications enabled'):L('لم يتم السماح','Not allowed'),p==='granted'?'success':'warn'); render(); } }
+      else if(a==='trefresh'){ pubStats(true); toast(L('جارٍ التحديث…','Refreshing…'),'success'); }
+      else if(a==='vis'){ const tm=myTeam(); if(!tm||!TS.team) return; const nv=!TS.team.isPublic; await fb.db.collection('teams').doc(tm.id).update({isPublic:nv,updatedAt:iso()}); TS.team.isPublic=nv; PUB.rows=null; toast(nv?L('الفريق أصبح عامًا','Team is now public'):L('الفريق أصبح خاصًا','Team is now private'),'success'); render(); }
+      else if(a==='pjoin'){ if(myTeam()){ toast(L('أنت في فريق بالفعل','Already in a team'),'warn'); return; } await fb.db.collection('teams').doc(b.dataset.id).update({memberIds:firebase.firestore.FieldValue.arrayUnion(state.auth.uid),updatedAt:iso()}); await Teams.fetch(); PUB.rows=null; TS.cur=null; toast(t('savedMsg'),'success'); render(); }
+      else if(a==='lk-google'){ await fb.auth.currentUser.linkWithPopup(new firebase.auth.GoogleAuthProvider()); toast(t('savedMsg'),'success'); render(); }
+      else if(a==='lk-apple'){ await fb.auth.currentUser.linkWithPopup(new firebase.auth.OAuthProvider('apple.com')); toast(t('savedMsg'),'success'); render(); }
+      else if(a==='lk-pass'){ const em=state.auth.email; askBox(L('إضافة كلمة مرور','Add a password'),[...(em?[]:[['v7em','Email','email']]),['v7pw',L('كلمة المرور (6+)','Password (6+)'),'password']],'dopass',L('ربط','Link')); }
+      else if(a==='dopass'){ const em=state.auth.email||val('v7em'), pw=val('v7pw'); if(!em||pw.length<6){ toast(L('أدخل بريدًا وكلمة مرور (6+)','Enter email and a 6+ password'),'warn'); return; } await fb.auth.currentUser.linkWithCredential(firebase.auth.EmailAuthProvider.credential(em,pw)); if(window.__v7m) window.__v7m.close(); toast(t('savedMsg'),'success'); render(); }
+      else if(a==='lk-phone'){ askBox(L('ربط رقم الهاتف','Link phone'),[['v7ph','+20 1xx xxx xxxx','tel']],'phsend',L('إرسال الكود','Send code')); }
+      else if(a==='phsend'){ const ph=val('v7ph').replace(/\s+/g,''); if(!/^\+\d{8,15}$/.test(ph)){ toast(L('اكتب الرقم بصيغة دولية مثل +201234567890','Use international format, e.g. +201234567890'),'warn'); return; } window.__rv=new firebase.auth.RecaptchaVerifier('v7rc',{size:'invisible'}); window.__cr=await fb.auth.currentUser.linkWithPhoneNumber(ph,window.__rv); b.outerHTML=`<input class="input" id="v7code" placeholder="${esc(L('كود التحقق','Code'))}" dir="ltr" style="margin:8px 0;font-size:16px"><button type="button" class="btn primary" data-v7="phok" style="width:100%">${L('تأكيد','Confirm')}</button>`; }
+      else if(a==='phok'){ await window.__cr.confirm(val('v7code')); if(window.__v7m) window.__v7m.close(); toast(t('savedMsg'),'success'); render(); }
+      else if(a==='acr'){ AC.rows=null; AC.busy=false; loadAC(); }
+      else if(!dev()) return;
+      else if(a==='analyze'){ await analyze(); }
+      else if(a==='publish'){ const notes=val('v7n').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,40), version=val('v7v')||new Date().toISOString().slice(0,16); if(!U7.hash){ toast(L('حلّل الملفات أولًا','Analyze the files first'),'warn'); return; } const at=iso();
+        await fb.db.collection('config').doc('update').set({version:version.slice(0,40),notes,hash:U7.hash,at,sections:U7.sections,files:U7.sizes,by:'YS'}); localStorage.setItem('munjiz.updSeen',at); toast(L('تم نشر التحديث — سيظهر للمستخدمين','Update published'),'success'); }
+      else if(a==='apick'){ const f=document.getElementById('a5f'); if(f) f.click(); }
+      else if(a==='apub'){ const title=val('a5t').slice(0,160); if(!title) return; let image=a5img||val('a5i'); if(image==='(صورة مرفوعة)') image=a5img; if(image&&!okUrl(image)&&!image.startsWith('data:image/')) image=''; const link=okUrl(val('a5l'))?val('a5l').slice(0,500):'';
+        await fb.db.collection('announcements').add({title,body:val('a5b').slice(0,3000),createdAt:iso(),author:'YS',active:true,pinned:!!(document.getElementById('a5p')||{}).checked,image,link}); a5img=''; toast(t('savedMsg'),'success'); }
+    }catch(err){ if(String(a).startsWith('lk-')||a==='dopass'||a==='phsend'||a==='phok') linkErr(err); else toast(errTxt(err),'error'); } });
+
+  /* ---------- unread alerts: badge on the menu button + inbox, optional browser notifications ---------- */
+  const unread=()=>{ const seen=+localStorage.getItem('munjiz.inboxSeen')||0; let n=ls('munjiz.inbox',[]).filter(m=>m.at>seen).length; (state.announcements||[]).forEach(a=>{ if((Date.parse(a.createdAt||'')||0)>seen) n++; }); return n; };
+  const badge=(el,n)=>{ if(!el) return; let i=el.querySelector('.v7-b'); if(!n){ if(i) i.remove(); return; } if(!i){ i=document.createElement('i'); i.className='v7-b'; el.style.position='relative'; el.appendChild(i); } i.textContent=n>9?'9+':String(n); };
+  let lastN=unread();
+  setInterval(()=>{ const n=unread(); badge(document.querySelector('[data-action="toggle-sidebar"]'),n); badge(document.querySelector('.nav-item[data-view="inbox"]'),n);
+    if(n>lastN&&document.hidden&&('Notification' in window)&&Notification.permission==='granted'){ const m=ls('munjiz.inbox',[])[0]; try{ new Notification(t('appName'),{body:(m&&m.t)||L('لديك رسالة جديدة','You have a new message')}); }catch{} } lastN=n; },2500);
+
+  const _rv7=renderView; renderView=function(v){ let h=_rv7(v); if(v==='teams') h+=teamCard(); else if(v==='leaderboard') h=mbCard()+h; else if(v==='home') h=annBanners()+h; else if(v==='inbox'&&'Notification' in window&&Notification.permission==='default') h=`<div class="card"><div class="row between" style="gap:10px"><div><b>🔔 ${L('إشعارات المتصفح','Browser notifications')}</b><div class="muted small">${L('نبّهني لما توصلني رسالة جديدة.','Alert me when a new message arrives.')}</div></div><button type="button" class="btn primary" data-v7="notif">${L('تفعيل','Enable')}</button></div></div>`+h; return h; };
 })();
 
       init();
