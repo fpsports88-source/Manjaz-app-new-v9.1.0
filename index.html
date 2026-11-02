@@ -512,7 +512,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
 @keyframes fxMove{from{background-position-y:-40px}to{background-position-y:420px}}
 @media(prefers-reduced-motion:reduce){.ev-b::after,.ev-rain,.pf-card[class*="fx-"]::after{animation:none!important}}
 </style>
-</head>
+<style id="fitFix">@media(min-width:1101px){.shell .main{width:auto!important;max-width:calc(100vw - 260px)!important}}.main,.view,.card{min-width:0}html,body{overflow-x:hidden;max-width:100vw}.view img,.view svg{max-width:100%}</style></head>
 <body>
   <div id="app" class="app-root"></div>
   <div id="toastRoot" class="toast-root" aria-live="polite"></div>
@@ -534,7 +534,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
         appId: '1:3482020492:web:72d6f419712c0404a8e9a9'
       };
 
-      const APP = { name:'منجز', version:'9.3.0', copyright:'© YS — جميع الحقوق محفوظة' };
+      const APP = { name:'منجز', version:'10.0.0', copyright:'© YS — جميع الحقوق محفوظة' };
       const LS = { profiles:'munjiz.profiles', active:'munjiz.active', prefs:'munjiz.prefs', temp:'munjiz.temp' };
       const DAY = 86400000;
       const STATUS = ['new','inProgress','done'];
@@ -826,7 +826,13 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
       async function signInWithGoogle(remember=true){ if(!fb.ready){toast(t('firebaseMissing'),'warn');return false;} try{ await setPersistence(remember); await fb.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
       async function loginWithEmail(email,password,remember=true){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} try{ await setPersistence(remember); await fb.auth.signInWithEmailAndPassword(String(email).trim(),password); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
       async function registerWithEmail(name,email,password,remember=true){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} if(String(password).length<6){toast(t('invalidCredentials'),'error');return false;} try{ await setPersistence(remember); const c=await fb.auth.createUserWithEmailAndPassword(String(email).trim(),password); await c.user.updateProfile({displayName:String(name).trim()||email}); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
-      async function resetPassword(email){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} try{ await fb.auth.sendPasswordResetEmail(String(email).trim()); toast(t('savedMsg'),'success'); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
+      async function resetPassword(email){ const AR=state.settings.lang==='ar'; email=String(email||'').trim();
+        if(!fb.ready){ toast(t('requiresFirebase'),'warn'); return false; }
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ toast(AR?'اكتب إيميلًا صحيحًا':'Enter a valid email','warn'); return false; }
+        const left=60-Math.floor((Date.now()-(+localStorage.getItem('munjiz.resetAt')||0))/1000); if(left>0){ toast((AR?'انتظر ':'Wait ')+left+(AR?' ثانية قبل إعادة الإرسال':'s before resending'),'warn'); return false; }
+        try{ await fb.auth.sendPasswordResetEmail(email); }catch(e){ if(e&&e.code!=='auth/user-not-found'){ toast(authError(e.code),'error'); return false; } }
+        localStorage.setItem('munjiz.resetAt',String(Date.now()));
+        toast(AR?'📧 لو الإيميل مسجّل عندنا فقد أرسلنا لك رابط إعادة تعيين كلمة المرور. افتحه من بريدك (وتفقّد Spam).':'📧 If this email is registered, we sent you a password reset link. Open it from your inbox (check Spam).','success'); return true; }
       let watchUnsub=null, watchUid=null;
       function stopWatch(){ if(watchUnsub){ watchUnsub(); watchUnsub=null; } watchUid=null; }
       /* أي تعديل من جهاز آخر على نفس الحساب يظهر هنا فورًا */
@@ -867,6 +873,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
             } else { cloudReady=uid; await pushCloud(); }
           } else { cloudReady=uid; await pushCloud(); }
           startWatch(uid);
+          try{ await Teams.fetch(); }catch{}
         }catch(e){ console.warn(e); }
       }
       function publishProfileToCloud(){
@@ -1246,12 +1253,12 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
         if(v==='groups') return renderGroups();
         if(v==='teams') return renderTeams();
         if(v==='friends') return renderFriends();
-        if(v==='profile') return renderProfile();
+        if(v==='profile') return renderProfile()+(window.Medals?Medals.card():'');
         if(v==='chat') return PubChat.html();
         if(v==='leaderboard') return renderLeaderboard();
         if(v==='challenges') return renderChallenges();
         if(v==='focus') return renderFocus();
-        if(v==='settings') return renderSettings()+(window.Look?Look.card():'')+(window.Tools?Tools.card():'');
+        if(v==='settings') return renderSettings()+(window.Look?Look.card():'')+(window.Tools?Tools.card():'')+(window.Privacy?Privacy.card():'');
         if(v==='developer') return renderDeveloper();
         return renderHome();
       }
@@ -1308,7 +1315,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
       function renderTeams(){
         const active=teamById(state.activeTeamId);
         return `<div class="card"><div class="row between"><div><h2 class="title">${esc(t('teams'))}</h2><p class="subtitle">${esc(t('createFirstTeam'))}</p></div><div class="row"><button class="btn" data-action="join-team">${icon('users',16)} ${esc(t('joinTeam'))}</button><button class="btn primary" data-action="new-team">${icon('plus',18)} ${esc(t('createTeam'))}</button></div></div>
-        ${state.teams.length?`<div class="grid-cards" style="margin-top:12px">${state.teams.map(tm=>{const tasks=state.tasks.filter(x=>x.teamId===tm.id); return `<div class="card entity-card ${state.activeTeamId===tm.id?'active':''}"><div class="strip" style="background:${esc(tm.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(tm.name)}</h3><div class="muted small">${esc(tm.description||'—')}</div><div class="badge" style="margin-top:6px">${esc(t('teamCode'))}: ${esc(tm.joinCode)}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tm.memberIds.length}</strong><div class="muted small">${esc(t('members'))}</div></div></div><div class="row"><button class="btn sm ${state.activeTeamId===tm.id?'primary':''}" data-action="select-team" data-id="${tm.id}">${esc(state.activeTeamId===tm.id?t('activeTeam'):t('selectTeam'))}</button><button class="btn sm" data-action="copy-team-code" data-id="${tm.id}">${esc(t('copyCode'))}</button><button class="btn sm danger" data-action="leave-team" data-id="${tm.id}">${esc(t('leaveTeam'))}</button>${(tm.ownerId===state.auth.uid||state.developer.unlocked)?`<button class="btn sm danger" data-action="delete-team" data-id="${tm.id}">🗑 ${esc(state.settings.lang==='ar'?'حذف الفريق':'Delete team')}</button>`:''}</div></div>`;}).join('')}</div>`:emptyHtml(t('noTeams'))}
+        ${state.teams.length?`<div class="grid-cards" style="margin-top:12px">${state.teams.map(tm=>{const tasks=state.tasks.filter(x=>x.teamId===tm.id); return `<div class="card entity-card ${state.activeTeamId===tm.id?'active':''}"><div class="strip" style="background:${esc(tm.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(tm.name)}</h3><div class="muted small">${esc(tm.description||'—')}</div><div class="badge" style="margin-top:6px">${esc(t('teamCode'))}: ${esc(tm.joinCode)}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tm.memberIds.length}</strong><div class="muted small">${esc(t('members'))}</div></div></div><div class="row"><button class="btn sm ${state.activeTeamId===tm.id?'primary':''}" data-action="select-team" data-id="${tm.id}">${esc(state.activeTeamId===tm.id?t('activeTeam'):t('selectTeam'))}</button><button class="btn sm" data-action="copy-team-code" data-id="${tm.id}">${esc(t('copyCode'))}</button><button class="btn sm" data-tv="${tm.id}">👥 ${esc(state.settings.lang==='ar'?'الأعضاء والأوسمة':'Members & awards')}</button><button class="btn sm danger" data-action="leave-team" data-id="${tm.id}">${esc(t('leaveTeam'))}</button>${(tm.ownerId===state.auth.uid||state.developer.unlocked)?`<button class="btn sm danger" data-action="delete-team" data-id="${tm.id}">🗑 ${esc(state.settings.lang==='ar'?'حذف الفريق':'Delete team')}</button>`:''}</div></div>`;}).join('')}</div>`:emptyHtml(t('noTeams'))}
         </div>
         ${active?`<div class="card" style="margin-top:12px"><div class="row between"><h2 class="title">${esc(t('teamLb'))}: ${esc(active.name)}</h2><button class="btn sm primary" data-action="lb-tab" data-tab="team">${esc(t('refresh'))}</button> <button class="btn sm" data-soc="team-chat" data-id="${esc(active.id)}">💬 ${esc(t('chatT'))}</button></div><div class="list">${state.leaderboard.cache.filter(Boolean).slice(0,10).map(lbRow).join('')||emptyHtml(t('noData'))}</div></div>`:''}`;
       }
@@ -1616,6 +1623,118 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
           return _s(id, source);
         };
       })();
+
+      /* ===== مكافأة الدخول اليومي + الخصوصية (© YS) ===== */
+      var Daily = {
+        REW: [10, 15, 20, 25, 30, 40, 100], shown: false,
+        wl(){ try{ return JSON.parse(localStorage.getItem('munjiz.wallet')) || { c: 0 }; }catch{ return { c: 0 }; } },
+        check(){
+          if(this.shown || !Social.ok() || document.hidden || document.querySelector('.modal-backdrop')) return;
+          try{ if(cloudReady !== state.auth.uid) return; }catch{}
+          const k = dateKey(new Date()), d = state.daily || { last: '', streak: 0 }; if(d.last === k){ this.shown = true; return; } this.shown = true;
+          const y = dateKey(new Date(Date.now() - 864e5)), streak = d.last === y ? (d.streak || 0) + 1 : 1, idx = (streak - 1) % 7, coins = this.REW[idx], xp = idx === 6 ? 50 : 5;
+          state.daily = { last: k, streak }; const w = this.wl(); w.c = (+w.c || 0) + coins; localStorage.setItem('munjiz.wallet', JSON.stringify(w));
+          try{ Gamification.addXp(xp); }catch{} try{ const a = JSON.parse(localStorage.getItem('munjiz.inbox') || '[]'); a.unshift({ t: '🎁 ' + L2('مكافأة دخول اليوم', 'Daily reward') + ': 🪙 ' + coins + ' · ⚡ ' + xp + ' XP', at: Date.now() }); localStorage.setItem('munjiz.inbox', JSON.stringify(a.slice(0, 40))); }catch{}
+          saveState();
+          openModal({ title: '🎁 ' + L2('مكافأتك اليومية', 'Your daily reward'), body: `<p class="muted" style="text-align:center">${esc(L2('سلسلة دخولك: ', 'Login streak: '))}<b>${streak}</b> ${esc(L2('يوم', 'days'))}</p>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;margin:12px 0">${this.REW.map((c, i) => `<div style="padding:8px 2px;border-radius:12px;background:${i === idx ? 'var(--accent)' : 'var(--surface2)'};color:${i === idx ? '#fff' : 'inherit'};opacity:${i > idx ? .6 : 1}"><div style="font-size:11px">${esc(L2('يوم', 'Day'))} ${i + 1}</div><div style="font-size:20px">${i < idx ? '✅' : i === 6 ? '🎁' : '🪙'}</div><b style="font-size:12px">${c}</b></div>`).join('')}</div>
+            <div style="text-align:center;font-size:1.1rem"><b>+${coins} 🪙 · +${xp} XP</b></div><p class="muted small" style="text-align:center">${esc(L2('ارجع كل يوم لتصل لجائزة اليوم السابع الكبرى!', 'Come back every day to reach the day-7 jackpot!'))}</p>` });
+        },
+      };
+      setInterval(() => Daily.check(), 4000);
+
+      var Privacy = {
+        card(){ return `<div class="card" style="margin-top:12px"><h2 class="title">🛡️ ${esc(L2('الخصوصية والبيانات', 'Privacy & data'))}</h2><p class="muted small">${esc(L2('يمكنك حذف حسابك وكل بياناتك نهائيًا في أي وقت.', 'You can delete your account and all your data permanently at any time.'))}</p><button type="button" class="btn danger" data-priv="delete">🗑 ${esc(L2('حذف حسابي وبياناتي', 'Delete my account & data'))}</button></div>`; },
+        async deleteAll(){
+          if(!Social.ok()){ toast(t('requiresFirebase'), 'warn'); return; }
+          if(!(await confirmModal({ title: L2('حذف الحساب', 'Delete account'), message: L2('سيتم حذف حسابك وكل بياناتك نهائيًا ولا يمكن التراجع. متأكد؟', 'Your account and all data will be deleted permanently. Sure?'), danger: true }))) return;
+          const uid = Social.me(), db = fb.db, tryDel = p => p.catch(() => {});
+          try{
+            tryDel(db.collection('publicProfiles').doc(uid).delete()); tryDel(db.collection('accounts').doc(uid).delete()); tryDel(db.collection('wallets').doc(uid).delete()); tryDel(db.collection('friendCodes').doc(Social.code()).delete());
+            const fs = await db.collection('friendships').where('users', 'array-contains', uid).get().catch(() => null); if(fs) await Promise.all(fs.docs.map(d => tryDel(d.ref.delete())));
+            await db.collection('users').doc(uid).collection('data').doc('main').delete().catch(() => {});
+            await fb.auth.currentUser.delete();
+          }catch(e){ if(e && e.code === 'auth/requires-recent-login'){ toast(L2('لأمانك: سجّل خروج ثم دخول مرة أخرى ثم أعد المحاولة', 'For your safety: sign out and in again, then retry'), 'warn'); return; } }
+          Object.keys(localStorage).filter(k => k.startsWith('munjiz')).forEach(k => localStorage.removeItem(k)); location.reload();
+        },
+      };
+      document.addEventListener('click', e => { if(e.target.closest('[data-priv="delete"]')) Privacy.deleteAll(); });
+
+
+      /* ===== ميداليات حقيقية + عجلة الحظ + نافذة الفريق (© YS) ===== */
+      var Medal = {
+        T: [['bronze','برونزي','Bronze','#f0b27a','#a05a2c','#4a2610'],['silver','فضي','Silver','#f8fafc','#a3aebd','#475569'],['gold','ذهبي','Gold','#fff3a8','#eab308','#8a5a00'],
+            ['platinum','بلاتيني','Platinum','#e6f9ff','#4cc3f5','#0c4a6e'],['diamond','ماسي','Diamond','#f3eaff','#9b6dff','#4c1d95'],['legendary','أسطوري','Legendary','#ffd6d6','#ef4444','#7f1d1d']],
+        svg(tier, icon, size, on){
+          const t = this.T.find(x => x[0] === tier) || this.T[0], id = 'md' + tier + (Math.random() * 1e6 | 0); let lv = '';
+          for(let k = 0; k < 11; k++){ const d = 110 + k * 14, a = d * Math.PI / 180, x = 32 + Math.cos(a) * 21, y = 34 + Math.sin(a) * 21;
+            lv += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="2" ry="4.2" transform="rotate(${d} ${x.toFixed(1)} ${y.toFixed(1)})"/><ellipse cx="${(64 - x).toFixed(1)}" cy="${y.toFixed(1)}" rx="2" ry="4.2" transform="rotate(${-d} ${(64 - x).toFixed(1)} ${y.toFixed(1)})"/>`; }
+          return `<svg class="${on !== false && tier === 'legendary' ? 'tm-leg' : ''}" width="${size}" height="${Math.round(size * 1.25)}" viewBox="0 0 64 80" style="${on === false ? 'filter:grayscale(1) opacity(.38)' : ''}" aria-hidden="true"><defs><linearGradient id="${id}a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t[3]}"/><stop offset=".55" stop-color="${t[4]}"/><stop offset="1" stop-color="${t[5]}"/></linearGradient><radialGradient id="${id}b" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="${t[3]}"/><stop offset="1" stop-color="${t[4]}"/></radialGradient></defs>
+            <path d="M20 2h8l6 20h-8z" fill="#dc2626"/><path d="M36 2h8l-6 20h-8z" fill="#1d4ed8"/><circle cx="32" cy="42" r="29" fill="url(#${id}a)" stroke="${t[5]}" stroke-width="1.6"/><circle cx="32" cy="42" r="26.3" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/>
+            <g transform="translate(0 8)" fill="${t[5]}" opacity=".72">${lv}</g><circle cx="32" cy="42" r="15.5" fill="url(#${id}b)" stroke="${t[5]}" stroke-width="1"/><text x="32" y="48" text-anchor="middle" font-size="17">${on === false ? '🔒' : icon}</text></svg>`;
+        },
+      };
+      document.head.appendChild(Object.assign(document.createElement('style'), { textContent: '@keyframes tmGlow{0%,100%{filter:drop-shadow(0 0 4px #fbbf24)}50%{filter:drop-shadow(0 0 14px #ef4444)}}.tm-leg{animation:tmGlow 2.2s ease-in-out infinite}@keyframes whSpin{from{transform:rotate(0)}}' }));
+      var TeamAwards = {
+        T: [['bronze',100,'🥉'],['silver',500,'🥈'],['gold',1500,'🥇'],['platinum',4000,'💠'],['diamond',10000,'💎'],['legendary',25000,'👑']],
+        strip(pts){ const cur = [...this.T].reverse().find(x => pts >= x[1]), nxt = this.T.find(x => pts < x[1]), nm = k => { const m = Medal.T.find(y => y[0] === k); return L2(m[1], m[2]); };
+          return `<div style="margin-bottom:12px"><div class="row between" style="margin-bottom:6px"><b>🏅 ${esc(L2('أوسمة الفريق', 'Team awards'))}</b><span class="muted small">${cur ? esc(nm(cur[0])) : esc(L2('بدون وسام بعد', 'No award yet'))}${nxt ? ' · ' + esc(L2('التالي: ', 'Next: ')) + nxt[1] + ' pts' : ' · MAX'}</span></div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;text-align:center">${this.T.map(x => `<div>${Medal.svg(x[0], x[2], 40, pts >= x[1])}<div class="muted" style="font-size:10px">${esc(nm(x[0]))}</div></div>`).join('')}</div></div>`; },
+      };
+      var Medals = {
+        C: [['tasks','✅','المهام المنجزة','Tasks done',[10,50,150,400,1000,3000]],['xp','⚡','نقاط الخبرة','XP',[300,1500,5000,15000,40000,100000]],['streak','🔥','أيام متتالية','Best streak',[3,7,14,30,60,100]],['sessions','🎯','جلسات تركيز','Focus sessions',[5,20,60,150,400,1000]]],
+        val(k){ try{ return k === 'tasks' ? state.tasks.filter(t => t.status === 'done').length : k === 'xp' ? (state.game.xp || 0) : k === 'streak' ? Math.max(state.game.bestStreak || 0, state.game.streak || 0) : completedSessions().length; }catch{ return 0; } },
+        lvl(k, v){ let n = 0; this.C.find(c => c[0] === k)[4].forEach((x, i) => { if(v >= x) n = i + 1; }); return n; },
+        show(){ return localStorage.getItem('munjiz.showMedals') !== '0'; },
+        publish(){ if(!Social.ok()) return; const m = {}; if(this.show()) this.C.forEach(c => { m[c[0]] = this.lvl(c[0], this.val(c[0])); });
+          const key = JSON.stringify(m); if(key === this._last) return; this._last = key; fb.db.collection('publicProfiles').doc(Social.me()).set({ medals: m }, { merge: true }).catch(() => {}); },
+        mini(m){ return m ? this.C.map(c => { const n = m[c[0]] | 0; return n ? `<span title="${esc(L2(c[2], c[3]))}">${Medal.svg(Medal.T[n - 1][0], c[1], 22)}</span>` : ''; }).join('') : ''; },
+        card(){
+          setTimeout(() => this.publish(), 400);
+          return `<div class="card" style="margin-top:12px"><div class="row between"><h2 class="title">🏅 ${esc(L2('أوسمتي', 'My medals'))}</h2><button type="button" class="btn sm" data-medals="toggle">${this.show() ? '🌐 ' + esc(L2('ظاهرة للجميع', 'Public')) : '🔒 ' + esc(L2('مخفية', 'Hidden'))}</button></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:10px">${this.C.map(c => { const v = this.val(c[0]), n = this.lvl(c[0], v), th = c[4], nx = th[n], T = Medal.T[Math.max(0, n - 1)];
+              return `<div style="text-align:center">${Medal.svg(T[0], c[1], 64, n > 0)}<div><b>${esc(L2(c[2], c[3]))}</b></div><div class="muted small">${n ? esc(L2(T[1], T[2])) : esc(L2('لم تبدأ', 'Not started'))} · ${v}${nx ? '/' + nx : ' MAX'}</div><div style="height:6px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:4px"><div style="height:100%;width:${nx ? Math.round(Math.min(1, v / nx) * 100) : 100}%;background:var(--accent)"></div></div></div>`; }).join('')}</div></div>`; },
+      };
+
+      var Wheel = {
+        S: [['🪙 5','c',5,'#3b82f6'],['⚡ 10','x',10,'#8b5cf6'],['🪙 10','c',10,'#06b6d4'],['⚡ 25','x',25,'#f59e0b'],['🪙 20','c',20,'#10b981'],['⚡ 50','x',50,'#ef4444'],['🪙 50','c',50,'#ec4899'],['🪙 100','c',100,'#eab308']],
+        W: [26, 22, 18, 12, 9, 6, 4, 3], busy: false,
+        can(){ return (state.wheel || {}).last !== dateKey(new Date()); },
+        pick(){ const a = new Uint32Array(1); crypto.getRandomValues(a); let r = a[0] / 4294967296 * 100, acc = 0; for(let i = 0; i < 8; i++){ acc += this.W[i]; if(r < acc) return i; } return 0; },
+        svg(){ let p = ''; for(let k = 0; k < 8; k++){ const a1 = (k * 45 - 90) * Math.PI / 180, a2 = ((k + 1) * 45 - 90) * Math.PI / 180, m = ((k + .5) * 45 - 90) * Math.PI / 180;
+            p += `<path d="M100 100L${(100 + 95 * Math.cos(a1)).toFixed(1)} ${(100 + 95 * Math.sin(a1)).toFixed(1)}A95 95 0 0 1 ${(100 + 95 * Math.cos(a2)).toFixed(1)} ${(100 + 95 * Math.sin(a2)).toFixed(1)}Z" fill="${this.S[k][3]}" stroke="#fff" stroke-width="2"/><text x="${(100 + 64 * Math.cos(m)).toFixed(1)}" y="${(100 + 64 * Math.sin(m)).toFixed(1)}" fill="#fff" font-size="13" font-weight="800" text-anchor="middle" dominant-baseline="middle" transform="rotate(${(k + .5) * 45} ${(100 + 64 * Math.cos(m)).toFixed(1)} ${(100 + 64 * Math.sin(m)).toFixed(1)})">${this.S[k][0]}</text>`; }
+          return `<div style="position:relative;width:min(78vw,280px);margin:6px auto"><div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);z-index:2;font-size:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))">🔻</div><svg id="whSvg" viewBox="0 0 200 200" style="width:100%;border-radius:50%;box-shadow:0 12px 36px -12px rgba(0,0,0,.5);transition:transform 4.2s cubic-bezier(.12,.7,.1,1)">${p}<circle cx="100" cy="100" r="14" fill="#fff" stroke="#e5e7eb"/></svg></div>`; },
+        card(){ return `<div class="card" style="margin-bottom:12px"><div class="row between"><div><h2 class="title">🎡 ${esc(L2('عجلة الحظ اليومية', 'Daily lucky wheel'))}</h2><div class="muted small">${this.can() ? esc(L2('لفّة مجانية جاهزة — اكسب كوينز أو XP', 'A free spin is ready — win coins or XP')) : esc(L2('تعالَ بكرة للفّة جديدة', 'Come back tomorrow for a new spin'))}</div></div><button type="button" class="btn ${this.can() ? 'primary' : ''}" data-wheel="open">${this.can() ? '🎡 ' + esc(L2('لفّ', 'Spin')) : '👀'}</button></div></div>`; },
+        open(){ const m = openModal({ title: '🎡 ' + L2('عجلة الحظ', 'Lucky wheel'), body: `${this.svg()}<div id="whRes" style="text-align:center;min-height:30px;font-weight:800;font-size:1.1rem;margin:10px 0"></div><div style="text-align:center"><button type="button" class="btn primary" id="whGo" ${this.can() ? '' : 'disabled'}>${esc(this.can() ? L2('لفّ الآن!', 'Spin now!') : L2('تعالَ بكرة', 'Come back tomorrow'))}</button></div>` });
+          m.el.querySelector('#whGo').onclick = () => this.spin(m.el); },
+        spin(root){
+          if(this.busy || !this.can()) return; this.busy = true; const i = this.pick(), svg = root.querySelector('#whSvg'), btn = root.querySelector('#whGo'), res = root.querySelector('#whRes'); btn.disabled = true;
+          state.wheel = { last: dateKey(new Date()) }; saveState(false);
+          svg.style.transform = `rotate(${360 * 6 + (360 - (i * 45 + 22.5))}deg)`;
+          setTimeout(() => { const s = this.S[i]; if(s[1] === 'c'){ try{ const w = JSON.parse(localStorage.getItem('munjiz.wallet')) || { c: 0 }; w.c = (+w.c || 0) + s[2]; localStorage.setItem('munjiz.wallet', JSON.stringify(w)); }catch{} } else { try{ Gamification.addXp(s[2]); }catch{} }
+            const msg = '🎡 ' + L2('ربحت: ', 'You won: ') + s[0] + (s[1] === 'x' ? ' XP' : ' YS Coins'); res.textContent = msg; toast(msg, 'success');
+            try{ const a = JSON.parse(localStorage.getItem('munjiz.inbox') || '[]'); a.unshift({ t: msg, at: Date.now() }); localStorage.setItem('munjiz.inbox', JSON.stringify(a.slice(0, 40))); }catch{}
+            saveState(); this.busy = false; setTimeout(() => render(), 600); }, 4400);
+        },
+      };
+
+      document.addEventListener('click', async e => {
+        const w = e.target.closest('[data-wheel]'); if(w){ Wheel.open(); return; }
+        const b = e.target.closest('[data-medals]'); if(b){ localStorage.setItem('munjiz.showMedals', Medals.show() ? '0' : '1'); Medals._last = null; render(); return; }
+        const row = e.target.closest('[data-tv]'); if(!row) return;
+        if(!Social.ok()){ toast(t('requiresFirebase'), 'warn'); return; }
+        const tid = row.dataset.tv, m = openModal({ title: '🏅', size: 'lg', body: '<div id="tvBox" class="muted">…</div>' }), box = m.el.querySelector('#tvBox');
+        try{
+          const info = await fb.db.collection('teamBoard').doc('all').collection('teams').doc(tid).get(), ti = info.exists ? info.data() : {};
+          let ids = [], priv = false; try{ const td = await fb.db.collection('teams').doc(tid).get(); if(td.exists){ ids = (td.data().memberIds || []).slice(0, 30); ti.name = ti.name || td.data().name; } }catch{ priv = true; }
+          const profs = await Promise.all(ids.map(id => fb.db.collection('publicProfiles').doc(id).get().catch(() => null)));
+          const h = m.el.querySelector('h3'); if(h) h.textContent = '🏅 ' + (ti.name || ''); box.className = '';
+          box.innerHTML = TeamAwards.strip(+ti.pts || 0) + `<div class="row between" style="margin-bottom:10px"><b>${esc(ti.name || '')}</b><span class="muted small">👥 ${ti.members || ids.length || '—'} · ⭐ ${ti.pts || 0}</span></div>`
+            + (ids.length ? '<div class="list">' + ids.map((id, i) => { const p = profs[i] && profs[i].exists ? profs[i].data() : {}, nm = p.displayName || 'User';
+              return `<div class="list-item"><span class="avatar" style="width:38px;height:38px;background:${esc(p.avatarColor || 'var(--accent)')}">${esc(nm.slice(0, 1).toUpperCase())}</span><div class="list-main"><div class="list-title">${esc(nm)}</div><div class="meta"><span>L${p.level || 1} · ${p.xp || 0} XP</span><span>✅ ${p.tasksCompleted || 0}</span><span>🔥 ${p.streak || 0}</span></div><div style="display:flex;gap:4px;margin-top:4px">${Medals.mini(p.medals)}</div></div></div>`; }).join('') + '</div>'
+              : `<p class="muted small">${esc(priv ? L2('فريق خاص: الأعضاء يظهرون لأعضاء الفريق فقط.', 'Private team: members are visible to team members only.') : L2('لا يوجد أعضاء لعرضهم.', 'No members to show.'))}</p>`);
+        }catch{ box.textContent = t('requiresFirebase'); }
+      });
 
       /* ===== الأصدقاء والشات (© YS) ===== */
       const Social = {
@@ -2278,7 +2397,7 @@ service cloud.firestore {
       else{ const per=this.sub==='d'?'d-'+day():this.sub==='w'?'w-'+wk():'all'; const s=await col('teamBoard',per,'teams').orderBy('pts','desc').limit(50).get(); let r=s.docs.map(d=>({id:d.id,...d.data()})); r.forEach(x=>{ const st=(Social.staff||{})[x.ownerId]; x.pin=!!(x.featured||(st&&st.role==='developer')); }); this.rows=[...r.filter(x=>x.pin),...r.filter(x=>!x.pin)]; } }
     catch(e){ this.err=(e&&e.code)||'error'; this.rows=[]; } this.busy=false; render(); };
   const PR={d:[500,300,150],td:[400,250,120],tw:[1500,900,500]}, medal=i=>['🥇','🥈','🥉'][i]||(i+1);
-  const teamRows=()=>LB.rows.map((r,i)=>`<div class="list-item ${r.pin?'u5-pin':''}"><div class="lb-rank" style="min-width:30px">${medal(i)}</div>${window.__emblem(r.id,r.color,42,r.emblem)}<div class="list-main"><div class="list-title">${esc(r.name||'—')} ${r.pin?'👑':''}</div><div class="meta"><span>👥 ${r.members||1}</span><span>⭐ ${r.pin?'∞':(r.pts||0).toLocaleString()} ${L('نقطة','pts')}</span>${r.pin?`<span>${L('فريق المؤسس','Founder team')}</span>`:''}</div></div></div>`).join('');
+  const teamRows=()=>LB.rows.map((r,i)=>`<div class="list-item ${r.pin?'u5-pin':''}" data-tv="${esc(r.id)}" style="cursor:pointer"><div class="lb-rank" style="min-width:30px">${medal(i)}</div>${window.__emblem(r.id,r.color,42,r.emblem)}<div class="list-main"><div class="list-title">${esc(r.name||'—')} ${r.pin?'👑':''}</div><div class="meta"><span>👥 ${r.members||1}</span><span>⭐ ${r.pin?'∞':(r.pts||0).toLocaleString()} ${L('نقطة','pts')}</span>${r.pin?`<span>${L('فريق المؤسس','Founder team')}</span>`:''}</div></div></div>`).join('');
   const _rl=renderLeaderboard;
   renderLeaderboard=function(){ const o=_rl(), k=o.indexOf('<div class="grid cols-2"'), rest=k>0?o.slice(k):'', key=LB.tab+LB.sub;
     if(LB.key!==key){ LB.key=key; setTimeout(()=>LB.load(),0); }
@@ -2407,7 +2526,7 @@ service cloud.firestore {
   /* instant developer recognition (UI only; server rules still decide real power) */
   try{ const h=localStorage.getItem('munjiz.devHint'); if(h&&state.auth&&state.auth.uid===h) state.developer.unlocked=true; }catch{}
   /* dev-controlled prices (developer/prices) */
-  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,vipd:365,team:100,items:{}}, Pz={...D0}, live={};
+  const D0={fb:120,fs:40,tb:100,ts:35,vip:10000,vipd:365,team:200,items:{}}, Pz={...D0}, live={};
   window.__price=(k,i,id)=>{ const o=(Pz.items||{})[k+':'+id]; if(o!==undefined&&o!==null&&o!=='') return +o; return k==='f'?Pz.fb+i*Pz.fs:Pz.tb+i*Pz.ts; };
   const Promo={on:false,text:'',link:'',emoji:'📣'};
   setInterval(()=>{ if(!ok()) return;
@@ -2425,9 +2544,9 @@ service cloud.firestore {
   setInterval(()=>{ pull(); push(); },12000); setTimeout(pull,2500);
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) push(); });
   /* one team only; extra team costs YS Coins */
-  document.addEventListener('click',e=>{ const b=e.target.closest('[data-action="save-team"]'); if(!b||dev()||!state.teams.length) return; if((ls(WK,{c:0}).c||0)<Pz.team){ e.stopImmediatePropagation(); e.preventDefault(); toast(L('مسموح بفريق واحد فقط. فريق إضافي يكلف '+Pz.team+' YS Coins — رصيدك لا يكفي','One team only. An extra team costs '+Pz.team+' YS Coins — not enough YS Coins'),'warn'); } },true);
+  document.addEventListener('click',e=>{ const b=e.target.closest('[data-action="save-team"]'); if(!b||dev()) return; if((ls(WK,{c:0}).c||0)<Pz.team){ e.stopImmediatePropagation(); e.preventDefault(); toast(L('مسموح بفريق واحد فقط. فريق إضافي يكلف '+Pz.team+' YS Coins — رصيدك لا يكفي','One team only. An extra team costs '+Pz.team+' YS Coins — not enough YS Coins'),'warn'); } },true);
   const _tc=Teams.create.bind(Teams);
-  Teams.create=async function(d){ if(!dev()&&state.teams.length){ const w=ls(WK,{c:0}); if(w.c<Pz.team){ toast(L('رصيدك لا يكفي','Not enough YS Coins'),'warn'); return null; }
+  Teams.create=async function(d){ if(!dev()){ const w=ls(WK,{c:0}); if(w.c<Pz.team){ toast(L('رصيدك لا يكفي','Not enough YS Coins'),'warn'); return null; }
       if(!await confirmModal({title:'🛡️',message:L('إنشاء فريق إضافي بسعر '+Pz.team+' YS Coins؟','Create an extra team for '+Pz.team+' YS Coins?')})) return null; const g=await _tc(d); if(g){ w.c-=Pz.team; ss(WK,w); push(); } return g; } return _tc(d); };
   /* VIP purchase */
   async function buyVip(){ const w=ls(WK,{c:0}), p=Pz.vip; if(!dev()&&w.c<p){ toast(L('تحتاج '+p+' YS Coins — رصيدك '+w.c,'Need '+p+' YS Coins — you have '+w.c),'warn'); return; }
@@ -2464,7 +2583,7 @@ service cloud.firestore {
     try{
       if(a==='vipbuy') await buyVip();
       else if(a==='ad'){ const l=b.dataset.l; if(/^https?:\/\//i.test(l)) window.open(l,'_blank','noopener'); }
-      else if(a==='emb'){ const id=b.dataset.id, i=+b.dataset.i; await col('teams',id).update({emblem:i,updatedAt:iso()}); ['all','d-'+day(),'w-'+wk()].forEach(p=>col('teamBoard',p,'teams',id).set({emblem:i},{merge:true}).catch(()=>{})); Em.d[id]={...(Em.d[id]||{}),emblem:i}; render(); }
+      else if(a==='emb'){ const id=b.dataset.id, i=+b.dataset.i; { const tm0=teamById(id); if(tm0&&tm0.shared&&ok()){ try{ await col('teams',id).update({emblem:i,updatedAt:iso()}); }catch(e){ if(!(e&&e.code==='not-found')) throw e; } } } ['all','d-'+day(),'w-'+wk()].forEach(p=>col('teamBoard',p,'teams',id).set({emblem:i},{merge:true}).catch(()=>{})); Em.d[id]={...(Em.d[id]||{}),emblem:i}; render(); }
       else if(!dev()) return;
       else if(a==='psave'){ await col('developer','prices').set({fb:+v('u7fb')||0,fs:+v('u7fs')||0,tb:+v('u7tb')||0,ts:+v('u7ts')||0,vip:+v('u7vip')||0,vipd:Math.max(1,+v('u7vipd')||365),team:+v('u7team')||0},{merge:true}); toast(t('savedMsg'),'success'); }
       else if(a==='iset'){ const k=v('u7it'), p=v('u7ip'); if(p==='') return; await col('developer','prices').set({items:{[k]:+p}},{merge:true}); toast(t('savedMsg'),'success'); }

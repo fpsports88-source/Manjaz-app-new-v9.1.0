@@ -1,5 +1,5 @@
 /* © YS — جميع الحقوق محفوظة */
-const CACHE = 'munjiz-ultra-v9.9';
+const CACHE = 'munjiz-ultra-v10.0';
 const PRECACHE = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', event => {
