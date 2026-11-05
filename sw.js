@@ -1,51 +1,56 @@
-/* © YS — جميع الحقوق محفوظة */
-const CACHE = 'munjiz-ultra-v10.0';
-const PRECACHE = ['./', './index.html', './manifest.json'];
+/* منجز — Service Worker v11: تحميل سريع + يعمل بدون إنترنت + تحديث فوري عند النشر */
+const VERSION = 'munjiz-v11.0.0.0';
+const CORE = ['./', './index.html', './manifest.json'];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then(c => Promise.all(PRECACHE.map(u => c.add(u).catch(() => null))))   // فشل ملف لا يُفشل التثبيت
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(VERSION)
+      .then((c) => c.addAll(CORE).catch(() => {}))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k.startsWith('munjiz-') && k !== CACHE).map(k => caches.delete(k))))
+      .then((ks) => Promise.all(ks.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
+self.addEventListener('message', (e) => { if (e.data === 'skipWaiting') self.skipWaiting(); });
 
-  // مكتبات Firebase (ثابتة بالإصدار): الكاش أولًا ليعمل التطبيق أوفلاين
-  if (url.hostname === 'www.gstatic.com' && url.pathname.includes('/firebasejs/')) {
-    event.respondWith(caches.match(req).then(c => c || fetch(req).then(res => {
-      if (res && (res.ok || res.type === 'opaque')) { const copy = res.clone(); caches.open(CACHE).then(x => x.put(req, copy)); }
-      return res;
-    })));
+self.addEventListener('fetch', (e) => {
+  const r = e.request;
+  if (r.method !== 'GET') return;
+  const u = new URL(r.url);
+  if (u.origin !== location.origin) return; // Firebase / CDN تذهب مباشرة للشبكة
+
+  // صفحة التطبيق: الشبكة أولًا (يظهر أي تحديث فورًا) ثم النسخة المخزّنة عند انقطاع الإنترنت
+  if (r.mode === 'navigate') {
+    e.respondWith(
+      fetch(r)
+        .then((res) => { const cp = res.clone(); caches.open(VERSION).then((c) => c.put('./index.html', cp)); return res; })
+        .catch(() => caches.match('./index.html').then((x) => x || caches.match('./')))
+    );
     return;
   }
 
-  // أي نطاق آخر (Firestore / Auth / جوجل): لا نتدخل أبدًا
-  if (url.origin !== self.location.origin) return;
-  // صفحة المطور لا تمر عبر الكاش
-  if (url.pathname.endsWith('/admin.html')) return;
-
-  // ملفات التطبيق: الكاش أولًا (فتح فوري) مع تحديث صامت في الخلفية
-  const key = req.mode === 'navigate' ? './index.html' : req;
-  event.respondWith(caches.match(key).then(cached => {
-    const net = fetch(req).then(res => {
-      if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(key, copy)); }
-      return res;
-    }).catch(() => cached);
-    return cached || net;
-  }));
+  // باقي الملفات: من الكاش فورًا وتتحدّث في الخلفية
+  e.respondWith(
+    caches.match(r).then((hit) => {
+      const net = fetch(r)
+        .then((res) => { if (res && res.ok) { const cp = res.clone(); caches.open(VERSION).then((c) => c.put(r, cp)); } return res; })
+        .catch(() => hit);
+      return hit || net;
+    })
+  );
 });
 
-self.addEventListener('message', e => { if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting(); });
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(clients.matchAll({ type: 'window' }).then((l) => {
+    for (const c of l) { if ('focus' in c) return c.focus(); }
+    return clients.openWindow('./');
+  }));
+});
