@@ -11,7 +11,63 @@
   "background_color": "#0b1220",
   "theme_color": "#2563eb",
   "icons": [
-    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
-    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "ابدأ تركيز",
+      "short_name": "تركيز",
+      "url": "./index.html?go=focus",
+      "icons": [
+        {
+          "src": "icon-180.png",
+          "sizes": "180x180"
+        }
+      ]
+    },
+    {
+      "name": "المكافأة اليومية",
+      "short_name": "مكافأة",
+      "url": "./index.html?go=chest",
+      "icons": [
+        {
+          "src": "icon-180.png",
+          "sizes": "180x180"
+        }
+      ]
+    },
+    {
+      "name": "المهام",
+      "short_name": "مهام",
+      "url": "./index.html?go=tasks",
+      "icons": [
+        {
+          "src": "icon-180.png",
+          "sizes": "180x180"
+        }
+      ]
+    },
+    {
+      "name": "عالمي",
+      "short_name": "عالمي",
+      "url": "./index.html?go=world",
+      "icons": [
+        {
+          "src": "icon-180.png",
+          "sizes": "180x180"
+        }
+      ]
+    }
   ]
 }
