@@ -1,15 +1,14 @@
 {
-  "name": "منجز Ultra",
+  "name": "منجز — مساعد الطالب الذكي",
   "short_name": "منجز",
-  "description": "تطبيق المهام والمذاكرة والتحديات",
-  "start_url": "./index.html",
-  "scope": "./",
+  "description": "Munjiz Ultra — مساعد الطالب الذكي للمهام والفرق والتحديات والمتصدرين",
+  "start_url": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "dir": "rtl",
+  "orientation": "portrait-primary",
+  "background_color": "#0f0f1a",
+  "theme_color": "#6d5efc",
   "lang": "ar",
-  "background_color": "#0b1220",
-  "theme_color": "#2563eb",
+  "dir": "rtl",
   "icons": [
     {
       "src": "icon-180.png",
@@ -18,56 +17,18 @@
       "purpose": "any"
     },
     {
-      "src": "icon-180.png",
-      "sizes": "180x180",
+      "src": "icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "shortcuts": [
-    {
-      "name": "ابدأ تركيز",
-      "short_name": "تركيز",
-      "url": "./index.html?go=focus",
-      "icons": [
-        {
-          "src": "icon-180.png",
-          "sizes": "180x180"
-        }
-      ]
-    },
-    {
-      "name": "المكافأة اليومية",
-      "short_name": "مكافأة",
-      "url": "./index.html?go=chest",
-      "icons": [
-        {
-          "src": "icon-180.png",
-          "sizes": "180x180"
-        }
-      ]
-    },
-    {
-      "name": "المهام",
-      "short_name": "مهام",
-      "url": "./index.html?go=tasks",
-      "icons": [
-        {
-          "src": "icon-180.png",
-          "sizes": "180x180"
-        }
-      ]
-    },
-    {
-      "name": "عالمي",
-      "short_name": "عالمي",
-      "url": "./index.html?go=world",
-      "icons": [
-        {
-          "src": "icon-180.png",
-          "sizes": "180x180"
-        }
-      ]
-    }
-  ]
+  "categories": ["education", "productivity"],
+  "prefer_related_applications": false
 }
