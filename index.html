@@ -808,9 +808,9 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
       const toCSV = rows => '\uFEFF'+rows.map(r=>r.map(csvEsc).join(',')).join('\n');
       const icon = (name,size=20) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||''}</svg>`;
       const logo = (size=42) => `<svg width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="mzg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset=".55" stop-color="#5b4df0"/><stop offset="1" stop-color="#14b8e6"/></linearGradient><linearGradient id="mzs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="48" height="48" rx="15" fill="url(#mzg)"/><rect width="48" height="26" rx="15" fill="url(#mzs)"/><path d="M12.5 25.5L21 34L36 14.5" fill="none" stroke="#fff" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M38.5 6.5l1.3 3.2 3.2 1.3-3.2 1.3-1.3 3.2-1.3-3.2-3.2-1.3 3.2-1.3z" fill="#fbbf24"/></svg>`;
-      const t = key => (M[state.settings.lang]?.[key] || M.ar[key] || key);
+      const t = key => { const l=state.settings.lang; return M[l]?.[key] || (l!=='ar'&&M.en[key]) || M.ar[key] || key; };
       const fmtDuration = min => { min=Math.round(num(min,0)); if(min<60) return `${min} ${state.settings.lang==='ar'?'د':'m'}`; const h=Math.floor(min/60), m=min%60; return m?`${h} ${state.settings.lang==='ar'?'س':'h'} ${m} ${state.settings.lang==='ar'?'د':'m'}`:`${h} ${state.settings.lang==='ar'?'س':'h'}`; };
-      const fmtDateTime = d => new Date(d).toLocaleString(state.settings.lang==='ar'?'ar-EG':'en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      const fmtDateTime = d => new Date(d).toLocaleString((window.YS&&YS.locale)?YS.locale():(state.settings.lang==='ar'?'ar-EG':'en-US'),{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
       const randomColor = () => ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0891b2','#db2777','#65a30d','#475569','#ea580c'][Math.floor(Math.random()*10)];
       const makeCode = () => Math.random().toString(36).slice(2,8).toUpperCase();
       const getPreset = id => THEME_PRESETS.find(p=>p.id===id) || THEME_PRESETS[0];
@@ -1038,7 +1038,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
               title:titleName(state.game.titles.equipped), frame:state.game.frames.equipped||'none', xp:state.game.xp, level:state.game.level, streak:state.game.streak, bestStreak:state.game.bestStreak,
               tasksCompleted:state.tasks.filter(x=>x.status==='done').length, focusMinutes:Math.round(completedSessions().reduce((s,x)=>s+x.actualSec/60,0)),
               raceWins:state.game.raceWins, challengeWins:state.game.challengeWins, firstCompletionDate:state.game.firstCompletionDate||'', firstCompletionAt:state.game.firstCompletionAt||null,
-              badgesCount:Object.keys(state.game.badges||{}).length, updatedAt:iso(), public:true, bio:String(state.profile.bio||'').slice(0,140), banner:state.profile.banner|0, handle:String(state.profile.handle||'').slice(0,20), badges:Object.keys(state.game.badges||{}).slice(0,60), gender:String(state.profile.gender||'').slice(0,1), fx:String(state.profile.fx||'').slice(0,12), eng:String(state.profile.eng||'').slice(0,40), rare:(state.profile.rare||[]).slice(0,6), cb:String(state.profile.cb||'').slice(0,12), cf:String(state.profile.cf||'').slice(0,12), tracks:v3Tracks()
+              badgesCount:Object.keys(state.game.badges||{}).length, updatedAt:iso(), xpAt:firebase.firestore.FieldValue.serverTimestamp(), public:true, bio:String(state.profile.bio||'').slice(0,140), banner:state.profile.banner|0, handle:String(state.profile.handle||'').slice(0,20), badges:Object.keys(state.game.badges||{}).slice(0,60), gender:String(state.profile.gender||'').slice(0,1), fx:String(state.profile.fx||'').slice(0,12), eng:String(state.profile.eng||'').slice(0,40), rare:(state.profile.rare||[]).slice(0,6), cb:String(state.profile.cb||'').slice(0,12), cf:String(state.profile.cf||'').slice(0,12), tracks:v3Tracks()
             },{merge:true});
           }catch(e){ console.warn(e); }
         },1200);
@@ -1290,7 +1290,7 @@ html[dir=rtl] body *:not(.pf-id):not(.sp-sig):not(.v3-sig):not(code){letter-spac
       function openModal(opts){ const backdrop=document.createElement('div'); backdrop.className='modal-backdrop'; const modal=document.createElement('div'); modal.className=`modal ${opts.size||''}`; modal.setAttribute('role','dialog'); modal.setAttribute('aria-modal','true'); modal.innerHTML=`<div class="modal-head"><h3>${esc(opts.title||'')}</h3><button class="icon-btn" data-close aria-label="${esc(t('close'))}">${icon('close',18)}</button></div><div class="modal-body">${opts.body||''}</div>${opts.footer?`<div class="modal-foot">${opts.footer}</div>`:''}`; backdrop.appendChild(modal); $('#modalRoot').appendChild(backdrop); requestAnimationFrame(()=>backdrop.classList.add('show')); const api={el:modal,close(){backdrop.classList.remove('show');setTimeout(()=>backdrop.remove(),180);modalStack=modalStack.filter(m=>m!==api);}}; backdrop.addEventListener('mousedown',e=>{if(e.target===backdrop && opts.dismissible!==false)api.close();}); modal.querySelector('[data-close]').addEventListener('click',api.close); modalStack.push(api); setTimeout(()=>modal.querySelector('input,select,textarea,button')?.focus(),60); return api; }
       function confirmModal({title='',message='',confirmText='',danger=false}={}){ return new Promise(res=>{ const m=openModal({title,size:'sm',dismissible:false,body:`<p>${esc(message)}</p>`,footer:`<button class="btn ${danger?'danger':'primary'}" id="ok">${esc(confirmText||t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{m.close();res(true);}; m.el.querySelector('#cx').onclick=()=>{m.close();res(false);}; }); }
       function promptSafe(label,def=''){ return new Promise(res=>{ const m=openModal({title:label,size:'sm',dismissible:false,body:`<label class="field"><span>${esc(label)}</span><input class="input" id="pi" value="${esc(def)}"></label>`,footer:`<button class="btn primary" id="ok">${esc(t('save'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{const v=m.el.querySelector('#pi').value.trim(); m.close(); res(v||null);}; m.el.querySelector('#cx').onclick=()=>{m.close();res(null);}; }); }
-      function applySettings(){ const lang=state.settings.lang; document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr'; const dark=state.settings.themeMode==='dark'||(state.settings.themeMode==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme=dark?'dark':'light'; const preset=getPreset(state.settings.themePreset); document.documentElement.style.setProperty('--accent',state.settings.accent||preset.accent); const meta=document.querySelector('meta[name=theme-color]'); if(meta) meta.content=state.settings.accent||preset.accent; }
+      function applySettings(){ const lang=state.settings.lang; document.documentElement.lang=lang; document.documentElement.dir=(lang==='ar'||lang==='ur')?'rtl':'ltr'; const dark=state.settings.themeMode==='dark'||(state.settings.themeMode==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme=dark?'dark':'light'; const preset=getPreset(state.settings.themePreset); document.documentElement.style.setProperty('--accent',state.settings.accent||preset.accent); const meta=document.querySelector('meta[name=theme-color]'); if(meta) meta.content=state.settings.accent||preset.accent; }
       function navItems(){ const items=[['home','home'],['tasks','tasks'],['groups','users'],['teams','trophy'],['friends','users'],['profile','user'],['chat','chat'],['leaderboard','medal'],['challenges','fire'],['focus','focus'],['passport','star'],['settings','settings']]; if(state.developer.unlocked) items.push(['developer','crown']); return items; }
       function bottomItems(){ return ['home','tasks','focus','leaderboard','settings']; }
       var __wl=null,__wlp=false;
@@ -1809,7 +1809,7 @@ function render(){ applySettings(); if(window.Look) Look.apply(); $('#app').inne
       function exportJSON(){ download(`munjiz-${dateKey(new Date())}.json`,JSON.stringify(state,null,2),'application/json'); toast(t('exported'),'success'); }
       function exportCSV(){ const rows=[['id','title','subject','group','team','priority','status','dueAt','estimate']]; state.tasks.forEach(x=>rows.push([x.id,x.title,subjectById(x.subjectId)?.name||'',groupById(x.groupId)?.name||'',teamById(x.teamId)?.name||'',x.priority,x.status,x.dueAt||'',x.estimate])); download(`munjiz-tasks.csv`,toCSV(rows),'text/csv'); toast(t('exported'),'success'); }
       function importJSON(){ const i=document.createElement('input'); i.type='file'; i.accept='application/json,.json'; i.onchange=async()=>{ const f=i.files?.[0]; if(!f)return; const r=new FileReader(); r.onload=async()=>{ try{ const obj=JSON.parse(r.result); if(!obj||!Array.isArray(obj.tasks)) throw 0; if(!await confirmModal({title:t('importJson'),message:t('deleteAllWarning'),danger:true})) return; state=normalizeState(obj); if(activeProfile) saveProfile(activeProfile.id,state); applySettings(); render(); toast(t('imported'),'success'); }catch{ toast(t('importFailed'),'error'); } }; r.readAsText(f); }; i.click(); }
-      async function deleteAll(){ if(!await confirmModal({title:t('deleteAll'),message:t('deleteAllWarning'),danger:true})) return; const word=state.settings.lang==='ar'?'حذف':'delete'; const m=openModal({title:t('doubleConfirm'),size:'sm',dismissible:false,body:`<p>${esc(t('deleteAllWarning'))}</p><label class="field"><span>${esc(word)}</span><input class="input" id="kw"></label>`,footer:`<button class="btn danger" id="ok">${esc(t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{ if(m.el.querySelector('#kw').value.trim().toLowerCase()!==word){toast(t('invalidDate'),'error');return;} if(activeProfile) localStorage.removeItem(profileKey(activeProfile.id)); const list=getProfiles().filter(p=>p.id!==activeProfile?.id); saveProfiles(list); localStorage.removeItem(LS.active); activeProfile=null; state=normalizeState({settings:state.settings}); window.__state=state; m.close(); render(); toast(t('deleted'),'success'); }; m.el.querySelector('#cx').onclick=()=>m.close(); }
+      async function deleteAll(){ if(!await confirmModal({title:t('deleteAll'),message:t('deleteAllWarning'),danger:true})) return; const word=String(t('typeDelete')).toLowerCase(); const m=openModal({title:t('doubleConfirm'),size:'sm',dismissible:false,body:`<p>${esc(t('deleteAllWarning'))}</p><label class="field"><span>${esc(word)}</span><input class="input" id="kw"></label>`,footer:`<button class="btn danger" id="ok">${esc(t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{ if(m.el.querySelector('#kw').value.trim().toLowerCase()!==word){toast(t('invalidDate'),'error');return;} if(activeProfile) localStorage.removeItem(profileKey(activeProfile.id)); const list=getProfiles().filter(p=>p.id!==activeProfile?.id); saveProfiles(list); localStorage.removeItem(LS.active); activeProfile=null; state=normalizeState({settings:state.settings}); window.__state=state; m.close(); render(); toast(t('deleted'),'success'); }; m.el.querySelector('#cx').onclick=()=>m.close(); }
       function handlePhotoFile(file){ if(!file||!file.type.startsWith('image/')) return; const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{ const size=256; const c=document.createElement('canvas'); c.width=size; c.height=size; const ctx=c.getContext('2d'); const min=Math.min(img.width,img.height); ctx.drawImage(img,(img.width-min)/2,(img.height-min)/2,min,min,0,0,size,size); state.profile.photo=c.toDataURL('image/jpeg',0.82); URL.revokeObjectURL(url); if(activeProfile){ activeProfile.photo=state.profile.photo; const list=getProfiles(); const i=list.findIndex(p=>p.id===activeProfile.id); if(i>=0){list[i]=activeProfile; saveProfiles(list);} } saveState(); render(); toast(t('savedMsg'),'success'); }; img.src=url; }
       async function sendInquiry(subject,message){ if(!fb.ready || state.auth.provider!=='firebase'){ toast(t('requiresFirebase'),'warn'); return; } try{ await fb.db.collection('inquiries').add({uid:state.auth.uid,name:state.profile.name||state.auth.displayName||'User',subject,message,createdAt:iso(),status:'open',developerReply:''}); toast(t('inquirySent'),'success'); }catch{ toast(t('requiresFirebase'),'error'); } }
 
@@ -2282,7 +2282,7 @@ function render(){ applySettings(); if(window.Look) Look.apply(); $('#app').inne
         }catch(e){ console.warn('Service worker unavailable; app can still run online.',e); }
       }
       async function init(){
-        loadLocalPrefs(); bootProfile();
+        loadLocalPrefs(); bootProfile(); if(window.YS&&YS.boot) await YS.boot();
         /* المطوّر: نفتح اللوحة فورًا بتلميح محلي، والتحقق الحقيقي بالخلفية والقواعد هي اللي تحمي فعليًا */
         try{ const h=localStorage.getItem('munjiz.devHint'); if(h && activeProfile && activeProfile.uid===h) state.developer.unlocked=true; }catch{}
         applySettings(); render(); registerSW();
@@ -4105,7 +4105,7 @@ function v3Chips(list,fem){ return list&&list.length?`<div class="tr-row">${list
 
   /* language switch: texts built at load time refresh with a quick reload */
   let lastLang=state.settings.lang;
-  setInterval(()=>{ if(state.settings.lang!==lastLang){ lastLang=state.settings.lang; try{ saveState(); }catch{} setTimeout(()=>location.reload(),350); } },1000);
+  setInterval(()=>{ if(window.YS&&YS.bootLang&&lastLang!==YS.bootLang&&!window.__ysLangSet) lastLang=YS.bootLang; if(state.settings.lang!==lastLang){ lastLang=state.settings.lang; try{ saveState(); }catch{} setTimeout(()=>location.reload(),350); } },1000);
 
   /* friends: show real profile photos (and frames) in the friends list */
   const friendPhotos=h=>{ try{ const map={}; (Social.list||[]).forEach(f=>{ const o=Social.other(f), nm=(f.names&&f.names[o])||''; if(nm) map[esc(nm)]=o; });
@@ -5100,10 +5100,269 @@ YS.css('core', `
 .ys-rl-form{display:grid;gap:8px}.ys-rl-card h3{margin:0}
 `);
 
+/* ===== YS:10-i18n ===== */
+/* © YS — محرك اللغات: 10 لغات + لهجاتها، الحزم تتحمّل عند الحاجة فقط (مفيش تقل) */
+(function () {
+  /* code, الاسم بلغته, [[كود اللهجة, الاسم, ملف الحزمة, locale]], locale الافتراضي, اتجاه */
+  const LANGS = [
+    { c: 'ar', n: 'العربية', f: '🇸🇦', loc: 'ar-EG', rtl: 1, d: [['', 'الافتراضي (مصري مبسّط)', 0, 'ar-EG'], ['ar-msa', 'الفصحى', 'ar-msa', 'ar'], ['ar-eg', 'المصرية', 'ar-eg', 'ar-EG'], ['ar-sa', 'السعودية / الخليجية', 'ar-sa', 'ar-SA'], ['ar-lv', 'الشامية', 'ar-lv', 'ar-SY'], ['ar-ma', 'المغربية (الدارجة)', 'ar-ma', 'ar-MA']] },
+    { c: 'en', n: 'English', f: '🇺🇸', loc: 'en-US', d: [['', 'United States', 0, 'en-US'], ['en-gb', 'United Kingdom', 'en-gb', 'en-GB']] },
+    { c: 'es', n: 'Español', f: '🇪🇸', loc: 'es-ES', d: [['', 'España', 0, 'es-ES'], ['es-mx', 'México / Latinoamérica', 'es-mx', 'es-MX']] },
+    { c: 'pt', n: 'Português', f: '🇧🇷', loc: 'pt-BR', d: [['', 'Brasil', 0, 'pt-BR'], ['pt-pt', 'Portugal', 'pt-pt', 'pt-PT']] },
+    { c: 'fr', n: 'Français', f: '🇫🇷', loc: 'fr-FR', d: [['', 'France', 0, 'fr-FR'], ['fr-ca', 'Canada (Québec)', 'fr-ca', 'fr-CA']] },
+    { c: 'tr', n: 'Türkçe', f: '🇹🇷', loc: 'tr-TR' },
+    { c: 'ur', n: 'اردو', f: '🇵🇰', loc: 'ur-PK', rtl: 1 },
+    { c: 'id', n: 'Bahasa Indonesia', f: '🇮🇩', loc: 'id-ID' },
+    { c: 'hi', n: 'हिन्दी', f: '🇮🇳', loc: 'hi-IN' },
+    { c: 'ru', n: 'Русский', f: '🇷🇺', loc: 'ru-RU' }
+  ];
+  const byCode = c => LANGS.find(l => l.c === c) || LANGS[0];
+  const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch { } };
+  const dialectOf = () => { const l = state.settings.lang, d = lsGet('munjiz.dialect') || ''; const L = byCode(l); return L.d && L.d.some(x => x[0] === d && d) ? d : ''; };
+
+  YS.langs = LANGS;
+  YS.isRTL = () => !!byCode(state.settings.lang).rtl;
+  YS.locale = () => { const L = byCode(state.settings.lang), d = dialectOf(); const row = L.d && L.d.find(x => x[0] === d); return (row && row[3]) || L.loc; };
+  YS.dialect = dialectOf;
+
+  /* ---------- الحزم ---------- */
+  const ck = f => 'ys.pack.' + f;
+  const readCache = f => { try { const j = JSON.parse(lsGet(ck(f)) || 'null'); return j && j.d ? j.d : null; } catch { return null; } };
+  async function fetchPack(f, ms) {
+    const ctl = new AbortController(), tm = ms ? setTimeout(() => ctl.abort(), ms) : 0;
+    try {
+      const r = await fetch('lang/' + f + '.json', { signal: ctl.signal, cache: 'no-cache' }); if (!r.ok) throw 0;
+      const d = await r.json(); if (!d || typeof d !== 'object') throw 0;
+      lsSet(ck(f), JSON.stringify({ d, at: Date.now() })); return d;
+    } catch { return null; } finally { clearTimeout(tm); }
+  }
+  /* الكاش أولًا (فوري)، وبنحدّثه بالخلفية؛ لو مفيش كاش ننتظر 3.5 ثانية بحد أقصى */
+  async function pack(f) { const c = readCache(f); if (c) { setTimeout(() => fetchPack(f, 0), 1500); return c; } return await fetchPack(f, 3500); }
+  YS.preload = async (lang, dia) => { const L = byCode(lang); if (!['ar', 'en'].includes(lang)) await pack(lang); if (dia) await pack(dia); };
+
+  function applyPacks(lang, dia, base, over) {
+    const clean = o => { const r = {}; for (const k in o) if (typeof o[k] === 'string') r[k] = o[k]; return r; };
+    if (base && !['ar', 'en'].includes(lang)) M[lang] = Object.assign(M[lang] || {}, clean(base));
+    if (over) { const tgt = M[lang] || (M[lang] = {}); Object.assign(tgt, clean(over)); }
+  }
+
+  /* يتنادى من init() بعد bootProfile وقبل أول رسم */
+  YS.boot = async function () {
+    if (!activeProfile) { try { const pl = lsGet('ys.lang'); if (pl) state.settings.lang = pl; } catch { } }
+    const lang = state.settings.lang, dia = dialectOf(); YS.bootLang = lang;
+    try {
+      const [base, over] = await Promise.all([['ar', 'en'].includes(lang) ? null : pack(lang), dia ? pack(dia) : null]);
+      applyPacks(lang, dia, base, over);
+    } catch (e) { console.warn('YS i18n', e); }
+    document.documentElement.dir = YS.isRTL() ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  };
+
+  /* ---------- تغيير اللغة ---------- */
+  YS.setLang = async function (lang, dia) {
+    await YS.preload(lang, dia || '');
+    state.settings.lang = lang; lsSet('munjiz.dialect', dia || ''); lsSet('ys.lang', lang);
+    try { saveLocalPrefs(); } catch { } try { saveState(); } catch { }
+    setTimeout(() => location.reload(), 120);
+  };
+
+  function sheet() {
+    if (document.getElementById('ys-lang')) return;
+    const cur = state.settings.lang, curD = dialectOf(); let pick = cur;
+    const o = document.createElement('div'); o.id = 'ys-lang'; o.className = 'ys-lang';
+    const draw = () => {
+      const L = byCode(pick);
+      o.innerHTML = `<div class="ys-lg-card" role="dialog" aria-modal="true"><div class="ys-lg-h"><b>🌐 ${YS.ar() ? 'اللغة' : 'Language'}</b><button class="ys-lg-x" type="button" aria-label="close">✕</button></div>
+      <div class="ys-lg-grid">${LANGS.map(l => `<button type="button" class="ys-lg-i${l.c === pick ? ' on' : ''}" data-l="${l.c}"><span>${l.f}</span><b>${esc(l.n)}</b></button>`).join('')}</div>
+      ${L.d ? `<div class="ys-lg-d">${L.d.map(d => `<button type="button" class="ys-lg-dd${(pick === cur ? d[0] === curD : !d[0]) ? ' on' : ''}" data-d="${d[0]}">${esc(d[1])}</button>`).join('')}</div>` : `<div class="ys-lg-d"><button type="button" class="ys-lg-dd on" data-d="">${esc(L.n)}</button></div>`}
+      <p class="muted small ys-lg-n">${YS.ar() ? 'الأجزاء اللي لسه ما اتترجمتش بتظهر بالإنجليزي.' : 'Anything not yet translated falls back to English.'}</p></div>`;
+    };
+    draw(); document.body.appendChild(o);
+    o.addEventListener('click', e => {
+      if (e.target === o || e.target.closest('.ys-lg-x')) { o.remove(); return; }
+      const li = e.target.closest('[data-l]'); if (li) { pick = li.dataset.l; const L = byCode(pick); if (!L.d) { o.querySelector('.ys-lg-card').classList.add('busy'); YS.setLang(pick, ''); return; } draw(); return; }
+      const di = e.target.closest('[data-d]'); if (di) { o.querySelector('.ys-lg-card').classList.add('busy'); YS.setLang(pick, di.dataset.d); }
+    });
+  }
+  YS.langSheet = sheet;
+
+  /* أزرار اللغة (عربي/English) في شاشات الدخول تفتح القائمة الكاملة */
+  document.addEventListener('click', e => { const b = e.target.closest('[data-action="lang"]'); if (!b) return; e.preventDefault(); e.stopImmediatePropagation(); sheet(); }, true);
+
+  /* الإعدادات: قائمة اللغة تعرض الـ10 + قائمة اللهجة */
+  document.addEventListener('change', e => {
+    const s = e.target; if (!s || !s.matches) return;
+    if (s.matches('select[name="lang"]')) { e.stopImmediatePropagation(); e.preventDefault(); const L = byCode(s.value); YS.setLang(s.value, ''); return; }
+    if (s.matches('[data-ys-dia]')) { e.stopImmediatePropagation(); YS.setLang(state.settings.lang, s.value); }
+  }, true);
+
+  function decorate() {
+    const sel = document.querySelector('select[name="lang"]');
+    if (sel && !sel.dataset.ys) {
+      sel.dataset.ys = 1;
+      sel.innerHTML = LANGS.map(l => `<option value="${l.c}" ${l.c === state.settings.lang ? 'selected' : ''}>${l.f} ${esc(l.n)}</option>`).join('');
+      const L = byCode(state.settings.lang);
+      if (L.d) {
+        const cur = dialectOf(), lab = document.createElement('label'); lab.className = 'field';
+        lab.innerHTML = `<span>${YS.ar() ? 'اللهجة / المنطقة' : 'Dialect / region'}</span><select class="input" data-ys-dia>${L.d.map(d => `<option value="${d[0]}" ${d[0] === cur ? 'selected' : ''}>${esc(d[1])}</option>`).join('')}</select>`;
+        sel.closest('label').after(lab);
+      }
+    }
+    /* زرار اللغات في صفوف الشيبس */
+    document.querySelectorAll('.chip[data-action="lang"]').forEach(b => {
+      const row = b.parentElement; if (row.querySelector('[data-ys-more]')) return;
+      const m = document.createElement('button'); m.type = 'button'; m.className = 'chip'; m.dataset.ysMore = 1; m.dataset.action = 'lang'; m.textContent = '🌐 +8'; row.appendChild(m);
+    });
+  }
+  YS.after(decorate);
+
+  YS.css('i18n', `
+.ys-lang{position:fixed;inset:0;z-index:9998;display:grid;place-items:end center;background:rgba(10,12,28,.55);backdrop-filter:blur(6px);padding:0}
+.ys-lg-card{width:min(520px,100%);max-height:88vh;overflow:auto;background:var(--surface,#fff);color:var(--text,#111);border-radius:26px 26px 0 0;padding:18px;display:grid;gap:12px;animation:ys-up .28s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:640px){.ys-lang{place-items:center;padding:16px}.ys-lg-card{border-radius:26px}}
+.ys-lg-card.busy{opacity:.6;pointer-events:none}
+.ys-lg-h{display:flex;justify-content:space-between;align-items:center;font-size:1.1rem}
+.ys-lg-x{border:0;background:rgba(120,120,140,.15);width:34px;height:34px;border-radius:50%;cursor:pointer;color:inherit}
+.ys-lg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ys-lg-i{display:flex;align-items:center;gap:10px;padding:12px;border-radius:16px;border:1.5px solid var(--border,rgba(120,120,140,.25));background:transparent;color:inherit;font:inherit;cursor:pointer;text-align:start;transition:transform .15s,border-color .2s,background .2s}
+.ys-lg-i span{font-size:1.4rem}.ys-lg-i:active{transform:scale(.97)}
+.ys-lg-i.on{border-color:var(--accent,#6d5efc);background:color-mix(in srgb,var(--accent,#6d5efc) 12%,transparent)}
+.ys-lg-d{display:flex;flex-wrap:wrap;gap:6px}
+.ys-lg-dd{padding:8px 13px;border-radius:999px;border:1px solid var(--border,rgba(120,120,140,.3));background:transparent;color:inherit;font:inherit;cursor:pointer}
+.ys-lg-dd.on{background:var(--accent,#6d5efc);color:#fff;border-color:transparent}
+.ys-lg-n{margin:0}
+@keyframes ys-up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+`);
+})();
+
+/* ===== YS:20-remote ===== */
+/* © YS — مركز النشر: حدّث البرنامج من جواه (نسخة تلقائية) بدون رفع على جيت هاب.
+   مجاني بالكامل: مستند Firestore واحد config/release (قراءة للجميع، كتابة للمطوّر فقط بالقواعد).
+   بيدعم: ملاحظات الإصدار، CSS إضافي، تعديل نصوص، شريط إعلان، تراجع. (مفيش تنفيذ JS من بعيد — أمان.) */
+(function () {
+  const PROJ = FIREBASE_CONFIG.projectId, KEY = FIREBASE_CONFIG.apiKey;
+  const URL_ = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/config/release?key=${KEY}`;
+  const CK = 'ys.release';
+  const major = v => parseInt(String(v || '0').split('.')[0], 10) || 0;
+  const cmp = (a, b) => { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0); } return 0; };
+  const FILE_V = APP.version;
+  let cur = null, applied = '';
+
+  const cleanCss = c => String(c || '').slice(0, 30000).replace(/@import[^;]*;?/gi, '').replace(/expression\s*\(/gi, '').replace(/javascript:/gi, '').replace(/<\/?style/gi, '').replace(/behavior\s*:/gi, '');
+  const cleanStr = s => String(s == null ? '' : s).replace(/[<>]/g, '').slice(0, 600);
+
+  function apply(r, live) {
+    if (!r || typeof r !== 'object' || !r.v || major(r.v) !== major(FILE_V)) return false;
+    if (r.v === applied) return false;
+    cur = r; applied = r.v;
+    YS.css('remote', cleanCss(r.css));
+    const st = r.strings || {};
+    for (const lg in st) { if (!/^[a-z]{2}$/.test(lg) || !st[lg] || typeof st[lg] !== 'object') continue; const tgt = M[lg] || (M[lg] = {}); for (const k in st[lg]) if (/^[A-Za-z0-9_]{1,40}$/.test(k)) tgt[k] = cleanStr(st[lg][k]); }
+    if (cmp(r.v, FILE_V) >= 0) APP.version = r.v;
+    banner(r);
+    if (live) { try { render(); } catch { } }
+    return true;
+  }
+
+  function banner(r) {
+    document.getElementById('ys-banner') && document.getElementById('ys-banner').remove();
+    const b = r.banner, ar = YS.ar(), txt = b && cleanStr(ar ? b.ar : (b.en || b.ar));
+    if (!txt) return;
+    try { if (sessionStorage.getItem('ys.bn.' + r.v)) return; } catch { }
+    const el = document.createElement('div'); el.id = 'ys-banner'; el.className = 'ys-banner';
+    el.innerHTML = `<span>📣 ${esc(txt)}</span><button type="button" aria-label="close">✕</button>`;
+    el.querySelector('button').onclick = () => { try { sessionStorage.setItem('ys.bn.' + r.v, '1'); } catch { } el.remove(); };
+    const app = document.getElementById('app'); app && app.parentNode.insertBefore(el, app);
+  }
+
+  async function fetchRemote() {
+    try {
+      const r = await fetch(URL_, { cache: 'no-store' }); if (r.status === 404) return null; if (!r.ok) throw 0;
+      const j = await r.json(), s = j && j.fields && j.fields.json && j.fields.json.stringValue; return s ? JSON.parse(s) : null;
+    } catch { return undefined; }
+  }
+  async function check(live) {
+    const r = await fetchRemote(); if (r === undefined) return;
+    if (r === null) { try { localStorage.removeItem(CK); } catch { } return; }
+    try { localStorage.setItem(CK, JSON.stringify(r)); } catch { }
+    const was = applied, ok = apply(r, live);
+    if (ok && live && was) { try { toast(YS.ar() ? '🚀 تم تحديث منجز إلى ' + r.v : '🚀 Munjiz updated to ' + r.v, 'success'); } catch { } }
+  }
+
+  /* من الكاش فورًا (بدون انتظار الشبكة) ثم تحديث بالخلفية */
+  try { const c = JSON.parse(localStorage.getItem(CK) || 'null'); if (c) apply(c, false); } catch { }
+  setTimeout(() => check(true), 1200);
+  setInterval(() => check(true), 15 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) check(true); });
+
+  /* ---------- النشر (للمطوّر) ---------- */
+  const bump = (v, kind) => { const p = String(v).split('.').map(Number); while (p.length < 3) p.push(0); if (kind === 'major') return `${p[0] + 1}.0.0`; if (kind === 'minor') return `${p[0]}.${p[1] + 1}.0`; return `${p[0]}.${p[1]}.${p[2] + 1}`; };
+  async function save(payload) {
+    if (!fb.ready || !fb.db) throw new Error('offline');
+    await fb.db.collection('config').doc('release').set({ json: JSON.stringify(payload), v: payload.v, at: Date.now() });
+    try { localStorage.setItem(CK, JSON.stringify(payload)); } catch { }
+  }
+  async function publish(f) {
+    const base = (await fetchRemote()) || cur; const baseV = base && cmp(base.v, FILE_V) > 0 ? base.v : FILE_V;
+    const kind = f.kind.value, v = bump(baseV, kind);
+    let strings = {}; const sraw = f.strings.value.trim();
+    if (sraw) { try { strings = JSON.parse(sraw); } catch { throw new Error(YS.ar() ? 'JSON النصوص غير صحيح' : 'Strings JSON is invalid'); } }
+    const prev = base ? Object.assign({}, base, { prev: undefined, history: undefined }) : null;
+    const note = { ar: f.nar.value.trim(), en: f.nen.value.trim() };
+    const hist = [{ v, at: Date.now(), kind, note }].concat((base && base.history) || []).slice(0, 20);
+    const payload = { v, at: Date.now(), notes: note, css: cleanCss(f.css.value), strings, banner: { ar: f.bar.value.trim(), en: f.ben.value.trim() }, history: hist, prev };
+    await save(payload); applied = ''; apply(payload, true); return payload;
+  }
+  async function rollback() {
+    const base = (await fetchRemote()) || cur; if (!base || !base.prev) throw new Error(YS.ar() ? 'مفيش نسخة سابقة' : 'No previous release');
+    const v = bump(base.v, 'patch'), p = Object.assign({}, base.prev);
+    const hist = [{ v, at: Date.now(), kind: 'rollback', note: { ar: 'تراجع إلى ' + p.v, en: 'Rolled back to ' + p.v } }].concat(base.history || []).slice(0, 20);
+    const payload = Object.assign({}, p, { v, at: Date.now(), history: hist, prev: undefined });
+    await save(payload); applied = ''; apply(payload, true); return payload;
+  }
+
+  function mount(pane) {
+    if (!pane || pane.querySelector('.ys-rel')) return;
+    const ar = YS.ar(), r = cur || {}, nxt = bump(r.v && cmp(r.v, FILE_V) > 0 ? r.v : FILE_V, 'patch');
+    const card = document.createElement('div'); card.className = 'card ys-rel'; card.style.gridColumn = '1/-1';
+    card.innerHTML = `<h2 class="title">🚀 ${ar ? 'مركز النشر' : 'Release center'}</h2>
+      <p class="muted small">${ar ? 'النسخة الحالية' : 'Current'}: <b dir="ltr" data-cv>${esc(APP.version)}</b> · ${ar ? 'التالية' : 'Next'}: <b dir="ltr" data-nv>${esc(nxt)}</b> — ${ar ? 'التغييرات تظهر عند كل المستخدمين خلال دقايق، بدون رفع ملفات.' : 'Changes reach every user within minutes — no file upload.'}</p>
+      <form class="form-grid ys-rel-f">
+        <label class="field"><span>${ar ? 'نوع الإصدار' : 'Bump'}</span><select class="input" name="kind"><option value="patch">patch (x.x.+1)</option><option value="minor">minor (x.+1.0)</option><option value="major">major (+1.0.0)</option></select></label>
+        <label class="field"><span>${ar ? 'ملاحظات الإصدار (عربي)' : 'Notes (Arabic)'}</span><textarea class="input" name="nar" rows="2">${esc(r.notes ? r.notes.ar || '' : '')}</textarea></label>
+        <label class="field"><span>${ar ? 'ملاحظات الإصدار (English)' : 'Notes (English)'}</span><textarea class="input" name="nen" rows="2" dir="ltr">${esc(r.notes ? r.notes.en || '' : '')}</textarea></label>
+        <label class="field"><span>${ar ? 'شريط إعلان (عربي) — اختياري' : 'Banner (Arabic) — optional'}</span><input class="input" name="bar" value="${esc(r.banner ? r.banner.ar || '' : '')}"></label>
+        <label class="field"><span>Banner (English)</span><input class="input" name="ben" dir="ltr" value="${esc(r.banner ? r.banner.en || '' : '')}"></label>
+        <label class="field"><span>${ar ? 'CSS إضافي (ألوان/تحسينات) — اختياري' : 'Extra CSS — optional'}</span><textarea class="input" name="css" rows="4" dir="ltr" spellcheck="false">${esc(r.css || '')}</textarea></label>
+        <label class="field"><span>${ar ? 'تعديل نصوص JSON — اختياري' : 'String overrides JSON — optional'}</span><textarea class="input" name="strings" rows="3" dir="ltr" spellcheck="false" placeholder='{"ar":{"home":"الرئيسية"},"en":{"home":"Home"}}'>${esc(r.strings ? JSON.stringify(r.strings) : '')}</textarea></label>
+        <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">🚀 ${ar ? 'انشر الآن' : 'Publish now'}</button><button class="btn" type="button" data-rb>↩️ ${ar ? 'تراجع للنسخة السابقة' : 'Roll back'}</button></div>
+      </form>
+      <div class="ys-rel-h"><b>${ar ? 'السجل' : 'History'}</b><ul data-hist></ul></div>`;
+    pane.appendChild(card);
+    const f = card.querySelector('form'), hist = card.querySelector('[data-hist]');
+    const draw = () => { const h = (cur && cur.history) || []; hist.innerHTML = h.length ? h.map(x => `<li><b dir="ltr">${esc(x.v)}</b> <span class="muted small">${new Date(x.at).toLocaleString(YS.locale())}</span> — ${esc((ar ? x.note && x.note.ar : x.note && (x.note.en || x.note.ar)) || '')}</li>`).join('') : `<li class="muted small">${ar ? 'لسه مفيش إصدارات منشورة' : 'No releases yet'}</li>`; card.querySelector('[data-cv]').textContent = APP.version; card.querySelector('[data-nv]').textContent = bump(cur && cmp(cur.v, FILE_V) > 0 ? cur.v : FILE_V, 'patch'); };
+    draw();
+    const run = async fn => { const bs = card.querySelectorAll('button'); bs.forEach(b => b.disabled = true); try { const p = await fn(); toast((ar ? 'تم النشر ✔ ' : 'Published ✔ ') + p.v, 'success'); draw(); } catch (e) { toast(String(e.message || e), 'error'); } finally { bs.forEach(b => b.disabled = false); } };
+    f.onsubmit = e => { e.preventDefault(); run(() => publish(f)); };
+    card.querySelector('[data-rb]').onclick = async () => { if (await confirmModal({ title: ar ? 'تراجع' : 'Roll back', message: ar ? 'هنرجّع النسخة السابقة لكل المستخدمين.' : 'This restores the previous release for everyone.', danger: true })) run(rollback); };
+    check(false).then(draw);
+  }
+
+  YS.release = { mount, publish, rollback, check, get current() { return cur; }, bump };
+
+  YS.css('remote-ui', `
+.ys-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;background:linear-gradient(90deg,var(--accent,#6d5efc),#a855f7);color:#fff;font-weight:700;font-size:.92rem;position:relative;z-index:50}
+.ys-banner button{border:0;background:rgba(255,255,255,.22);color:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer}
+.ys-rel-h ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.ys-rel textarea.input{resize:vertical;font-family:ui-monospace,monospace;font-size:13px}
+`);
+})();
+
 /* ===== YS:30-devpanel ===== */
 /* © YS — لوحة المطوّر في تبويبات مع بحث (تنظّم الكروت الموجودة بدون ما تغيّر وظيفتها) */
 (function () {
-  const TABS = [['ov', '📊', 'نظرة عامة', 'Overview'], ['us', '👥', 'المستخدمون', 'Users'], ['ct', '📣', 'المحتوى', 'Content'], ['sy', '⚙️', 'النظام', 'System'], ['sp', '🛟', 'الدعم والسجل', 'Support']];
+  const TABS = [['ov', '📊', 'نظرة عامة', 'Overview'], ['us', '👥', 'المستخدمون', 'Users'], ['ct', '📣', 'المحتوى', 'Content'], ['sy', '⚙️', 'النظام', 'System'], ['rl', '🚀', 'النشر', 'Release'], ['sp', '🛟', 'الدعم والسجل', 'Support']];
   const classify = c => {
     const has = s => !!c.querySelector(s);
     if (has('#announceForm,[data-action*="announcement"],#globalChallengeForm,#devTiers')) return 'ct';
@@ -5133,6 +5392,7 @@ YS.css('core', `
           ${TABS.map(t => `<div class="ys-pane grid cols-2" data-pane="${t[0]}" ${t[0] === cur ? '' : 'hidden'}></div>`).join('')}`;
         const head = dp.firstElementChild; head ? head.after(shell) : dp.prepend(shell);
       }
+      try { YS.release && YS.release.mount(shell.querySelector('[data-pane="rl"]')); } catch (e) { console.warn(e); }
       top.forEach(c => { const p = shell.querySelector(`[data-pane="${classify(c)}"]`); if (p) p.appendChild(c); });
       dp.querySelectorAll(':scope > .grid.cols-2:not(.ys-pane)').forEach(g => { if (!g.querySelector('.card')) g.remove(); });
       TABS.forEach(t => { const n = shell.querySelectorAll(`[data-pane="${t[0]}"] > .card`).length, b = shell.querySelector(`[data-cnt="${t[0]}"]`); if (b) b.textContent = n || ''; });
