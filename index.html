@@ -5584,6 +5584,658 @@ YS.css('core', `
 `);
 })();
 
+/* ===== YS:50-design ===== */
+/* © YS — طبقة التصميم "أورورا": زجاج + عمق + حركة موحّدة. CSS فقط تقريبًا (خفيف، بدون مكتبات). */
+(function () {
+  YS.css('design', `
+:root{
+  --ys-ease:cubic-bezier(.2,.8,.2,1);--ys-spring:cubic-bezier(.34,1.56,.64,1);
+  --ys-d1:.14s;--ys-d2:.26s;--ys-d3:.5s;
+  --ys-a:var(--accent,#6d5efc);--ys-b:#a855f7;--ys-c:#22d3ee;
+  --ys-glass:color-mix(in srgb,var(--surface,#fff) 78%,transparent);
+  --ys-line:color-mix(in srgb,var(--ys-a) 14%,var(--border,#dbe2ea));
+  --ys-sh1:0 1px 2px rgba(20,18,58,.05),0 8px 22px -10px rgba(60,50,160,.18);
+  --ys-sh2:0 2px 4px rgba(20,18,58,.06),0 22px 44px -18px rgba(60,50,160,.34);
+  --ys-ar:'Cairo','Noto Naskh Arabic',system-ui,sans-serif;
+}
+html[data-theme="dark"],[data-theme="dark"]{
+  --ys-glass:color-mix(in srgb,var(--surface,#10152b) 74%,transparent);
+  --ys-line:color-mix(in srgb,var(--ys-a) 22%,var(--border,#2b3560));
+  --ys-sh1:0 1px 0 rgba(255,255,255,.05) inset,0 10px 26px -12px rgba(0,0,0,.7);
+  --ys-sh2:0 1px 0 rgba(255,255,255,.07) inset,0 26px 54px -20px rgba(0,0,0,.85);
+}
+/* خلفية أورورا ثابتة (بدون أنيميشن ثقيل) */
+html body{background-color:var(--bg,#f4f3ff);background-image:
+  radial-gradient(60vmax 40vmax at 8% -5%,color-mix(in srgb,var(--ys-a) 16%,transparent),transparent 60%),
+  radial-gradient(50vmax 36vmax at 105% 8%,color-mix(in srgb,var(--ys-b) 13%,transparent),transparent 60%),
+  radial-gradient(46vmax 34vmax at 50% 115%,color-mix(in srgb,var(--ys-c) 10%,transparent),transparent 62%);
+  background-attachment:fixed}
+html body{font-feature-settings:"tnum" 1,"kern" 1;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+html[lang="ar"] body,html[lang="ur"] body{font-family:var(--ys-ar)}
+html body h1,html body h2,html body h3{letter-spacing:-.01em;font-weight:800}
+html[dir="rtl"] body h1,html[dir="rtl"] body h2,html[dir="rtl"] body h3{letter-spacing:0}
+
+/* الكروت: زجاج + حافة مضيئة + لمعة تتبع المؤشر */
+html body .card{position:relative;background:var(--ys-glass);border:1px solid var(--ys-line);box-shadow:var(--ys-sh1);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px);
+  transition:transform var(--ys-d2) var(--ys-ease),box-shadow var(--ys-d2) var(--ys-ease),border-color var(--ys-d2)}
+html body .card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity var(--ys-d2);
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--ys-a) 14%,transparent),transparent 70%)}
+@media (hover:hover) and (pointer:fine){
+  html body .card:hover{transform:translateY(-2px);box-shadow:var(--ys-sh2);border-color:color-mix(in srgb,var(--ys-a) 34%,var(--border,#dbe2ea))}
+  html body .card:hover::after{opacity:1}
+}
+html body .modal .card::after,html body .ys-dev .card::after{display:none}
+
+/* الأزرار */
+html body .btn{transition:transform var(--ys-d1) var(--ys-ease),box-shadow var(--ys-d2),background var(--ys-d2),border-color var(--ys-d2)}
+html body .btn:active{transform:scale(.96)}
+html body .btn.primary,html body button.primary{background:linear-gradient(135deg,var(--ys-a),color-mix(in srgb,var(--ys-a) 55%,var(--ys-b)));border-color:transparent;color:#fff;
+  box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 12px 26px -12px color-mix(in srgb,var(--ys-a) 80%,transparent)}
+@media (hover:hover){html body .btn.primary:hover{box-shadow:0 1px 0 rgba(255,255,255,.32) inset,0 16px 32px -12px color-mix(in srgb,var(--ys-a) 90%,transparent);filter:saturate(1.1)}}
+/* أزرار الإكمال/الإيقاف كانت بيضا على أبيض (عيب قديم) */
+html body .btn.ok{background:linear-gradient(135deg,#10b981,#059669)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 10px 22px -12px rgba(5,150,105,.8)}
+html body .btn.danger{background:linear-gradient(135deg,#f43f5e,#dc2626)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 10px 22px -12px rgba(220,38,38,.8)}
+html body .chip{transition:transform var(--ys-d1) var(--ys-ease),background var(--ys-d2),color var(--ys-d2)}
+html body .chip:active{transform:scale(.94)}
+html body .chip.active{background:linear-gradient(135deg,var(--ys-a),var(--ys-b));color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--ys-a) 80%,transparent)}
+
+/* الحقول */
+html body .input{background:color-mix(in srgb,var(--surface,#fff) 88%,transparent);border-color:var(--ys-line);transition:border-color var(--ys-d2),box-shadow var(--ys-d2)}
+html body .input:focus{outline:none;border-color:var(--ys-a);box-shadow:0 0 0 4px color-mix(in srgb,var(--ys-a) 18%,transparent)}
+html body :focus-visible{outline:2px solid var(--ys-a);outline-offset:2px;border-radius:8px}
+
+/* التنقّل: زجاج وتوهّج للعنصر النشط */
+html body .sidebar{background:var(--ys-glass);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border-color:var(--ys-line)}
+html body .bottom-nav{background:var(--ys-glass);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border-top:1px solid var(--ys-line);box-shadow:0 -10px 30px -18px rgba(60,50,160,.35)}
+html body .nav-item{transition:background var(--ys-d2),color var(--ys-d2),transform var(--ys-d1)}
+html body .nav-item:active{transform:scale(.96)}
+html body .nav-item.active{background:linear-gradient(135deg,color-mix(in srgb,var(--ys-a) 18%,transparent),color-mix(in srgb,var(--ys-b) 12%,transparent));box-shadow:0 0 0 1px color-mix(in srgb,var(--ys-a) 28%,transparent) inset}
+html body .bottom-nav .active svg{filter:drop-shadow(0 4px 8px color-mix(in srgb,var(--ys-a) 60%,transparent))}
+
+/* شريط التقدّم: تدرّج + لمعان */
+html body .progress{background:color-mix(in srgb,var(--ys-a) 10%,var(--surface2,#eef2f7));border-radius:99px;overflow:hidden}
+html body .progress>span{background:linear-gradient(90deg,var(--ys-a),var(--ys-b),var(--ys-c));background-size:200% 100%;animation:ys-flow 6s linear infinite;border-radius:99px}
+@keyframes ys-flow{to{background-position:-200% 0}}
+
+/* النوافذ المنبثقة */
+html body .modal-backdrop,html body .overlay{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+html body .modal{box-shadow:var(--ys-sh2);border:1px solid var(--ys-line);animation:ys-pop var(--ys-d3) var(--ys-spring)}
+@keyframes ys-pop{from{transform:translateY(18px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+
+/* دخول الصفحة: تتابع هادئ للعناصر */
+html body .view>*{animation:ys-in var(--ys-d3) var(--ys-ease) both}
+html body .view>*:nth-child(2){animation-delay:.04s}html body .view>*:nth-child(3){animation-delay:.08s}
+html body .view>*:nth-child(4){animation-delay:.12s}html body .view>*:nth-child(5){animation-delay:.16s}
+html body .view>*:nth-child(n+6){animation-delay:.2s}
+@keyframes ys-in{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+
+/* هيكل تحميل جاهز للاستخدام */
+.ys-skel{border-radius:12px;background:linear-gradient(100deg,color-mix(in srgb,var(--ys-a) 6%,var(--surface2,#eef2f7)) 30%,color-mix(in srgb,var(--ys-a) 16%,var(--surface2,#eef2f7)) 50%,color-mix(in srgb,var(--ys-a) 6%,var(--surface2,#eef2f7)) 70%);background-size:300% 100%;animation:ys-sk 1.4s linear infinite}
+@keyframes ys-sk{to{background-position:-300% 0}}
+
+/* الأزرار العائمة ما تغطّيش القائمة الجانبية (RTL: القائمة يمين، فالأزرار تروح شمال) */
+@media (min-width:1024px){html[dir="rtl"] body .u3-fab,html[dir="rtl"] body #calmBtn{right:auto!important;left:16px!important}}
+
+/* شريط تمرير رفيع */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ys-a) 40%,transparent) transparent}
+
+/* احترام تفضيلات الحركة + الأجهزة الضعيفة */
+@media (prefers-reduced-motion:reduce){
+  html body *,html body *::before,html body *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+@media (max-width:720px){html body .card{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--surface,#fff) 94%,transparent)}}
+`);
+
+  /* لمعة الكارت تتبع المؤشر (مستمع واحد، rAF، للماوس فقط) */
+  if (window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    let raf = 0, ev = null;
+    document.addEventListener('pointermove', e => {
+      ev = e; if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0; const c = ev.target.closest && ev.target.closest('.card'); if (!c) return;
+        const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (ev.clientX - r.left) + 'px'); c.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      });
+    }, { passive: true });
+  }
+})();
+
+/* ===== YS:60-hover ===== */
+/* © YS — توهّج وتقريب عند الإشارة بالماوس (كمبيوتر فقط): حسابات، قوائم، أزرار، شارات */
+(function () {
+  YS.css('hover', `
+@media (hover:hover) and (pointer:fine){
+  html body .pz-c:hover,html body .pz-c:focus-visible{background:none!important;box-shadow:none!important;outline:none}
+  /* شاشة الحسابات: الأفاتار يقرّب ويتوهّج بلونه + يميل مع المؤشر */
+  html body .pz-c .pz-av{transition:transform .28s var(--ys-spring,cubic-bezier(.34,1.56,.64,1)),box-shadow .28s,filter .28s}
+  html body .pz-c:hover .pz-av,html body .pz-c:focus-visible .pz-av{
+    transform:perspective(500px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(1.22)!important;
+    box-shadow:0 0 0 3px rgba(255,255,255,.95),0 0 38px 10px var(--g,#8b7bff),0 24px 44px -8px rgba(0,0,0,.55)!important;filter:saturate(1.15) brightness(1.06)}
+  html body .pz-c .pz-nm{transition:transform .25s var(--ys-ease,ease),opacity .25s,text-shadow .25s}
+  html body .pz-c:hover .pz-nm{opacity:1;transform:translateY(8px) scale(1.08);text-shadow:0 0 16px var(--g,#8b7bff)}
+  /* عام: أي عنصر بتشاور عليه يقرّب شوية ويطلع له توهّج */
+  html body .list-item,html body .nav-item,html body .chip,html body .badge-item,html body .icon-btn,html body .avatar,html body .btn:not(.primary){
+    transition:transform .22s var(--ys-ease,ease),box-shadow .22s,background .22s,border-color .22s}
+  html body .list-item:hover,html body .badge-item:hover,html body .avatar:hover,html body .icon-btn:hover,html body .chip:hover,html body .btn:not(.primary):hover{
+    transform:scale(1.035);position:relative;z-index:2;
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--ys-a,#6d5efc) 55%,transparent),0 0 22px -2px color-mix(in srgb,var(--ys-a,#6d5efc) 60%,transparent),0 14px 30px -12px color-mix(in srgb,var(--ys-a,#6d5efc) 45%,transparent)}
+  html body .nav-item:hover{transform:scale(1.04);box-shadow:0 0 0 1px color-mix(in srgb,var(--ys-a,#6d5efc) 40%,transparent),0 0 24px -4px color-mix(in srgb,var(--ys-a,#6d5efc) 55%,transparent)}
+  html body .badge-item:hover{transform:perspective(500px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(1.1)}
+  html body .card:hover{box-shadow:var(--ys-sh2),0 0 0 1px color-mix(in srgb,var(--ys-a,#6d5efc) 30%,transparent),0 0 34px -10px color-mix(in srgb,var(--ys-a,#6d5efc) 50%,transparent)}
+  html body .u3-fab:hover{transform:scale(1.12) rotate(90deg);box-shadow:0 0 0 6px color-mix(in srgb,var(--ys-a,#6d5efc) 22%,transparent),0 0 36px 4px color-mix(in srgb,var(--ys-a,#6d5efc) 65%,transparent)}
+}`);
+  if (!(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches)) return;
+  /* لون التوهّج = لون الأفاتار نفسه */
+  document.addEventListener('mouseover', e => {
+    const c = e.target.closest && e.target.closest('.pz-c'); if (!c || c._g) return;
+    const av = c.querySelector('.pz-av'); if (!av) return;
+    const bg = getComputedStyle(av).backgroundColor; c._g = 1;
+    c.style.setProperty('--g', (bg && bg !== 'rgba(0, 0, 0, 0)' && !/rgba\(255, 255, 255, 0\.0/.test(bg)) ? bg : '#8b7bff');
+  }, true);
+  /* ميلان 3D خفيف تبع المؤشر */
+  let raf = 0, last = null;
+  document.addEventListener('pointermove', e => {
+    last = e; if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0; const t = last.target.closest && last.target.closest('.pz-c,.badge-item'); if (!t) return;
+      const r = (t.querySelector('.pz-av') || t).getBoundingClientRect(), x = (last.clientX - r.left) / r.width - .5, y = (last.clientY - r.top) / r.height - .5;
+      t.style.setProperty('--ry', (x * 22).toFixed(1) + 'deg'); t.style.setProperty('--rx', (-y * 22).toFixed(1) + 'deg');
+    });
+  }, { passive: true });
+  document.addEventListener('pointerout', e => { const t = e.target.closest && e.target.closest('.pz-c,.badge-item'); if (t && !t.contains(e.relatedTarget)) { t.style.setProperty('--rx', '0deg'); t.style.setProperty('--ry', '0deg'); } }, true);
+})();
+
+/* ===== YS:70-mini3d ===== */
+/* © YS — mini3d: محرك WebGL صغير (بدون مكتبات) للمشاهد المجسّمة منخفضة التفاصيل.
+   مصمَّم للخفّة: DPR تكيّفي، يقف لما الكانفس مش ظاهر، ويرجع لـ2D لو الجهاز ضعيف أو مفيش WebGL. */
+(function () {
+  /* ───── رياضيات (column-major) ───── */
+  const M4 = {
+    id: () => new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]),
+    mul(a, b, o) { o = o || new Float32Array(16); for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++) o[c * 4 + r] = a[r] * b[c * 4] + a[4 + r] * b[c * 4 + 1] + a[8 + r] * b[c * 4 + 2] + a[12 + r] * b[c * 4 + 3]; return o; },
+    persp(fov, asp, n, f) { const k = 1 / Math.tan(fov / 2); return new Float32Array([k / asp, 0, 0, 0, 0, k, 0, 0, 0, 0, (f + n) / (n - f), -1, 0, 0, 2 * f * n / (n - f), 0]); },
+    look(e, t, u) {
+      let zx = e[0] - t[0], zy = e[1] - t[1], zz = e[2] - t[2], l = Math.hypot(zx, zy, zz) || 1; zx /= l; zy /= l; zz /= l;
+      let xx = u[1] * zz - u[2] * zy, xy = u[2] * zx - u[0] * zz, xz = u[0] * zy - u[1] * zx; l = Math.hypot(xx, xy, xz) || 1; xx /= l; xy /= l; xz /= l;
+      const yx = zy * xz - zz * xy, yy = zz * xx - zx * xz, yz = zx * xy - zy * xx;
+      return new Float32Array([xx, yx, zx, 0, xy, yy, zy, 0, xz, yz, zz, 0, -(xx * e[0] + xy * e[1] + xz * e[2]), -(yx * e[0] + yy * e[1] + yz * e[2]), -(zx * e[0] + zy * e[1] + zz * e[2]), 1]);
+    },
+    T: (x, y, z) => new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1]),
+    S: (x, y, z) => new Float32Array([x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1]),
+    RX: a => { const c = Math.cos(a), s = Math.sin(a); return new Float32Array([1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1]); },
+    RY: a => { const c = Math.cos(a), s = Math.sin(a); return new Float32Array([c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1]); },
+    RZ: a => { const c = Math.cos(a), s = Math.sin(a); return new Float32Array([c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]); }
+  };
+  const _t = M4.id(), _u = M4.id();
+  function local(n, o) { /* T * Ry * Rx * Rz * S */
+    let m = M4.mul(M4.RY(n.ry), M4.RX(n.rx)); m = M4.mul(m, M4.RZ(n.rz)); m = M4.mul(m, M4.S(n.sx, n.sy, n.sz)); m = M4.mul(M4.T(n.x, n.y, n.z), m, o); return m;
+  }
+
+  /* ───── مجسّمات (flat-shaded، بدون indexing) ───── */
+  function build(tris, inside) {
+    const out = new Float32Array(tris.length * 3 * 6); let k = 0;
+    for (const t of tris) {
+      const [a, b, c] = t; let ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+      let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const l = Math.hypot(nx, ny, nz) || 1; nx /= l; ny /= l; nz /= l;
+      const cx = (a[0] + b[0] + c[0]) / 3 - inside[0], cy = (a[1] + b[1] + c[1]) / 3 - inside[1], cz = (a[2] + b[2] + c[2]) / 3 - inside[2];
+      if (nx * cx + ny * cy + nz * cz < 0) { nx = -nx; ny = -ny; nz = -nz; }
+      for (const p of t) { out[k++] = p[0]; out[k++] = p[1]; out[k++] = p[2]; out[k++] = nx; out[k++] = ny; out[k++] = nz; }
+    }
+    return { data: out, count: tris.length * 3 };
+  }
+  const G = {
+    box(w, h, d) {
+      const x = w / 2, y = h / 2, z = d / 2, v = [[-x, -y, -z], [x, -y, -z], [x, y, -z], [-x, y, -z], [-x, -y, z], [x, -y, z], [x, y, z], [-x, y, z]];
+      const q = [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 5, 4], [3, 2, 6, 7], [0, 3, 7, 4], [1, 2, 6, 5]], t = [];
+      q.forEach(f => { t.push([v[f[0]], v[f[1]], v[f[2]]], [v[f[0]], v[f[2]], v[f[3]]]); }); return build(t, [0, 0, 0]);
+    },
+    ico(r, sub) {
+      const p = (1 + Math.sqrt(5)) / 2; let V = [[-1, p, 0], [1, p, 0], [-1, -p, 0], [1, -p, 0], [0, -1, p], [0, 1, p], [0, -1, -p], [0, 1, -p], [p, 0, -1], [p, 0, 1], [-p, 0, -1], [-p, 0, 1]].map(a => { const l = Math.hypot(...a); return a.map(z => z / l); });
+      let F = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
+      for (let s = 0; s < (sub || 0); s++) {
+        const cache = {}, mid = (a, b) => { const key = a < b ? a + '_' + b : b + '_' + a; if (cache[key] != null) return cache[key]; const m = V[a].map((z, i) => (z + V[b][i]) / 2), l = Math.hypot(...m); V.push(m.map(z => z / l)); return cache[key] = V.length - 1; };
+        const nf = []; F.forEach(f => { const a = mid(f[0], f[1]), b = mid(f[1], f[2]), c = mid(f[2], f[0]); nf.push([f[0], a, c], [f[1], b, a], [f[2], c, b], [a, b, c]); }); F = nf;
+      }
+      return build(F.map(f => f.map(i => V[i].map(z => z * r))), [0, 0, 0]);
+    },
+    cyl(r1, r2, h, n) { /* قاعدة عند y=0 وقمة عند y=h؛ r2=0 → مخروط */
+      n = n || 8; const t = [], pt = (r, a, y) => [Math.cos(a) * r, y, Math.sin(a) * r];
+      for (let i = 0; i < n; i++) {
+        const a = i / n * Math.PI * 2, b = (i + 1) / n * Math.PI * 2;
+        t.push([pt(r1, a, 0), pt(r1, b, 0), pt(r2, b, h)]); if (r2 > 0) t.push([pt(r1, a, 0), pt(r2, b, h), pt(r2, a, h)]);
+        if (r1 > 0) t.push([[0, 0, 0], pt(r1, a, 0), pt(r1, b, 0)]); if (r2 > 0) t.push([[0, h, 0], pt(r2, a, h), pt(r2, b, h)]);
+      }
+      return build(t, [0, h / 2, 0]);
+    }
+  };
+
+  /* ───── المشهد ───── */
+  const VS = 'attribute vec3 p;attribute vec3 n;uniform mat4 uVP;uniform mat4 uM;varying vec3 vN;varying vec3 vW;void main(){vec4 w=uM*vec4(p,1.);vW=w.xyz;vN=mat3(uM)*n;gl_Position=uVP*w;}';
+  const FS = 'precision mediump float;varying vec3 vN;varying vec3 vW;uniform vec3 uCol;uniform vec3 uEm;uniform vec3 uL;uniform vec3 uLC;uniform vec3 uSky;uniform vec3 uGnd;uniform vec3 uCam;uniform vec3 uFog;uniform float uFD;uniform float uA;void main(){vec3 n=normalize(vN);float d=max(dot(n,normalize(uL)),0.);vec3 h=mix(uGnd,uSky,n.y*.5+.5);vec3 c=uCol*(h+uLC*d)+uEm;vec3 v=normalize(uCam-vW);c+=pow(1.-max(dot(n,v),0.),3.)*.07*uSky;float f=clamp(length(uCam-vW)*uFD,0.,1.);c=mix(c,uFog,f*f);gl_FragColor=vec4(c,uA);}';
+
+  function scene(canvas, opt) {
+    opt = opt || {};
+    let gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false, powerPreference: 'low-power' }) || canvas.getContext('experimental-webgl');
+    if (!gl) return null;
+    const S = { canvas, nodes: [], cam: { az: 0.6, el: 0.42, dist: 11, target: [0, 0.9, 0], fov: 0.72 }, light: { dir: [0.5, 1, 0.4], col: [0.7, 0.66, 0.55], sky: [0.5, 0.58, 0.7], gnd: [0.28, 0.26, 0.22] }, fog: { col: [0.8, 0.85, 0.95], d: 0.045 }, onFrame: null, dpr: Math.min(window.devicePixelRatio || 1, 1.5), running: false, lost: false, onSlow: opt.onSlow || null, t: 0 };
+    let prog, loc, epoch = 0;
+    const geos = [];
+    function sh(type, src) { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+    function init() {
+      prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('link');
+      gl.useProgram(prog); loc = {}; ['uVP', 'uM', 'uCol', 'uEm', 'uL', 'uLC', 'uSky', 'uGnd', 'uCam', 'uFog', 'uFD', 'uA'].forEach(k => loc[k] = gl.getUniformLocation(prog, k));
+      loc.p = gl.getAttribLocation(prog, 'p'); loc.n = gl.getAttribLocation(prog, 'n');
+      gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.clearColor(0, 0, 0, 0);
+      epoch++; geos.forEach(g => g.ep = -1);
+    }
+    try { init(); } catch (e) { console.warn('mini3d init', e); return null; }
+    function buf(g) { if (g.ep === epoch) return; g.b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, g.b); gl.bufferData(gl.ARRAY_BUFFER, g.data, gl.STATIC_DRAW); g.ep = epoch; }
+    S.geo = g => { geos.push(g); return g; };
+    /* node(geo|null, {color, emis, alpha}, parent) */
+    S.node = (geo, mat, parent) => {
+      const n = { geo, col: (mat && mat.color) || [1, 1, 1], em: (mat && mat.emis) || [0, 0, 0], a: mat && mat.alpha != null ? mat.alpha : 1, x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, sx: 1, sy: 1, sz: 1, kids: [], parent: parent || null, vis: true, w: M4.id(), l: M4.id() };
+      if (parent) parent.kids.push(n); else S.nodes.push(n); return n;
+    };
+    S.remove = n => { const list = n.parent ? n.parent.kids : S.nodes, i = list.indexOf(n); if (i >= 0) list.splice(i, 1); };
+    S.clear = () => { S.nodes.length = 0; };
+    function world(n, pw) { local(n, n.l); n.w = pw ? M4.mul(pw, n.l, n.w) : n.l.slice(); n.kids.forEach(k => world(k, n.w)); }
+    const opq = [], trn = [];
+    function collect(n) { if (!n.vis) return; if (n.geo) (n.a < 1 ? trn : opq).push(n); n.kids.forEach(collect); }
+    function resize() {
+      const r = canvas.getBoundingClientRect(), w = Math.max(2, Math.round(r.width * S.dpr)), h = Math.max(2, Math.round(r.height * S.dpr));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    }
+    function drawNode(n) {
+      buf(n.geo); gl.bindBuffer(gl.ARRAY_BUFFER, n.geo.b);
+      gl.enableVertexAttribArray(loc.p); gl.vertexAttribPointer(loc.p, 3, gl.FLOAT, false, 24, 0); gl.enableVertexAttribArray(loc.n); gl.vertexAttribPointer(loc.n, 3, gl.FLOAT, false, 24, 12);
+      gl.uniformMatrix4fv(loc.uM, false, n.w); gl.uniform3fv(loc.uCol, n.col); gl.uniform3fv(loc.uEm, n.em); gl.uniform1f(loc.uA, n.a); gl.drawArrays(gl.TRIANGLES, 0, n.geo.count);
+    }
+    let last = 0, acc = 0, nf = 0, hidden = false;
+    function frame(ts) {
+      if (!S.running) return; requestAnimationFrame(frame);
+      if (hidden || S.lost) return;
+      const dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts; S.t += dt;
+      acc += dt; nf++; if (nf >= 45) {   /* جودة تكيّفية */
+        const avg = acc / nf; acc = 0; nf = 0;
+        if (avg > 0.034) { if (S.dpr > 1) { S.dpr = 1; } else if (S.dpr > 0.7) { S.dpr = 0.7; } else if (avg > 0.06 && !window.__ysNoSlow) { S.stop(); S.onSlow && S.onSlow(); return; } }
+      }
+      try { S.onFrame && S.onFrame(S.t, dt); } catch (e) { console.warn(e); }
+      resize(); gl.viewport(0, 0, canvas.width, canvas.height); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      const c = S.cam, ce = Math.cos(c.el), eye = [c.target[0] + c.dist * ce * Math.sin(c.az), c.target[1] + c.dist * Math.sin(c.el), c.target[2] + c.dist * ce * Math.cos(c.az)];
+      const P = M4.persp(c.fov, canvas.width / canvas.height, 0.5, 80), V = M4.look(eye, c.target, [0, 1, 0]), VP = M4.mul(P, V);
+      gl.uniformMatrix4fv(loc.uVP, false, VP); gl.uniform3fv(loc.uCam, eye); gl.uniform3fv(loc.uL, S.light.dir); gl.uniform3fv(loc.uLC, S.light.col); gl.uniform3fv(loc.uSky, S.light.sky); gl.uniform3fv(loc.uGnd, S.light.gnd); gl.uniform3fv(loc.uFog, S.fog.col); gl.uniform1f(loc.uFD, S.fog.d);
+      S.nodes.forEach(n => world(n, null)); opq.length = 0; trn.length = 0; S.nodes.forEach(collect);
+      gl.depthMask(true); opq.forEach(drawNode); gl.depthMask(false); trn.forEach(drawNode); gl.depthMask(true);
+    }
+    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); S.lost = true; });
+    canvas.addEventListener('webglcontextrestored', () => { try { init(); S.lost = false; } catch { S.stop(); S.onSlow && S.onSlow(); } });
+    let io = null; if (window.IntersectionObserver) { io = new IntersectionObserver(es => { hidden = !es[0].isIntersecting || document.hidden; }); io.observe(canvas); }
+    const vis = () => { hidden = document.hidden; }; document.addEventListener('visibilitychange', vis);
+    S.start = () => { if (S.running) return; S.running = true; last = performance.now(); requestAnimationFrame(frame); };
+    S.stop = () => { S.running = false; };
+    S.dispose = () => { S.stop(); io && io.disconnect(); document.removeEventListener('visibilitychange', vis); try { const x = gl.getExtension('WEBGL_lose_context'); x && x.loseContext(); } catch { } };
+    return S;
+  }
+
+  const hex = h => { h = h.replace('#', ''); return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255]; };
+  const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  /* هل الجهاز قادر؟ (ذاكرة/أنوية ضعيفة أو توفير بيانات → نسخة 2D) */
+  const capable = () => { try { if (navigator.connection && navigator.connection.saveData) return false; if (navigator.deviceMemory && navigator.deviceMemory < 2) return false; if (matchMedia('(prefers-reduced-motion:reduce)').matches) return false; return true; } catch { return true; } };
+  YS.gl = { scene, G, M4, hex, rng, capable };
+})();
+
+/* ===== YS:80-forest ===== */
+/* © YS — غابة التركيز: كل جلسة تركيز بتزرع شجرة بتكبر قدامك. الجزيرة فيها تراب وصخور وزلط وماية وطيور وأرنب ودودة وفراشات… */
+(function () {
+  const { scene, G, hex, rng, capable } = YS.gl;
+  let F = null;
+
+  const PH = {
+    day: { bg: 'linear-gradient(#6fbfff,#dff3ff 72%)', fog: '#dff3ff', dir: [.5, 1, .4], lc: [.78, .72, .56], sky: [.58, .66, .8], gnd: [.32, .3, .24] },
+    dawn: { bg: 'linear-gradient(#8aa7e8,#ffd9b8 74%)', fog: '#ffd9b8', dir: [.9, .5, .3], lc: [.85, .66, .5], sky: [.55, .55, .72], gnd: [.3, .26, .24] },
+    dusk: { bg: 'linear-gradient(#5b4b9a,#ffb48a 75%)', fog: '#ffb48a', dir: [-.8, .45, .35], lc: [.9, .55, .4], sky: [.5, .45, .62], gnd: [.26, .2, .2] },
+    night: { bg: 'linear-gradient(#070b24,#1f2a5a 80%)', fog: '#1f2a5a', dir: [.3, .9, .5], lc: [.22, .28, .5], sky: [.2, .26, .48], gnd: [.07, .08, .14] }
+  };
+  const phase = () => { const h = new Date().getHours(); return (h >= 19 || h < 5) ? 'night' : h >= 17 ? 'dusk' : h < 8 ? 'dawn' : 'day'; };
+  const ease = x => 1 - Math.pow(1 - x, 3), back = x => { const c = 1.70158; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+  const lerp3 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+
+  function counts() {
+    const all = completedSessions(), today = all.filter(s => sameDay(new Date(s.startedAt), new Date())).length;
+    return { today: Math.min(today, 14), older: Math.min(all.length - today, 12) };
+  }
+
+  function build(el) {
+    const S = scene(el.querySelector('canvas'), { onSlow: () => fallback('slow') }); if (!S) return null;
+    const g = {
+      trunk: S.geo(G.cyl(.13, .09, .75, 6)), pine1: S.geo(G.cyl(.62, 0, .8, 7)), pine2: S.geo(G.cyl(.48, 0, .7, 7)), pine3: S.geo(G.cyl(.32, 0, .6, 7)), crown: S.geo(G.ico(.62, 1)),
+      rock: S.geo(G.ico(.34, 0)), pebble: S.geo(G.ico(.09, 0)), tuft: S.geo(G.cyl(.05, 0, .3, 4)), head: S.geo(G.ico(.07, 0)), stem: S.geo(G.cyl(.012, .012, .22, 3)),
+      top: S.geo(G.cyl(7, 7, .38, 30)), base: S.geo(G.cyl(2.3, 7, 3.2, 30)), pond: S.geo(G.cyl(1.45, 1.45, .03, 26)), body: S.geo(G.ico(.3, 1)), ball: S.geo(G.ico(.5, 0)), box: S.geo(G.box(1, 1, 1))
+    };
+    const C = { grass: hex('#62b34f'), soil: hex('#6b4a2f'), soil2: hex('#4d3522'), trunk: hex('#7a5230'), p1: hex('#2f8a4a'), p2: hex('#3aa35a'), p3: hex('#52bd68'), round: hex('#5cbc5a'), rock: hex('#8e8f96'), peb: hex('#b0b1b6'), water: hex('#4aa3e8'), white: hex('#f4f1ea'), brown: hex('#b98a5e'), pink: hex('#ef7aa6'), yel: hex('#f6cf4a'), worm: hex('#d98a8a'), bird: hex('#3d6fd1') };
+    const R = rng(1337), world = S.node(null);
+    /* الجزيرة: عشب فوق، تراب تحته */
+    const top = S.node(g.top, { color: C.grass }, world); top.y = -.38;
+    const base = S.node(g.base, { color: C.soil }, world); base.y = -3.58;
+    const band = S.node(g.top, { color: C.soil2 }, world); band.y = -.62; band.sx = band.sz = .985; band.sy = .6;
+    /* ماية */
+    const POND = [-2.9, 1.6]; const pond = S.node(g.pond, { color: C.water, alpha: .82, emis: [.02, .05, .08] }, world); pond.x = POND[0]; pond.z = POND[1]; pond.y = .03;
+    const rip = S.node(g.pond, { color: [.85, .95, 1], alpha: .4 }, world); rip.x = POND[0]; rip.z = POND[1]; rip.y = .075;
+    /* مواضع الأشجار (ثابتة، تتجنّب الماية) */
+    const pos = []; let tries = 0;
+    while (pos.length < 30 && tries++ < 600) {
+      const a = R() * Math.PI * 2, r = 1.7 + R() * 4.6, x = Math.cos(a) * r, z = Math.sin(a) * r;
+      if (Math.hypot(x - POND[0], z - POND[1]) < 2.3 || Math.hypot(x - 3.2, z + 2.4) < 1.2 || pos.some(p => Math.hypot(p[0] - x, p[1] - z) < 1.25)) continue; pos.push([x, z, R()]);
+    }
+    /* صخور وزلط وعشب وورد */
+    for (let i = 0; i < 9; i++) { const a = R() * 6.28, r = 2 + R() * 4.4, n = S.node(g.rock, { color: lerp3(C.rock, [.5, .5, .55], R() * .5) }, world); n.x = Math.cos(a) * r; n.z = Math.sin(a) * r; n.y = .06; const s = .5 + R() * .8; n.sx = s * (1 + R() * .5); n.sy = s * .6; n.sz = s; n.ry = R() * 6; if (Math.hypot(n.x - POND[0], n.z - POND[1]) < 1.8) { n.x += 2.2; } }
+    for (let i = 0; i < 26; i++) { const a = R() * 6.28, r = 1 + R() * 5.8, n = S.node(g.pebble, { color: lerp3(C.peb, [.6, .55, .5], R() * .6) }, world); n.x = POND[0] + Math.cos(a) * (1.5 + R() * .7); n.z = POND[1] + Math.sin(a) * (1.5 + R() * .7); if (i > 12) { n.x = Math.cos(a) * r; n.z = Math.sin(a) * r; } n.y = .02; n.sy = .6; n.ry = R() * 6; }
+    for (let i = 0; i < 55; i++) { const a = R() * 6.28, r = R() * 6.3, n = S.node(g.tuft, { color: lerp3(hex('#3f9a3f'), hex('#8fd35a'), R()) }, world); n.x = Math.cos(a) * r; n.z = Math.sin(a) * r; if (Math.hypot(n.x - POND[0], n.z - POND[1]) < 1.55) { n.vis = false; } n.rz = (R() - .5) * .5; n.rx = (R() - .5) * .5; n.sy = .7 + R() * .8; }
+    const flowers = []; for (let i = 0; i < 12; i++) { const a = R() * 6.28, r = 1.5 + R() * 4.8, x = Math.cos(a) * r, z = Math.sin(a) * r; if (Math.hypot(x - POND[0], z - POND[1]) < 1.7) continue; const st = S.node(g.stem, { color: hex('#4a9a3c') }, world); st.x = x; st.z = z; const h = S.node(g.head, { color: [C.pink, C.yel, hex('#fff'), hex('#b48cf0')][i % 4], emis: [.05, .04, .03] }, world); h.x = x; h.z = z; h.y = .24; flowers.push([x, z]); }
+    /* الأرنب */
+    const rab = S.node(null, {}, world); rab.x = 3.4; rab.z = -2.5; rab.ry = -2.2;
+    const rb = S.node(g.body, { color: C.brown }, rab); rb.y = .28; rb.sx = 1.2; rb.sy = .9; rb.sz = .85;
+    const rh = S.node(g.body, { color: C.brown }, rab); rh.y = .5; rh.x = .32; rh.sx = rh.sy = rh.sz = .7;
+    const e1 = S.node(g.box, { color: C.brown }, rab); e1.x = .32; e1.y = .85; e1.z = .07; e1.sx = .06; e1.sy = .34; e1.sz = .07; const e2 = S.node(g.box, { color: C.brown }, rab); e2.x = .32; e2.y = .85; e2.z = -.07; e2.sx = .06; e2.sy = .34; e2.sz = .07;
+    const tl = S.node(g.body, { color: C.white }, rab); tl.x = -.35; tl.y = .28; tl.sx = tl.sy = tl.sz = .4;
+    /* دودة بتتلوّى جنب صخرة */
+    const worm = []; for (let i = 0; i < 6; i++) { const n = S.node(g.pebble, { color: C.worm }, world); n.sx = n.sy = n.sz = 1.1 - i * .08; worm.push(n); }
+    /* طيور */
+    const birds = []; for (let i = 0; i < 3; i++) { const b = S.node(null, {}, world); const bd = S.node(g.body, { color: i ? hex('#e0565b') : C.bird }, b); bd.sx = 1.2; bd.sy = .7; bd.sz = .7; bd.sx *= .7; bd.sy *= .7; bd.sz *= .7; const w1 = S.node(g.box, { color: i ? hex('#c64b50') : hex('#2f56a8') }, b), w2 = S.node(g.box, { color: i ? hex('#c64b50') : hex('#2f56a8') }, b); [w1, w2].forEach(w => { w.sx = .06; w.sy = .02; w.sz = .38; }); birds.push({ b, w1, w2, r: 3.6 + i * .9, h: 3.4 + i * .5, sp: .35 + i * .12, ph: i * 2.1 }); }
+    /* فراشات / يراعات */
+    const bf = []; for (let i = 0; i < 5; i++) { const b = S.node(null, {}, world), l = S.node(g.box, { color: [C.pink, C.yel, hex('#7cc6f4')][i % 3], emis: [.05, .05, .05] }, b), r = S.node(g.box, { color: [C.pink, C.yel, hex('#7cc6f4')][i % 3], emis: [.05, .05, .05] }, b); [l, r].forEach(w => { w.sx = .14; w.sy = .01; w.sz = .12; }); const f = flowers[i % Math.max(1, flowers.length)] || [0, 0]; bf.push({ b, l, r, cx: f[0], cz: f[1], ph: i * 1.7 }); }
+    const ff = []; for (let i = 0; i < 12; i++) { const n = S.node(g.pebble, { color: [1, .95, .5], emis: [.9, .85, .3] }, world); n.sx = n.sy = n.sz = .7; ff.push({ n, a: R() * 6.28, r: 1 + R() * 5, h: .4 + R() * 1.6, sp: .2 + R() * .4 }); }
+
+    /* ---- الأشجار ---- */
+    let trees = [], cnt = { today: -1, older: -1 }, sap = null;
+    const mkTree = (i, scale, big) => {
+      const r = S.node(null, {}, world), p = pos[i] || [0, 0, .5], pine = i % 3 !== 0; r.x = p[0]; r.z = p[1]; r.ry = p[2] * 6; r.base = scale * (.85 + p[2] * .35);
+      const tk = S.node(g.trunk, { color: C.trunk }, r);
+      if (pine) { const a = S.node(g.pine1, { color: lerp3(C.p1, C.p2, p[2]) }, r); a.y = .5; const b = S.node(g.pine2, { color: C.p2 }, r); b.y = 1.05; const c = S.node(g.pine3, { color: C.p3 }, r); c.y = 1.5; }
+      else { const c = S.node(g.crown, { color: lerp3(C.round, hex('#7bd06b'), p[2]) }, r); c.y = 1.05; c.sy = .9; r.crown = c; }
+      r.birth = big ? S.t : -9; r.ph = p[2] * 9; return r;
+    };
+    function rebuild() {
+      trees.forEach(t => S.remove(t)); trees = []; if (sap) { S.remove(sap); sap = null; }
+      const n = cnt.today, o = cnt.older;
+      for (let i = 0; i < n; i++) trees.push(mkTree(i, 1, i >= (F.prevToday || 0) && F.prevToday != null));
+      for (let i = 0; i < o; i++) trees.push(mkTree(pos.length - 1 - i, .8, false));
+      F.prevToday = n;
+      /* الشتلة: بتاخد مكان الشجرة الجاية */
+      sap = mkTree(Math.min(n, pos.length - 1), 1, false); sap.vis = false;
+      if (sap.crown == null) { /* لو الشتلة صنوبر: نخلّيها دايرية ليتغيّر لونها */
+        S.remove(sap); const r = S.node(null, {}, world), p = pos[Math.min(n, pos.length - 1)] || [0, 0, .5]; r.x = p[0]; r.z = p[1]; r.base = 1.05; S.node(g.trunk, { color: C.trunk }, r); const c = S.node(g.crown, { color: hex('#9be28a') }, r); c.y = 1.05; c.sy = .9; r.crown = c; r.ph = 1; r.birth = -9; r.vis = false; sap = r;
+      }
+    }
+
+    F.S = S; F.g = g;
+    S.cam.az = .7; S.cam.el = .5; S.cam.dist = 16.5; S.cam.target = [0, -.2, 0]; S.cam.fov = .7;
+    let drag = null, idleT = 0, auto = true;
+    const cv = el.querySelector('canvas');
+    cv.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); auto = false; });
+    cv.addEventListener('pointermove', e => { if (!drag) return; S.cam.az -= (e.clientX - drag.x) * .008; S.cam.el = Math.max(.16, Math.min(1.0, S.cam.el + (e.clientY - drag.y) * .005)); drag.x = e.clientX; drag.y = e.clientY; idleT = 0; });
+    const up = () => { drag = null; }; cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    let hudT = 0, curPh = '';
+    S.onFrame = (t, dt) => {
+      const ph = phase(); if (ph !== curPh) { curPh = ph; const P = PH[ph]; el.style.background = P.bg; S.fog.col = hex(P.fog); S.light.dir = P.dir; S.light.col = P.lc; S.light.sky = P.sky; S.light.gnd = P.gnd; ff.forEach(f => f.n.vis = ph === 'night'); bf.forEach(b => b.b.vis = ph !== 'night'); el.dataset.phase = ph; }
+      if (!F.asT || t - F.asT > .5) { F.asT = t; const asp = el.clientWidth / Math.max(1, el.clientHeight); S.cam.dist = asp > 2.2 ? 13 : asp > 1.4 ? 14.5 : 16.5; }
+      idleT += dt; if (!auto && idleT > 4) auto = true; if (auto) S.cam.az += dt * .07;
+      /* تحديث عدد الأشجار كل 1.5 ثانية */
+      hudT += dt; if (hudT > .25) {
+        hudT = 0; if (!F.cT || t - F.cT > 1.5) { F.cT = t; const c = counts(); if (c.today !== cnt.today || c.older !== cnt.older) { cnt = c; rebuild(); } }
+        hud();
+      }
+      const a = state.activeFocus, prog = a && a.mode === 'focus' ? Math.max(0, Math.min(1, activeElapsedMs() / (a.plannedSec * 1000))) : 0, paused = !!(a && a.pausedAt);
+      if (sap) { sap.vis = !!(a && a.mode === 'focus'); const k = .12 + .88 * ease(prog); sap.base = k; sap.crown.col = lerp3(paused ? hex('#9aa58f') : hex('#9be28a'), paused ? hex('#7f8c76') : hex('#3fae5c'), prog); }
+      const all = trees.concat(sap ? [sap] : []);
+      all.forEach(tr => { const age = Math.min(1, Math.max(0, (t - tr.birth) / 1.3)), pop = tr.birth > -5 ? back(age) : 1, s = (tr.base || 1) * pop; tr.sx = tr.sy = tr.sz = Math.max(.001, s); tr.rz = paused && tr === sap ? 0 : Math.sin(t * .8 + tr.ph) * .025; });
+      /* ماية */
+      const rt = (t % 3.2) / 3.2; rip.sx = rip.sz = .25 + rt * .8; rip.a = .45 * (1 - rt); pond.y = .03 + Math.sin(t * 1.3) * .004;
+      /* أرنب بيتنطط */
+      const hp = (t % 4.5) / 4.5, hop = hp < .22 ? Math.sin(hp / .22 * Math.PI) : 0; rab.y = hop * .45; rab.rz = hop * .25; if (hp > .9) rab.ry += dt * 2;
+      /* دودة */
+      worm.forEach((w, i) => { w.x = 1.2 + i * .13; w.z = -3.6 + Math.sin(t * 3 - i * .8) * .09; w.y = .05 + Math.max(0, Math.sin(t * 3 - i * .8)) * .03; });
+      /* طيور */
+      birds.forEach(b => { const a = t * b.sp + b.ph; b.b.x = Math.cos(a) * b.r; b.b.z = Math.sin(a) * b.r; b.b.y = b.h + Math.sin(t * 1.7 + b.ph) * .25; b.b.ry = -a; const f = Math.sin(t * 9 + b.ph) * .7; b.w1.z = .22; b.w2.z = -.22; b.w1.rx = f; b.w2.rx = -f; b.b.vis = phase() !== 'night'; });
+      bf.forEach(b => { const a = t * .8 + b.ph; b.b.x = b.cx + Math.cos(a) * .7; b.b.z = b.cz + Math.sin(a * 1.3) * .7; b.b.y = .5 + Math.sin(a * 2) * .25 + .2; b.b.ry = -a; const f = Math.sin(t * 14 + b.ph) * .9; b.l.rz = f; b.r.rz = -f; b.l.z = .08; b.r.z = -.08; });
+      ff.forEach(f => { const a = t * f.sp + f.a; f.n.x = Math.cos(a) * f.r; f.n.z = Math.sin(a * 1.2) * f.r; f.n.y = f.h + Math.sin(t * 2 + f.a) * .2; });
+    };
+    function hud() {
+      const a = state.activeFocus, c = cnt, t1 = el.querySelector('[data-fo-t]'), t2 = el.querySelector('[data-fo-s]');
+      if (!t1) return;
+      if (a && a.mode === 'focus') { const p = Math.round(Math.min(1, activeElapsedMs() / (a.plannedSec * 1000)) * 100); t1.textContent = (a.pausedAt ? '⏸ ' : '🌱 ') + p + '%'; t2.textContent = a.pausedAt ? YS.L('الشجرة مستنياك ترجع', 'Your tree is waiting for you') : YS.L('شجرتك بتكبر وانت مركّز', 'Your tree grows while you focus'); }
+      else if (a) { t1.textContent = '☕'; t2.textContent = YS.L('استراحة — الغابة بتستنّاك', 'Break time — the forest waits'); }
+      else { t1.textContent = '🌳 ' + c.today; t2.textContent = c.today ? YS.L('شجرة زرعتها النهاردة', 'trees planted today') : YS.L('ابدأ جلسة تركيز وازرع أول شجرة', 'Start a focus session to plant your first tree'); }
+    }
+    cnt = counts(); rebuild(); F.prevToday = cnt.today; S.start(); hud();
+    return S;
+  }
+
+  function fallback(why) {
+    if (!F) return; const el = F.el, n = counts(), a = state.activeFocus;
+    if (F.S) { F.S.dispose(); F.S = null; }
+    el.innerHTML = `<div class="ys-fo-fb"><div class="ys-fo-em">${'🌳'.repeat(Math.min(n.today, 8)) || '🌱'}${a && a.mode === 'focus' ? '🌱' : ''}</div><b>${YS.L('غابة النهاردة: ', 'Today’s forest: ')}${n.today}</b></div>`;
+  }
+
+  function mount(v) {
+    if (!F) {
+      const el = document.createElement('div'); el.className = 'card ys-forest'; el.innerHTML = '<canvas></canvas><div class="ys-fo-hud"><b data-fo-t></b><span data-fo-s></span></div>';
+      F = { el, S: null };
+      if (!capable()) fallback('lowend'); else { const S = build(el); if (!S) fallback('nogl'); }
+    }
+    if (F.el.parentNode !== v) v.prepend(F.el);
+  }
+  function destroy() { if (!F) return; if (F.S) F.S.dispose(); F.el.remove(); F = null; }
+  YS.after(() => { const v = YS.view(); if (state.ui.view !== 'focus' || !v || !activeProfile) { destroy(); return; } mount(v); });
+  YS.forest = { counts };
+
+  YS.css('forest', `
+.ys-forest{position:relative;grid-column:1/-1;height:clamp(250px,46vh,440px);padding:0!important;overflow:hidden;background:linear-gradient(#6fbfff,#dff3ff 72%);border-radius:var(--radius,20px);isolation:isolate}
+.ys-forest canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab}
+.ys-forest canvas:active{cursor:grabbing}
+html body .ys-forest::after{display:none}
+.ys-fo-hud{position:absolute;inset:auto 14px 12px 14px;display:flex;align-items:baseline;gap:10px;pointer-events:none;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.ys-fo-hud b{font-size:1.5rem;font-weight:900}.ys-fo-hud span{font-weight:700;font-size:.9rem;opacity:.95}
+.ys-forest[data-phase="day"] .ys-fo-hud,.ys-forest[data-phase="dawn"] .ys-fo-hud{color:#10331f;text-shadow:0 1px 8px rgba(255,255,255,.7)}
+.ys-fo-fb{height:100%;display:grid;place-content:center;text-align:center;gap:8px;color:#10331f}.ys-fo-em{font-size:2.6rem;letter-spacing:4px}
+`);
+})();
+
+/* ===== YS:90-companion ===== */
+/* © YS — نوري 3D + مدينة منجز (كانفس واحد في الرئيسية، مشهد واحد شغال في الوقت). */
+(function () {
+  const { scene, G, hex, rng, capable } = YS.gl;
+  let H = null;
+  const MODE = () => { try { return sessionStorage.getItem('ys.homemode') || 'nouri'; } catch { return 'nouri'; } };
+  const setMode = m => { try { sessionStorage.setItem('ys.homemode', m); } catch { } };
+  const hour = () => new Date().getHours(), night = () => hour() >= 19 || hour() < 5;
+  const BG = () => night() ? 'linear-gradient(#0b1030,#26336b 85%)' : hour() >= 17 ? 'linear-gradient(#5b4b9a,#ffb48a 80%)' : 'linear-gradient(#7cc7ff,#e6f5ff 78%)';
+  const FOG = () => night() ? '#26336b' : hour() >= 17 ? '#ffb48a' : '#e6f5ff';
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const petName = () => { try { const v = JSON.parse(localStorage.getItem('munjiz.petName') || '""'); return v || 'نوري'; } catch { return 'نوري'; } };
+  const shade = (c, k) => c.map(v => Math.max(0, Math.min(1, v * k)));
+  const mixc = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+
+  function lights(S) {
+    const n = night(), h = hour();
+    S.light.dir = n ? [.3, .9, .5] : h >= 17 ? [-.8, .45, .35] : [.5, 1, .4];
+    S.light.col = n ? [.25, .3, .52] : h >= 17 ? [.9, .55, .4] : [.78, .72, .56];
+    S.light.sky = n ? [.22, .27, .5] : h >= 17 ? [.5, .45, .62] : [.6, .67, .82];
+    S.light.gnd = n ? [.08, .09, .15] : [.32, .3, .26];
+    S.fog.col = hex(FOG()); S.fog.d = .03;
+  }
+
+  /* ───────── نوري ───────── */
+  function buildNouri(S, ui) {
+    S.clear(); lights(S);
+    const col = hex((state.profile && state.profile.petColor) || '#6d5efc'), g = {
+      body: S.geo(G.ico(1, 2)), eye: S.geo(G.ico(.18, 1)), pup: S.geo(G.ico(.1, 1)), arm: S.geo(G.ico(.22, 1)), cheek: S.geo(G.ico(.1, 0)),
+      stem: S.geo(G.cyl(.025, .025, .55, 5)), ball: S.geo(G.ico(.14, 1)), floor: S.geo(G.cyl(2.2, 2.2, .1, 28)), box: S.geo(G.box(1, 1, 1)), spark: S.geo(G.ico(.06, 0))
+    };
+    const root = S.node(null, {}), fl = S.node(g.floor, { color: night() ? [.14, .17, .34] : [.62, .78, .6] }, root); fl.y = -1.28;
+    const sh = S.node(g.floor, { color: [0, 0, 0], alpha: .22 }, root); sh.y = -1.2; sh.sx = sh.sz = .55; sh.sy = .05;
+    const me = S.node(null, {}, root);
+    const body = S.node(g.body, { color: col, emis: shade(col, .08) }, me); body.sy = 1.05; body.sz = .95;
+    const belly = S.node(g.body, { color: mixc(col, [1, 1, 1], .55) }, me); belly.z = .45; belly.y = -.2; belly.sx = .66; belly.sy = .7; belly.sz = .55;
+    const eyes = [-1, 1].map(s => { const e = S.node(g.eye, { color: [1, 1, 1], emis: [.2, .2, .2] }, me); e.x = s * .34; e.y = .3; e.z = .82; e.sx = 1.1; const p = S.node(g.pup, { color: [.06, .06, .12] }, me); p.x = s * .34; p.y = .3; p.z = .98; return { e, p, s }; });
+    const cheeks = [-1, 1].map(s => { const c = S.node(g.cheek, { color: [1, .55, .65] }, me); c.x = s * .56; c.y = .02; c.z = .78; c.sy = .6; return c; });
+    const mouth = S.node(g.box, { color: [.35, .12, .2] }, me); mouth.y = .02; mouth.z = .93; mouth.sx = .2; mouth.sy = .05; mouth.sz = .05;
+    const stem = S.node(g.stem, { color: shade(col, .7) }, me); stem.y = .95;
+    const ball = S.node(g.ball, { color: [1, .85, .3], emis: [.8, .6, .1] }, me); ball.y = 1.55;
+    const arms = [-1, 1].map(s => { const a = S.node(g.arm, { color: shade(col, .92) }, me); a.x = s * 1.0; a.y = -.15; a.sy = 1.2; return { a, s }; });
+    const feet = [-1, 1].map(s => { const f = S.node(g.arm, { color: shade(col, .75) }, me); f.x = s * .42; f.y = -1.0; f.z = .2; f.sx = 1.2; f.sy = .55; f.sz = 1.4; return f; });
+    const stars = []; for (let i = 0; i < 6; i++) { const s = S.node(g.spark, { color: [1, .95, .6], emis: [.9, .85, .4] }, root); s.vis = false; stars.push(s); }
+    S.cam.az = 0; S.cam.el = .12; S.cam.dist = 7.6; S.cam.target = [0, -.05, 0]; S.cam.fov = .78;
+    let wave = -9, jump = -9, blinkT = 2 + Math.random() * 3, blink = 0, lx = 0, ly = 0;
+    ui.poke = () => { wave = S.t; jump = S.t; ui.say(cheer()); };
+    ui.look = (x, y) => { lx = x; ly = y; };
+    S.onFrame = (t, dt) => {
+      const a = state.activeFocus, sleepy = night() && !a, focus = !!(a && a.mode === 'focus');
+      /* تنفّس / نطّة */
+      const br = Math.sin(t * 2) * .02, j = t - jump, hop = j > 0 && j < .7 ? Math.sin(j / .7 * Math.PI) * .6 : 0;
+      me.y = hop + (sleepy ? 0 : Math.abs(Math.sin(t * 2.2)) * .05); body.sy = 1.05 + br; body.sx = 1 - br * .6;
+      me.ry = lerp(me.ry, lx * .5, .08); me.rx = lerp(me.rx, -ly * .15, .08);
+      /* رمش */
+      blinkT -= dt; if (blinkT < 0) { blink = .16; blinkT = 2.5 + Math.random() * 3.5; } blink = Math.max(0, blink - dt);
+      const open = sleepy ? .12 : focus ? .55 : blink > 0 ? .1 : 1;
+      eyes.forEach(o => { o.e.sy = open; o.p.sy = open; o.p.x = o.s * .34 + lx * .09; o.p.y = .3 + ly * -.06 * open; });
+      mouth.sx = sleepy ? .1 : (hop > 0 || wave > t - 1.2) ? .34 : .2; mouth.y = (hop > 0 || wave > t - 1.2) ? -.02 : .02;
+      cheeks.forEach(c => c.sx = 1 + Math.sin(t * 3) * .05);
+      /* دلع الأنتينا */
+      stem.rz = Math.sin(t * 2.4) * .12; ball.x = Math.sin(t * 2.4) * .12 * .6; ball.emis = [.5 + Math.sin(t * 3) * .3, .4, .08];
+      /* ذراع بيلوّح */
+      const w = t - wave; arms.forEach(o => { o.a.rz = o.s * (.25 + Math.sin(t * 2) * .05); });
+      if (w > 0 && w < 1.6) { const k = Math.sin(w * 14) * .5; arms[1].a.rz = -1.9 + k; arms[1].a.y = .15; } else arms[1].a.y = -.15;
+      feet.forEach((f, i) => f.y = -1 + (hop > 0 ? .1 : 0));
+      /* نجوم احتفال */
+      stars.forEach((s, i) => { const k = t - jump; s.vis = k > 0 && k < 1.2; if (s.vis) { const aa = i / stars.length * 6.28 + k * 3; s.x = Math.cos(aa) * (.8 + k * 1.2); s.z = Math.sin(aa) * (.8 + k * 1.2); s.y = .6 + k * 1.4; } });
+      S.cam.az = Math.sin(t * .25) * .12 + lx * .12;
+    };
+    const cheer = () => { const L = YS.L, p = petName(), r = [L(`${p} فرحان بيك! 🎉`, `${p} is so happy to see you! 🎉`), L('يلا نذاكر سوا 💪', 'Let’s study together 💪'), L('إنت أقوى مما تتخيّل ✨', 'You’re stronger than you think ✨'), L('خطوة صغيرة كل يوم تفرق 🌱', 'A small step every day counts 🌱')]; return r[Math.floor(Math.random() * r.length)]; };
+    ui.greet = () => { const L = YS.L, p = petName(), n = (state.profile && state.profile.name) || '', h = hour(); const a = state.activeFocus; if (a && a.mode === 'focus') return L(`${p} قاعد جنبك بيذاكر 📖`, `${p} is studying right beside you 📖`); if (night()) return L(`${p} نعسان… ريّح شوية 😴`, `${p} is sleepy… rest a bit 😴`); return h < 12 ? L(`صباح الخير يا ${n} ☀️`, `Good morning ${n} ☀️`) : h < 17 ? L(`أهلًا يا ${n}! جاهز؟`, `Hi ${n}! Ready?`) : L(`مساء النور يا ${n} 🌆`, `Good evening ${n} 🌆`); };
+  }
+
+  /* ───────── مدينة منجز ───────── */
+  function buildCity(S, ui) {
+    S.clear(); lights(S);
+    const lvl = Math.max(1, Math.min(60, (state.game && state.game.level) || 1)), streak = Math.min(14, (state.game && state.game.streak) || 0), done = Math.min(24, Math.floor(state.tasks.filter(x => x.status === 'done').length / 3));
+    const R = rng(77), n = night();
+    const g = { box: S.geo(G.box(1, 1, 1)), roof: S.geo(G.cyl(.75, 0, .55, 4)), ground: S.geo(G.cyl(6.4, 6.4, .3, 32)), road: S.geo(G.box(1, .02, 1)), trunk: S.geo(G.cyl(.06, .05, .3, 5)), crown: S.geo(G.ico(.28, 1)), pole: S.geo(G.cyl(.025, .025, .6, 4)), bulb: S.geo(G.ico(.07, 0)), tower: S.geo(G.cyl(.5, .35, 1, 6)), ball: S.geo(G.ico(.22, 1)) };
+    const root = S.node(null, {}), gr = S.node(g.ground, { color: n ? [.1, .18, .14] : [.45, .72, .45] }, root); gr.y = -.3;
+    const base = S.node(S.geo(G.cyl(2.2, 6.4, 2.4, 32)), { color: [.42, .3, .2] }, root); base.y = -2.7;
+    /* شبكة الشوارع */
+    for (const o of [-2, 0, 2]) { const r1 = S.node(g.road, { color: [.28, .3, .36] }, root); r1.x = o; r1.y = .005; r1.sx = .5; r1.sz = 10.6; const r2 = S.node(g.road, { color: [.28, .3, .36] }, root); r2.z = o; r2.y = .005; r2.sz = .5; r2.sx = 10.6; }
+    /* المباني: كل مستوى = مبنى (بالترتيب من المركز للأطراف) */
+    const slots = []; for (let gx = -2.6; gx <= 2.6; gx += 1.3) for (let gz = -2.6; gz <= 2.6; gz += 1.3) { if (Math.abs(gx % 2) < .31 || Math.abs(gz % 2) < .31) { if (!(Math.abs(Math.abs(gx) - 2) < .01 || Math.abs(gz) < .01 && 0)) { } } slots.push([gx, gz]); }
+    slots.sort((a, b) => Math.hypot(a[0], a[1]) - Math.hypot(b[0], b[1]));
+    const pal = [[.93, .55, .45], [.55, .7, .95], [.96, .82, .45], [.65, .85, .7], [.85, .65, .9]];
+    let placed = 0;
+    for (const s of slots) {
+      if (placed >= Math.min(lvl, 22)) break; const x = s[0] + (R() - .5) * .15, z = s[1] + (R() - .5) * .15;
+      if (Math.abs(x) < .5 || Math.abs(z) < .5 || Math.abs(Math.abs(x) - 2) < .45 && false) { }
+      const tall = placed > 3 && R() > .55, h = tall ? 1.4 + R() * 1.6 : .55 + R() * .45, c = pal[placed % pal.length];
+      const b = S.node(g.box, { color: c }, root); b.x = x; b.z = z; b.y = h / 2; b.sx = .85; b.sz = .85; b.sy = h; b.birth = placed;
+      if (!tall) { const rf = S.node(g.roof, { color: shade(c, .6) }, root); rf.x = x; rf.z = z; rf.y = h; rf.ry = Math.PI / 4; rf.sx = rf.sz = .62; }
+      /* نوافذ منوّرة بالليل */
+      const wn = tall ? 3 : 1; for (let k = 0; k < wn; k++) { const w = S.node(g.box, { color: [.95, .9, .6], emis: n ? [.9, .8, .35] : [.12, .12, .1] }, root); w.x = x; w.z = z + .44; w.y = h * (k + 1) / (wn + 1); w.sx = .22; w.sy = .16; w.sz = .02; }
+      placed++;
+    }
+    /* معلم المدينة: برج بيتوهّج من المستوى 10 */
+    if (lvl >= 10) { const tw = S.node(g.tower, { color: [.55, .5, .95] }, root); tw.sy = 3.6; tw.sx = tw.sz = 1.1; tw.x = 0; tw.z = 0; tw.y = 0; const tb = S.node(g.ball, { color: [1, .85, .35], emis: [.9, .65, .15] }, root); tb.y = 3.9; ui.beacon = tb; }
+    /* أعمدة إنارة = أيام السلسلة */
+    for (let i = 0; i < streak; i++) { const a = i / Math.max(1, streak) * 6.28; const px = Math.cos(a) * 4.6, pz = Math.sin(a) * 4.6; const p = S.node(g.pole, { color: [.25, .25, .3] }, root); p.x = px; p.z = pz; p.y = .3; const b = S.node(g.bulb, { color: [1, .95, .6], emis: [.9, .85, .4] }, root); b.x = px; b.z = pz; b.y = .64; }
+    /* أشجار = كل 3 مهام */
+    for (let i = 0; i < done; i++) { const a = R() * 6.28, r = 3.6 + R() * 2.2, tr = S.node(g.trunk, { color: [.45, .3, .18] }, root), cr = S.node(g.crown, { color: [.35 + R() * .15, .7, .38] }, root); tr.x = cr.x = Math.cos(a) * r; tr.z = cr.z = Math.sin(a) * r; tr.y = .15; cr.y = .5; }
+    S.cam.az = .6; S.cam.el = .62; S.cam.dist = 15; S.cam.target = [0, .6, 0]; S.cam.fov = .7;
+    ui.greet = () => YS.L(`مدينتك: ${placed} مبنى • ${streak} عمود إنارة • ${done} شجرة`, `Your city: ${placed} buildings • ${streak} lamps • ${done} trees`);
+    ui.poke = () => ui.say(YS.L('كل مستوى بتوصله بيبني مبنى جديد 🏙️', 'Every level you reach builds a new building 🏙️')); ui.look = () => { };
+    let auto = true; S.onFrame = (t, dt) => { if (auto) S.cam.az += dt * .12; if (ui.beacon) { ui.beacon.emis = [.7 + Math.sin(t * 3) * .25, .55, .12]; } };
+  }
+
+  function mount(v) {
+    if (!H) {
+      const el = document.createElement('div'); el.className = 'card ys-home3d';
+      el.innerHTML = '<canvas></canvas><div class="ys-h3-tabs"><button type="button" data-hm="nouri"></button><button type="button" data-hm="city"></button></div><div class="ys-h3-say"></div>';
+      H = { el, S: null, mode: '', key: '', ui: {} };
+      H.ui.say = txt => { const s = el.querySelector('.ys-h3-say'); s.textContent = txt; s.classList.remove('on'); void s.offsetWidth; s.classList.add('on'); };
+      const cv = el.querySelector('canvas');
+      cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); H.ui.look && H.ui.look(((e.clientX - r.left) / r.width - .5) * 2, ((e.clientY - r.top) / r.height - .5) * 2); });
+      cv.addEventListener('pointerleave', () => H.ui.look && H.ui.look(0, 0));
+      cv.addEventListener('click', () => H.ui.poke && H.ui.poke());
+      el.addEventListener('click', e => { const b = e.target.closest('[data-hm]'); if (b) { setMode(b.dataset.hm); sync(true); } });
+      if (!capable()) { el.innerHTML = `<div class="ys-fo-fb"><div class="ys-fo-em">🧸</div><b>${esc(petName())}</b></div>`; }
+      else { H.S = scene(cv, { onSlow: () => { if (H && H.S) { H.S.dispose(); H.S = null; H.el.innerHTML = `<div class="ys-fo-fb"><div class="ys-fo-em">🧸</div><b>${esc(petName())}</b></div>`; } } }); if (!H.S) el.innerHTML = `<div class="ys-fo-fb"><div class="ys-fo-em">🧸</div><b>${esc(petName())}</b></div>`; else { H.S.start(); } }
+    }
+    if (H.el.parentNode !== v) { const first = v.firstElementChild; first ? first.after(H.el) : v.prepend(H.el); }
+    sync(false);
+  }
+  /* يبني المشهد المطلوب لو اتغيّر الوضع أو بيانات اللاعب */
+  function sync(force) {
+    if (!H || !H.S) return; const m = MODE(), g = state.game || {}, key = m + '|' + g.level + '|' + g.streak + '|' + state.tasks.filter(x => x.status === 'done').length + '|' + (state.profile && state.profile.petColor) + '|' + (night() ? 'n' : 'd') + '|' + YS.ar();
+    const tabs = H.el.querySelectorAll('[data-hm]'); if (tabs.length) { tabs[0].textContent = '🧸 ' + petName(); tabs[1].textContent = '🏙️ ' + YS.L('مدينتي', 'My city'); tabs.forEach(b => b.classList.toggle('on', b.dataset.hm === m)); }
+    if (!force && key === H.key) return; H.key = key; H.mode = m; H.el.style.background = BG();
+    H.ui.say && 0; (m === 'city' ? buildCity : buildNouri)(H.S, H.ui);
+    H.ui.say(H.ui.greet());
+  }
+  function destroy() { if (!H) return; if (H.S) H.S.dispose(); H.el.remove(); H = null; }
+  YS.after(() => { const v = YS.view(); if (state.ui.view !== 'home' || !v || !activeProfile) { destroy(); return; } mount(v); });
+
+  YS.css('home3d', `
+.ys-home3d{position:relative;height:clamp(230px,34vh,330px);padding:0!important;overflow:hidden;isolation:isolate;border-radius:var(--radius,20px);background:linear-gradient(#7cc7ff,#e6f5ff 78%)}
+.ys-home3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer;touch-action:pan-y}
+html body .ys-home3d::after{display:none}
+.ys-h3-tabs{position:absolute;top:10px;inset-inline-start:10px;display:flex;gap:6px;z-index:2}
+.ys-h3-tabs button{border:0;border-radius:999px;padding:7px 13px;font:inherit;font-weight:800;font-size:.82rem;cursor:pointer;color:#14123a;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);transition:transform .15s,background .2s}
+.ys-h3-tabs button.on{background:linear-gradient(135deg,var(--ys-a,#6d5efc),var(--ys-b,#a855f7));color:#fff}
+.ys-h3-tabs button:active{transform:scale(.95)}
+.ys-h3-say{position:absolute;inset-inline:12px;bottom:10px;z-index:2;padding:8px 14px;border-radius:16px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);color:#14123a;font-weight:700;font-size:.9rem;text-align:center;opacity:0;transform:translateY(8px)}
+.ys-h3-say.on{animation:ys-say .5s var(--ys-ease,ease) forwards}
+@keyframes ys-say{to{opacity:1;transform:none}}
+`);
+})();
+
+/* ===== YS:95-wow ===== */
+/* © YS — لحظات "واو": مشهد رفع المستوى + اهتزاز لمس خفيف */
+(function () {
+  const vib = p => { try { navigator.vibrate && navigator.vibrate(p); } catch { } };
+  function levelUp(n) {
+    if (document.getElementById('ys-lvl')) return;
+    const ar = YS.ar(), o = document.createElement('div'); o.id = 'ys-lvl'; o.className = 'ys-lvl';
+    const conf = Array.from({ length: 42 }, (_, i) => `<i style="--x:${(Math.random() * 100).toFixed(1)}vw;--d:${(Math.random() * .8).toFixed(2)}s;--t:${(2.2 + Math.random() * 1.6).toFixed(2)}s;--c:${['#6d5efc', '#a855f7', '#22d3ee', '#f6cf4a', '#ef7aa6', '#4cb867'][i % 6]};--r:${Math.floor(Math.random() * 360)}deg"></i>`).join('');
+    o.innerHTML = `<div class="ys-lvl-c">${conf}</div><div class="ys-lvl-card" role="dialog"><div class="ys-lvl-ring"><span>${n}</span></div><h2>${ar ? 'مستوى جديد! 🎉' : 'Level up! 🎉'}</h2><p>${ar ? 'كمّل كده — مدينتك كبرت ومبنى جديد اتبنى 🏙️' : 'Keep going — your city just grew a new building 🏙️'}</p><button class="btn primary" type="button">${ar ? 'تمام' : 'Nice'}</button></div>`;
+    document.body.appendChild(o); vib([30, 40, 30, 40, 90]);
+    const close = () => { o.classList.add('out'); setTimeout(() => o.remove(), 350); };
+    o.querySelector('button').onclick = close; o.addEventListener('click', e => { if (e.target === o) close(); }); setTimeout(close, 6000);
+  }
+  /* مراقبة المستوى: أول مرة بنسجّله بس، وبعدها أي زيادة تعمل المشهد */
+  setInterval(() => {
+    try {
+      if (!activeProfile || !state.onboarded || document.getElementById('ys-lvl')) return;
+      const k = 'ys.lvl.' + activeProfile.id, cur = (state.game && state.game.level) | 0, was = parseInt(localStorage.getItem(k) || '0', 10);
+      if (!was) { localStorage.setItem(k, String(cur)); return; }
+      if (cur > was) { localStorage.setItem(k, String(cur)); levelUp(cur); } else if (cur < was) localStorage.setItem(k, String(cur));
+    } catch { }
+  }, 1500);
+  /* اهتزاز خفيف على الأزرار الأساسية (موبايل) */
+  document.addEventListener('click', e => { if (e.target.closest && e.target.closest('.btn.primary,.btn.ok')) vib(8); }, true);
+  YS.wow = { levelUp };
+  YS.css('wow', `
+.ys-lvl{position:fixed;inset:0;z-index:9997;display:grid;place-items:center;background:radial-gradient(circle,rgba(109,94,252,.45),rgba(10,12,28,.8));backdrop-filter:blur(6px);animation:ys-fade .3s both}
+.ys-lvl.out{animation:ys-fade .35s reverse both}
+@keyframes ys-fade{from{opacity:0}to{opacity:1}}
+.ys-lvl-card{background:var(--surface,#fff);color:var(--text,#111);border-radius:28px;padding:26px 30px;text-align:center;display:grid;gap:10px;justify-items:center;box-shadow:0 30px 90px -20px rgba(109,94,252,.8);animation:ys-pop .6s var(--ys-spring,cubic-bezier(.34,1.56,.64,1)) both;max-width:min(360px,90vw)}
+.ys-lvl-card h2{margin:0}.ys-lvl-card p{margin:0;opacity:.75}
+.ys-lvl-ring{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from 0deg,#6d5efc,#a855f7,#22d3ee,#6d5efc);animation:ys-spin 4s linear infinite;box-shadow:0 0 50px 6px rgba(109,94,252,.55)}
+.ys-lvl-ring span{width:96px;height:96px;border-radius:50%;background:var(--surface,#fff);display:grid;place-items:center;font-size:2.6rem;font-weight:900;animation:ys-spin 4s linear infinite reverse}
+@keyframes ys-spin{to{transform:rotate(360deg)}}
+.ys-lvl-c{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.ys-lvl-c i{position:absolute;top:-20px;left:var(--x);width:9px;height:15px;background:var(--c);border-radius:2px;transform:rotate(var(--r));animation:ys-fall var(--t) var(--d) cubic-bezier(.3,.5,.5,1) both}
+@keyframes ys-fall{to{transform:translateY(110vh) rotate(calc(var(--r) + 720deg));opacity:.9}}
+@media (prefers-reduced-motion:reduce){.ys-lvl-c{display:none}}
+`);
+})();
+
       init();
     })();
   </script>
